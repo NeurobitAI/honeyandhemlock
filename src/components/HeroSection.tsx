@@ -3,36 +3,51 @@ const HeroSection = () => {
   return (
     <section className="bg-portfolio-black text-white py-20 relative overflow-hidden min-h-[700px] flex items-center">
       {/* Background Camera Lens Watermark */}
-      <div className="absolute inset-0 flex items-center justify-center opacity-10">
-        <div className="w-96 h-96 rounded-full border-4 border-white/20 flex items-center justify-center">
-          <div className="w-80 h-80 rounded-full border-2 border-white/15 flex items-center justify-center">
-            <div className="w-64 h-64 rounded-full border-2 border-white/10 flex items-center justify-center">
-              <div className="w-48 h-48 rounded-full border border-white/5"></div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <div 
+        className="absolute inset-0 opacity-[0.08] z-0"
+        style={{
+          backgroundImage: `url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><circle cx="100" cy="100" r="90" fill="none" stroke="white" stroke-width="2"/><circle cx="100" cy="100" r="70" fill="none" stroke="white" stroke-width="1.5"/><circle cx="100" cy="100" r="50" fill="none" stroke="white" stroke-width="1"/><circle cx="100" cy="100" r="30" fill="none" stroke="white" stroke-width="0.5"/></svg>')`,
+          backgroundPosition: 'center',
+          backgroundSize: 'cover',
+          backgroundRepeat: 'no-repeat'
+        }}
+      />
 
       <div className="container mx-auto px-6 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
-          {/* Left Column - Images */}
+          {/* Left Column - Image Collage */}
           <div className="lg:col-span-7 relative">
-            <div className="relative">
+            <div className="relative h-[600px] mx-12">
               {/* Main Portrait */}
-              <div className="relative z-10">
+              <div className="absolute top-0 left-0 z-30">
                 <img 
-                  src="https://images.unsplash.com/photo-1649972904349-6e44c42644a7?w=500&h=600&fit=crop"
-                  alt="Professional photographer with DSLR camera"
-                  className="w-full max-w-md mx-auto rounded-lg shadow-2xl grayscale hover:grayscale-0 transition-all duration-500"
+                  src="https://images.unsplash.com/photo-1649972904349-6e44c42644a7?w=600&h=800&fit=crop"
+                  alt="Professional photographer portrait"
+                  className="w-[300px] h-[400px] object-cover rounded-lg shadow-2xl"
                 />
               </div>
               
-              {/* Overlapping Secondary Image */}
-              <div className="absolute -bottom-8 -left-8 z-0 transform -rotate-3">
+              {/* Secondary Shot */}
+              <div 
+                className="absolute z-20 transform -rotate-[5deg]"
+                style={{ left: '65%', top: '10%' }}
+              >
                 <img 
-                  src="https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?w=200&h=240&fit=crop"
-                  alt="Photography equipment"
-                  className="w-40 h-48 object-cover rounded-lg shadow-xl opacity-80"
+                  src="https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?w=400&h=600&fit=crop"
+                  alt="Photography equipment setup"
+                  className="w-[200px] h-[300px] object-cover rounded-lg shadow-[0_8px_20px_rgba(0,0,0,0.5)]"
+                />
+              </div>
+
+              {/* Tertiary Detail */}
+              <div 
+                className="absolute z-10 transform rotate-[8deg] border-[3px] border-portfolio-gold rounded-lg"
+                style={{ left: '10%', top: '65%' }}
+              >
+                <img 
+                  src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=350&h=350&fit=crop"
+                  alt="Camera detail shot"
+                  className="w-[175px] h-[175px] object-cover rounded-md"
                 />
               </div>
             </div>
