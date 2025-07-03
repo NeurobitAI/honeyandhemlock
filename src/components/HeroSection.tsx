@@ -32,10 +32,10 @@ const HeroSection = () => {
           {/* Right Column - Content */}
           <div className="lg:col-span-5 relative z-20">
             <h1 className="font-playfair text-4xl lg:text-5xl font-bold mb-6 leading-tight">
-              Hi! My name is John Doe, I'm a photographer.
+              Honey & Hemlock Productions
             </h1>
             <p className="font-open-sans text-lg leading-relaxed text-white/80 max-w-md">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+              A female run production company committed to captivating audiences by creating new worlds through the art of filmmaking.
             </p>
           </div>
         </div>

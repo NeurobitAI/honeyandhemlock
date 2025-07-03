@@ -26,8 +26,19 @@ const SkillsetSection = () => {
   ];
 
   return (
-    <section className="bg-portfolio-black text-white py-20">
-      <div className="container mx-auto px-6">
+    <section className="bg-portfolio-black text-white py-20 relative overflow-hidden">
+      {/* Background Camera Lens Image - positioned subtly behind content */}
+      <div 
+        className="absolute inset-0 opacity-8 z-0"
+        style={{
+          backgroundImage: `url('/lovable-uploads/9cf1eb65-bc24-4062-9ec2-2bafdbaa9642.png')`,
+          backgroundPosition: 'right center',
+          backgroundSize: 'contain',
+          backgroundRepeat: 'no-repeat'
+        }}
+      />
+      
+      <div className="container mx-auto px-6 relative z-10">
         {/* Section Header */}
         <div className="text-center mb-16">
           <h2 className="font-playfair text-4xl font-bold mb-4">Our Work</h2>

@@ -24,7 +24,7 @@ const PartnersSection = () => {
           <h3 className="font-playfair text-xl text-portfolio-gold">Awards and Nominations</h3>
         </div>
         
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8 items-center justify-items-center">
+        <div className="flex flex-wrap justify-center items-center gap-8 max-w-6xl mx-auto">
           {recognitions.map((recognition, index) => (
             <div 
               key={index}

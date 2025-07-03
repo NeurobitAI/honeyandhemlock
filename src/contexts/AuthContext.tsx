@@ -38,8 +38,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const login = async (email: string, password: string, role: 'admin' | 'judge'): Promise<boolean> => {
     // Mock authentication - in real app, this would call an API
     const mockUsers = {
-      admin: { email: 'admin@honeyandhemlock.com', password: 'admin123' },
-      judge: { email: 'judge@honeyandgemlock.com', password: 'judge123' }
+      admin: { email: 'admin@honeyandhemlock.productions', password: 'Neurobit@123' },
+      judge: { email: 'judge@honeyandhemlock.productions', password: 'judge123' }
     };
 
     if (mockUsers[role].email === email && mockUsers[role].password === password) {

@@ -6,19 +6,19 @@ const Films = () => {
   const films = [
     {
       id: 1,
-      image: "/lovable-uploads/55b25aea-6a37-4ad7-92fb-78df6ded0d21.png",
+      image: "/lovable-uploads/5f9a22f4-a808-4f43-969d-f954514528c3.png",
       title: "SPACEMAN",
       description: "Spaceman is an exploration of human emotion that broaches subject matter that is unfortunately too often still considered taboo. It follows Bobby on his first jaunt back into the dating world after escaping an abusive marriage in which he fell victim to domestic violence. This story is powerful and provides a sliver of hope that one can, in fact, put themselves out there again."
     },
     {
       id: 2,
-      image: "/lovable-uploads/7a1ff599-69f2-4905-a0ce-0bb4fc99215c.png",
+      image: "/lovable-uploads/291d4f04-279f-428a-9bcc-634c12250d2f.png",
       title: "SPEECHLESS",
       description: "Speechless - Coming soon.."
     },
     {
       id: 3,
-      image: "/lovable-uploads/325d73e2-d687-4668-aa2f-5127ad2bbfbb.png",
+      image: "/lovable-uploads/b398eef9-af85-4f29-a70f-1a8b4edf44ca.png",
       title: "SOLITARITY",
       description: "'Solitarity' is the surrealist exploration of depression through the experience of Jeremy, a man at the end of his rope. Succumbing to his numbness, Jeremey is ready to throw in the towel when depression manifests itself into a human like entity and forces Jeremy to look his issues in the eye and realize he cannot continue alone."
     }
@@ -38,7 +38,7 @@ const Films = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {films.map((film) => (
               <div key={film.id} className="bg-portfolio-dark rounded-lg overflow-hidden shadow-2xl hover:scale-105 transition-transform duration-300">
-                <div className="relative aspect-[4/3]">
+                <div className="aspect-[16/9] overflow-hidden">
                   <img 
                     src={film.image}
                     alt={film.title}

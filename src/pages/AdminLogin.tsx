@@ -1,10 +1,9 @@
 
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 
@@ -20,67 +19,94 @@ const AdminLogin = () => {
     e.preventDefault();
     setIsLoading(true);
 
-    const success = await login(email, password, 'admin');
-    if (success) {
-      navigate('/admin-dashboard');
-    } else {
+    try {
+      const success = await login(email, password, 'admin');
+      if (success) {
+        toast({
+          title: "Login successful",
+          description: "Welcome to the admin dashboard",
+        });
+        navigate('/admin-dashboard');
+      } else {
+        toast({
+          title: "Login failed",
+          description: "Invalid email or password",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
       toast({
-        title: "Login Failed",
-        description: "Invalid credentials. Please try again.",
-        variant: "destructive"
+        title: "Error",
+        description: "An error occurred during login",
+        variant: "destructive",
       });
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
 
   return (
-    <div className="min-h-screen bg-portfolio-black flex items-center justify-center">
-      <Card className="w-full max-w-md bg-portfolio-dark border-portfolio-gold/20">
-        <CardHeader className="text-center">
-          <CardTitle className="text-2xl text-portfolio-gold">Admin Login</CardTitle>
-          <CardDescription className="text-white/70">
-            Access the script review administration panel
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <Label htmlFor="email" className="text-white">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="admin@honeyandgemlock.com"
-                className="bg-portfolio-black border-portfolio-gold/30 text-white"
-                required
-              />
+    <div className="min-h-screen bg-portfolio-black flex items-center justify-center p-4">
+      <div className="w-full max-w-md space-y-6">
+        <Card className="bg-portfolio-dark border-portfolio-gold">
+          <CardHeader className="text-center">
+            <CardTitle className="text-2xl font-playfair text-portfolio-gold">Admin Login</CardTitle>
+            <CardDescription className="text-white/80">
+              Access the admin dashboard
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <Input
+                  type="email"
+                  placeholder="Email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  className="bg-portfolio-black border-gray-600 text-white placeholder-gray-400"
+                />
+              </div>
+              <div>
+                <Input
+                  type="password"
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  className="bg-portfolio-black border-gray-600 text-white placeholder-gray-400"
+                />
+              </div>
+              <Button
+                type="submit"
+                className="w-full bg-portfolio-gold text-black hover:bg-portfolio-gold/90"
+                disabled={isLoading}
+              >
+                {isLoading ? 'Logging in...' : 'Login'}
+              </Button>
+            </form>
+          </CardContent>
+        </Card>
+
+        <Card className="bg-portfolio-dark border-portfolio-gold">
+          <CardContent className="pt-6">
+            <div className="text-center space-y-4">
+              <p className="text-white/80">Need to add a new judge?</p>
+              <Link to="/judge">
+                <Button variant="outline" className="w-full border-portfolio-gold text-portfolio-gold hover:bg-portfolio-gold hover:text-black">
+                  Judge Sign Up
+                </Button>
+              </Link>
             </div>
-            <div>
-              <Label htmlFor="password" className="text-white">Password</Label>
-              <Input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Enter your password"
-                className="bg-portfolio-black border-portfolio-gold/30 text-white"
-                required
-              />
-            </div>
-            <Button
-              type="submit"
-              disabled={isLoading}
-              className="w-full bg-portfolio-gold text-black hover:bg-portfolio-gold/90"
-            >
-              {isLoading ? 'Logging in...' : 'Login'}
-            </Button>
-          </form>
-          <div className="mt-4 text-center text-sm text-white/60">
-            Demo credentials: admin@honeyandgemlock.com / admin123
-          </div>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+
+        <div className="text-center">
+          <Link to="/" className="text-portfolio-gold hover:text-white transition-colors">
+            ← Back to Home
+          </Link>
+        </div>
+      </div>
     </div>
   );
 };

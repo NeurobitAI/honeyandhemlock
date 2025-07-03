@@ -1,234 +1,224 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { useScripts } from '@/contexts/ScriptContext';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Textarea } from '@/components/ui/textarea';
-import { Label } from '@/components/ui/label';
+import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
-import { LogOut, Users, FileText, Settings } from 'lucide-react';
+
+interface Script {
+  id: number;
+  title: string;
+  uploadedBy: string;
+  status: 'pending' | 'assigned' | 'approved' | 'declined';
+  assignedJudge?: string;
+  dateSubmitted: string;
+  feedback?: string;
+  paymentStatus: 'paid' | 'pending';
+}
+
+interface Contact {
+  id: number;
+  name: string;
+  email: string;
+  phone: string;
+  subject: string;
+  message: string;
+  date: string;
+  status: 'new' | 'read';
+}
 
 const AdminDashboard = () => {
   const { user, logout } = useAuth();
-  const { scripts, updateScript } = useScripts();
+  const navigate = useNavigate();
   const { toast } = useToast();
-  const [feedback, setFeedback] = useState('');
-  const [selectedScript, setSelectedScript] = useState<string>('');
+  const [scripts, setScripts] = useState<Script[]>([]);
+  const [contacts, setContacts] = useState<Contact[]>([]);
+  const [activeTab, setActiveTab] = useState<'scripts' | 'contacts'>('scripts');
 
-  const judges = [
-    'judge@honeyandgemlock.com',
-    'judge2@honeyandgemlock.com',
-    'judge3@honeyandgemlock.com'
-  ];
+  useEffect(() => {
+    if (!user || user.role !== 'admin') {
+      navigate('/admin');
+      return;
+    }
 
-  const handleAssignJudge = (scriptId: string, judgeEmail: string) => {
-    updateScript(scriptId, { 
-      assignedJudge: judgeEmail, 
-      status: 'assigned' 
-    });
+    // Load scripts and contacts from localStorage
+    const savedScripts = JSON.parse(localStorage.getItem('scripts') || '[]');
+    const savedContacts = JSON.parse(localStorage.getItem('contacts') || '[]');
+    setScripts(savedScripts);
+    setContacts(savedContacts);
+  }, [user, navigate]);
+
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+  };
+
+  const updateScriptStatus = (scriptId: number, status: Script['status'], feedback?: string) => {
+    const updatedScripts = scripts.map(script => 
+      script.id === scriptId 
+        ? { ...script, status, feedback }
+        : script
+    );
+    setScripts(updatedScripts);
+    localStorage.setItem('scripts', JSON.stringify(updatedScripts));
+    
     toast({
-      title: "Success",
-      description: "Script assigned to judge successfully"
+      title: "Script updated",
+      description: `Script status changed to ${status}`,
     });
   };
 
-  const handleSendFeedback = () => {
-    if (selectedScript && feedback) {
-      updateScript(selectedScript, { feedback });
-      setFeedback('');
-      setSelectedScript('');
-      toast({
-        title: "Success",
-        description: "Feedback sent successfully"
-      });
+  const markContactAsRead = (contactId: number) => {
+    const updatedContacts = contacts.map(contact =>
+      contact.id === contactId
+        ? { ...contact, status: 'read' as const }
+        : contact
+    );
+    setContacts(updatedContacts);
+    localStorage.setItem('contacts', JSON.stringify(updatedContacts));
+  };
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'pending': return 'bg-yellow-500';
+      case 'assigned': return 'bg-blue-500';
+      case 'approved': return 'bg-green-500';
+      case 'declined': return 'bg-red-500';
+      default: return 'bg-gray-500';
     }
   };
 
-  const getStatusBadge = (status: string) => {
-    const colors = {
-      pending: 'bg-yellow-500/20 text-yellow-300',
-      assigned: 'bg-blue-500/20 text-blue-300',
-      approved: 'bg-green-500/20 text-green-300',
-      declined: 'bg-red-500/20 text-red-300'
-    };
-    return colors[status as keyof typeof colors] || colors.pending;
-  };
-
   return (
-    <div className="min-h-screen bg-portfolio-black text-white">
-      <div className="border-b border-portfolio-gold/20 bg-portfolio-dark">
-        <div className="container mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <h1 className="text-2xl font-playfair font-bold text-portfolio-gold">Admin Dashboard</h1>
-              <div className="flex space-x-2">
-                <Button variant="ghost" size="sm" className="text-white hover:text-portfolio-gold">
-                  <FileText className="w-4 h-4 mr-2" />
-                  Submissions
-                </Button>
-                <Button variant="ghost" size="sm" className="text-white hover:text-portfolio-gold">
-                  <Users className="w-4 h-4 mr-2" />
-                  Judges
-                </Button>
-                <Button variant="ghost" size="sm" className="text-white hover:text-portfolio-gold">
-                  <Settings className="w-4 h-4 mr-2" />
-                  Settings
-                </Button>
-              </div>
-            </div>
-            <div className="flex items-center space-x-4">
-              <span className="text-white/70">Welcome, {user?.email}</span>
-              <Button 
-                onClick={logout}
-                variant="outline" 
-                size="sm"
-                className="border-portfolio-gold/30 text-white hover:bg-portfolio-gold hover:text-black"
-              >
-                <LogOut className="w-4 h-4 mr-2" />
-                Logout
-              </Button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="container mx-auto px-6 py-8">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <Card className="bg-portfolio-dark border-portfolio-gold/20">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm text-white/70">Total Submissions</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-portfolio-gold">{scripts.length}</div>
-            </CardContent>
-          </Card>
-          <Card className="bg-portfolio-dark border-portfolio-gold/20">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm text-white/70">Pending Review</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-yellow-300">
-                {scripts.filter(s => s.status === 'pending').length}
-              </div>
-            </CardContent>
-          </Card>
-          <Card className="bg-portfolio-dark border-portfolio-gold/20">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm text-white/70">Approved</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-green-300">
-                {scripts.filter(s => s.status === 'approved').length}
-              </div>
-            </CardContent>
-          </Card>
-          <Card className="bg-portfolio-dark border-portfolio-gold/20">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm text-white/70">Declined</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-red-300">
-                {scripts.filter(s => s.status === 'declined').length}
-              </div>
-            </CardContent>
-          </Card>
+    <div className="min-h-screen bg-portfolio-black text-white p-6">
+      <div className="container mx-auto">
+        <div className="flex justify-between items-center mb-8">
+          <h1 className="text-3xl font-playfair text-portfolio-gold">Admin Dashboard</h1>
+          <Button onClick={handleLogout} variant="outline" className="border-portfolio-gold text-portfolio-gold">
+            Logout
+          </Button>
         </div>
 
-        <Card className="bg-portfolio-dark border-portfolio-gold/20">
-          <CardHeader>
-            <CardTitle className="text-portfolio-gold">Script Submissions</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow className="border-portfolio-gold/20">
-                  <TableHead className="text-white">Title</TableHead>
-                  <TableHead className="text-white">Uploaded By</TableHead>
-                  <TableHead className="text-white">Status</TableHead>
-                  <TableHead className="text-white">Assigned Judge</TableHead>
-                  <TableHead className="text-white">Date</TableHead>
-                  <TableHead className="text-white">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {scripts.map((script) => (
-                  <TableRow key={script.id} className="border-portfolio-gold/10">
-                    <TableCell className="text-white font-medium">{script.title}</TableCell>
-                    <TableCell className="text-white/70">{script.uploadedBy}</TableCell>
-                    <TableCell>
-                      <span className={`px-2 py-1 rounded-full text-xs ${getStatusBadge(script.status)}`}>
-                        {script.status.charAt(0).toUpperCase() + script.status.slice(1)}
-                      </span>
-                    </TableCell>
-                    <TableCell className="text-white/70">{script.assignedJudge || 'Not assigned'}</TableCell>
-                    <TableCell className="text-white/70">
-                      {new Date(script.dateSubmitted).toLocaleDateString()}
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex space-x-2">
-                        <Select onValueChange={(value) => handleAssignJudge(script.id, value)}>
-                          <SelectTrigger className="w-32 bg-portfolio-black border-portfolio-gold/30">
-                            <SelectValue placeholder="Assign" />
-                          </SelectTrigger>
-                          <SelectContent className="bg-portfolio-dark border-portfolio-gold/20">
-                            {judges.map((judge) => (
-                              <SelectItem key={judge} value={judge} className="text-white">
-                                {judge.split('@')[0]}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                        <Dialog>
-                          <DialogTrigger asChild>
-                            <Button 
-                              variant="outline" 
-                              size="sm"
-                              onClick={() => setSelectedScript(script.id)}
-                              className="border-portfolio-gold/30 text-white hover:bg-portfolio-gold hover:text-black"
-                            >
-                              Feedback
-                            </Button>
-                          </DialogTrigger>
-                          <DialogContent className="bg-portfolio-dark border-portfolio-gold/20">
-                            <DialogHeader>
-                              <DialogTitle className="text-portfolio-gold">Send Feedback</DialogTitle>
-                              <DialogDescription className="text-white/70">
-                                Send feedback for "{script.title}"
-                              </DialogDescription>
-                            </DialogHeader>
-                            <div className="space-y-4">
-                              <div>
-                                <Label htmlFor="feedback" className="text-white">Feedback Message</Label>
-                                <Textarea
-                                  id="feedback"
-                                  value={feedback}
-                                  onChange={(e) => setFeedback(e.target.value)}
-                                  placeholder="Enter your feedback here..."
-                                  className="bg-portfolio-black border-portfolio-gold/30 text-white"
-                                  rows={4}
-                                />
-                              </div>
-                              <Button 
-                                onClick={handleSendFeedback}
-                                className="bg-portfolio-gold text-black hover:bg-portfolio-gold/90"
-                              >
-                                Send Feedback
-                              </Button>
-                            </div>
-                          </DialogContent>
-                        </Dialog>
+        {/* Tab Navigation */}
+        <div className="flex space-x-4 mb-6">
+          <Button
+            onClick={() => setActiveTab('scripts')}
+            variant={activeTab === 'scripts' ? 'default' : 'outline'}
+            className={activeTab === 'scripts' ? 'bg-portfolio-gold text-black' : 'border-portfolio-gold text-portfolio-gold'}
+          >
+            Scripts ({scripts.length})
+          </Button>
+          <Button
+            onClick={() => setActiveTab('contacts')}
+            variant={activeTab === 'contacts' ? 'default' : 'outline'}
+            className={activeTab === 'contacts' ? 'bg-portfolio-gold text-black' : 'border-portfolio-gold text-portfolio-gold'}
+          >
+            Contacts ({contacts.filter(c => c.status === 'new').length} new)
+          </Button>
+        </div>
+
+        {/* Scripts Tab */}
+        {activeTab === 'scripts' && (
+          <Card className="bg-portfolio-dark border-portfolio-gold">
+            <CardHeader>
+              <CardTitle className="text-portfolio-gold">Script Submissions</CardTitle>
+            </CardHeader>
+            <CardContent>
+              {scripts.length === 0 ? (
+                <p className="text-white/80">No scripts submitted yet.</p>
+              ) : (
+                <div className="space-y-4">
+                  {scripts.map((script) => (
+                    <div key={script.id} className="bg-portfolio-black p-4 rounded-lg border border-gray-700">
+                      <div className="flex justify-between items-start mb-2">
+                        <h3 className="font-semibold text-lg">{script.title}</h3>
+                        <Badge className={getStatusColor(script.status)}>
+                          {script.status}
+                        </Badge>
                       </div>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </CardContent>
-        </Card>
+                      <p className="text-sm text-white/70 mb-2">
+                        Submitted: {new Date(script.dateSubmitted).toLocaleDateString()}
+                      </p>
+                      <p className="text-sm text-white/70 mb-4">
+                        Payment: {script.paymentStatus}
+                      </p>
+                      
+                      <div className="flex space-x-2">
+                        <Button
+                          size="sm"
+                          onClick={() => updateScriptStatus(script.id, 'approved')}
+                          className="bg-green-600 hover:bg-green-700"
+                        >
+                          Approve
+                        </Button>
+                        <Button
+                          size="sm"
+                          onClick={() => updateScriptStatus(script.id, 'declined', 'Needs revision')}
+                          className="bg-red-600 hover:bg-red-700"
+                        >
+                          Decline
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Contacts Tab */}
+        {activeTab === 'contacts' && (
+          <Card className="bg-portfolio-dark border-portfolio-gold">
+            <CardHeader>
+              <CardTitle className="text-portfolio-gold">Contact Messages</CardTitle>
+            </CardHeader>
+            <CardContent>
+              {contacts.length === 0 ? (
+                <p className="text-white/80">No contact messages yet.</p>
+              ) : (
+                <div className="space-y-4">
+                  {contacts.map((contact) => (
+                    <div key={contact.id} className="bg-portfolio-black p-4 rounded-lg border border-gray-700">
+                      <div className="flex justify-between items-start mb-2">
+                        <h3 className="font-semibold text-lg">{contact.name}</h3>
+                        {contact.status === 'new' && (
+                          <Badge className="bg-blue-500">New</Badge>
+                        )}
+                      </div>
+                      <p className="text-sm text-white/70 mb-2">
+                        <strong>Email:</strong> {contact.email}
+                      </p>
+                      {contact.phone && (
+                        <p className="text-sm text-white/70 mb-2">
+                          <strong>Phone:</strong> {contact.phone}
+                        </p>
+                      )}
+                      <p className="text-sm text-white/70 mb-2">
+                        <strong>Subject:</strong> {contact.subject}
+                      </p>
+                      <p className="text-sm text-white/70 mb-2">
+                        <strong>Date:</strong> {new Date(contact.date).toLocaleDateString()}
+                      </p>
+                      <p className="text-white mb-4">{contact.message}</p>
+                      
+                      {contact.status === 'new' && (
+                        <Button
+                          size="sm"
+                          onClick={() => markContactAsRead(contact.id)}
+                          className="bg-portfolio-gold text-black hover:bg-portfolio-gold/90"
+                        >
+                          Mark as Read
+                        </Button>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        )}
       </div>
     </div>
   );
