@@ -9,7 +9,11 @@ const PartnersSection = () => {
     "/lovable-uploads/65f0aa8c-5593-4fad-9aba-e7eea97f2988.png",
     "/lovable-uploads/30432083-8e56-4a80-bb26-974c357354f7.png",
     "/lovable-uploads/08354c69-e36b-4dc6-8756-1bdc0e435087.png",
-    "/lovable-uploads/b57fa408-4c81-4a6c-ba5f-64d2cf7d0dc4.png"
+    "/lovable-uploads/b57fa408-4c81-4a6c-ba5f-64d2cf7d0dc4.png",
+    "/lovable-uploads/16a0fa7d-dd23-4385-a582-b0646598def1.png",
+    "/lovable-uploads/51574bd2-5bd6-4a97-bf51-91ac36ab41bc.png",
+    "/lovable-uploads/d3e6a88c-742d-4bcd-83b2-b895c032a1e7.png",
+    "/lovable-uploads/79fdfb56-6819-449c-89ce-1129134611c4.png"
   ];
 
   return (
@@ -17,18 +21,19 @@ const PartnersSection = () => {
       <div className="container mx-auto px-6">
         <div className="text-center mb-12">
           <h2 className="font-playfair text-2xl font-bold mb-2">Recognitions</h2>
+          <h3 className="font-playfair text-xl text-portfolio-gold">Awards and Nominations</h3>
         </div>
         
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8 items-center justify-items-center">
           {recognitions.map((recognition, index) => (
             <div 
               key={index}
-              className="hover:scale-105 transition-transform duration-300 cursor-pointer"
+              className="hover:scale-105 transition-transform duration-300 cursor-pointer bg-white/10 p-4 rounded-lg backdrop-blur-sm"
             >
               <img 
                 src={recognition}
                 alt={`Recognition ${index + 1}`}
-                className="w-32 h-auto object-contain filter brightness-90 hover:brightness-100 transition-all duration-300"
+                className="w-32 h-auto object-contain filter brightness-100 hover:brightness-110 transition-all duration-300"
               />
             </div>
           ))}

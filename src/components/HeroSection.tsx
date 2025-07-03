@@ -15,15 +15,15 @@ const HeroSection = () => {
 
       <div className="container mx-auto px-6 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
-          {/* Left Column - Single Image */}
+          {/* Left Column - Single Image - Reduced by 25% */}
           <div className="lg:col-span-7 relative">
-            <div className="relative h-[600px] mx-12">
-              {/* Main Image from uploaded content */}
+            <div className="relative h-[450px] mx-12">
+              {/* Main Image from uploaded content - reduced from h-[600px] to h-[450px] */}
               <div className="absolute top-0 left-0 z-30">
                 <img 
-                  src="/lovable-uploads/f7d688c7-3b2d-4f60-9146-4e8fb17518a4.png"
+                  src="/lovable-uploads/921dc20e-d8e8-4341-8aa0-c542f110c9c8.png"
                   alt="Honey & Hemlock Productions work"
-                  className="w-full h-[500px] object-cover rounded-lg shadow-2xl"
+                  className="w-full h-[375px] object-cover rounded-lg shadow-2xl"
                 />
               </div>
             </div>
