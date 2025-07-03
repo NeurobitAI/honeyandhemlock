@@ -25,8 +25,7 @@ const FeaturedProjects = () => {
   ];
 
   useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
-    gsap.registerPlugin(Draggable);
+    gsap.registerPlugin(ScrollTrigger, Draggable);
 
     gsap.set('.box', {
       yPercent: -50,
@@ -148,7 +147,7 @@ const FeaturedProjects = () => {
       position: 0,
     };
 
-    const POSITION_WRAP = gsap.utils.wrap(0, LOOP_HEAD.duration());
+    const POSITION_WRAP = gsap.utils.wrap(0, Number(LOOP_HEAD.duration()));
 
     const SCRUB = gsap.to(PLAYHEAD, {
       position: 0,
@@ -162,51 +161,32 @@ const FeaturedProjects = () => {
 
     let iteration = 0;
     const TRIGGER = ScrollTrigger.create({
-      start: 0,
-      end: '+=2000',
-      horizontal: false,
-      pin: '.boxes',
+      trigger: '.featured-projects-section',
+      start: 'top center',
+      end: 'bottom center',
+      scrub: 1,
       onUpdate: self => {
-        const SCROLL = self.scroll();
-        if (SCROLL > self.end - 1) {
-          WRAP(1, 1);
-        } else if (SCROLL < 1 && self.direction < 0) {
-          WRAP(-1, self.end - 1);
-        } else {
-          const NEW_POS = (iteration + self.progress) * Number(LOOP_HEAD.duration());
-          SCRUB.vars.position = NEW_POS;
-          SCRUB.invalidate().restart();
-        }
+        const progress = self.progress;
+        const NEW_POS = progress * Number(LOOP_HEAD.duration());
+        SCRUB.vars.position = NEW_POS;
+        SCRUB.invalidate().restart();
       },
     });
 
-    const WRAP = (iterationDelta: number, scrollTo: number) => {
-      iteration += iterationDelta;
-      TRIGGER.scroll(scrollTo);
-      TRIGGER.update();
-    };
-
     const SNAP = gsap.utils.snap(1 / BOXES.length);
-
-    const progressToScroll = (progress: number) =>
-      gsap.utils.clamp(
-        1,
-        TRIGGER.end - 1,
-        gsap.utils.wrap(0, 1, progress) * TRIGGER.end
-      );
 
     const scrollToPosition = (position: number) => {
       const SNAP_POS = SNAP(position);
-      const PROGRESS =
-        (SNAP_POS - Number(LOOP_HEAD.duration()) * iteration) / Number(LOOP_HEAD.duration());
-      const SCROLL = progressToScroll(PROGRESS);
-      if (PROGRESS >= 1 || PROGRESS < 0) return WRAP(Math.floor(PROGRESS), SCROLL);
-      TRIGGER.scroll(SCROLL);
+      const timeline = gsap.timeline();
+      timeline.to(PLAYHEAD, {
+        position: SNAP_POS,
+        duration: 0.5,
+        ease: 'power2.out',
+        onUpdate: () => {
+          LOOP_HEAD.totalTime(POSITION_WRAP(PLAYHEAD.position));
+        }
+      });
     };
-
-    ScrollTrigger.addEventListener('scrollEnd', () =>
-      scrollToPosition(Number(SCRUB.vars.position))
-    );
 
     const NEXT = () => scrollToPosition(Number(SCRUB.vars.position) - 1 / BOXES.length);
     const PREV = () => scrollToPosition(Number(SCRUB.vars.position) + 1 / BOXES.length);
@@ -279,7 +259,7 @@ const FeaturedProjects = () => {
   }, []);
 
   return (
-    <section className="bg-portfolio-black text-white py-20">
+    <section className="featured-projects-section bg-portfolio-black text-white py-20">
       <div className="container mx-auto px-6">
         <div className="text-center mb-16">
           <h2 className="font-playfair text-4xl font-bold">Featured Projects</h2>

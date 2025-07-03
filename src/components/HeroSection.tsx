@@ -2,13 +2,13 @@
 const HeroSection = () => {
   return (
     <section className="bg-portfolio-black text-white py-20 relative overflow-hidden min-h-[700px] flex items-center">
-      {/* Background Camera Lens Image */}
+      {/* Background Camera Lens Image - positioned on the right side */}
       <div 
-        className="absolute inset-0 opacity-[0.08] z-0"
+        className="absolute top-0 right-0 w-1/2 h-full opacity-15 z-0"
         style={{
           backgroundImage: `url('/lovable-uploads/74c9a851-6d57-412e-9a5e-b83bc5a76b7c.png')`,
-          backgroundPosition: 'center',
-          backgroundSize: 'cover',
+          backgroundPosition: 'center right',
+          backgroundSize: 'contain',
           backgroundRepeat: 'no-repeat'
         }}
       />
@@ -30,7 +30,7 @@ const HeroSection = () => {
           </div>
 
           {/* Right Column - Content */}
-          <div className="lg:col-span-5">
+          <div className="lg:col-span-5 relative z-20">
             <h1 className="font-playfair text-4xl lg:text-5xl font-bold mb-6 leading-tight">
               Hi! My name is John Doe, I'm a photographer.
             </h1>
