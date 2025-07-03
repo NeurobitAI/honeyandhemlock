@@ -91,10 +91,10 @@ const AdminLogin = () => {
         <Card className="bg-portfolio-dark border-portfolio-gold">
           <CardContent className="pt-6">
             <div className="text-center space-y-4">
-              <p className="text-white/80">Need to add a new judge?</p>
+              <p className="text-white/80">Judge Login</p>
               <Link to="/judge">
                 <Button variant="outline" className="w-full border-portfolio-gold text-portfolio-gold hover:bg-portfolio-gold hover:text-black">
-                  Judge Sign Up
+                  Judge Login
                 </Button>
               </Link>
             </div>

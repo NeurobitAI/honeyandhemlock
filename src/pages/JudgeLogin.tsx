@@ -1,7 +1,6 @@
 
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -11,8 +10,8 @@ import { useToast } from '@/hooks/use-toast';
 const JudgeLogin = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [name, setName] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const { login } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -20,30 +19,41 @@ const JudgeLogin = () => {
     e.preventDefault();
     setIsLoading(true);
 
-    const success = await login(email, password, 'judge');
-    if (success) {
-      navigate('/judge-dashboard');
-    } else {
-      toast({
-        title: "Login Failed",
-        description: "Invalid credentials. Please try again.",
-        variant: "destructive"
-      });
-    }
+    // Simulate signup process
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    toast({
+      title: "Signup Successful",
+      description: "Your account has been submitted for admin approval. You will be notified once approved.",
+    });
+    
     setIsLoading(false);
+    navigate('/');
   };
 
   return (
     <div className="min-h-screen bg-portfolio-black flex items-center justify-center">
       <Card className="w-full max-w-md bg-portfolio-dark border-portfolio-gold/20">
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl text-portfolio-gold">Judge Login</CardTitle>
+          <CardTitle className="text-2xl text-portfolio-gold">Judge Sign Up</CardTitle>
           <CardDescription className="text-white/70">
-            Access your assigned script reviews
+            Apply to become a script reviewer
           </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <Label htmlFor="name" className="text-white">Full Name</Label>
+              <Input
+                id="name"
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Enter your full name"
+                className="bg-portfolio-black border-portfolio-gold/30 text-white"
+                required
+              />
+            </div>
             <div>
               <Label htmlFor="email" className="text-white">Email</Label>
               <Input
@@ -51,7 +61,7 @@ const JudgeLogin = () => {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="judge@honeyandgemlock.com"
+                placeholder="Enter your email"
                 className="bg-portfolio-black border-portfolio-gold/30 text-white"
                 required
               />
@@ -63,7 +73,7 @@ const JudgeLogin = () => {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="Enter your password"
+                placeholder="Create a password"
                 className="bg-portfolio-black border-portfolio-gold/30 text-white"
                 required
               />
@@ -73,12 +83,9 @@ const JudgeLogin = () => {
               disabled={isLoading}
               className="w-full bg-portfolio-gold text-black hover:bg-portfolio-gold/90"
             >
-              {isLoading ? 'Logging in...' : 'Login'}
+              {isLoading ? 'Signing up...' : 'Sign Up'}
             </Button>
           </form>
-          <div className="mt-4 text-center text-sm text-white/60">
-            Demo credentials: judge@honeyandgemlock.com / judge123
-          </div>
         </CardContent>
       </Card>
     </div>

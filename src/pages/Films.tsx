@@ -6,21 +6,24 @@ const Films = () => {
   const films = [
     {
       id: 1,
-      image: "/lovable-uploads/5f9a22f4-a808-4f43-969d-f954514528c3.png",
+      image: "/lovable-uploads/c3efdeb0-642b-46d9-ac6b-7d1d5641a0b5.png",
       title: "SPACEMAN",
-      description: "Spaceman is an exploration of human emotion that broaches subject matter that is unfortunately too often still considered taboo. It follows Bobby on his first jaunt back into the dating world after escaping an abusive marriage in which he fell victim to domestic violence. This story is powerful and provides a sliver of hope that one can, in fact, put themselves out there again."
+      description: "Spaceman is an exploration of human emotion that broaches subject matter that is unfortunately too often still considered taboo. It follows Bobby on his first jaunt back into the dating world after escaping an abusive marriage in which he fell victim to domestic violence. This story is powerful and provides a sliver of hope that one can, in fact, put themselves out there again.",
+      imdbLink: "https://www.imdb.com/title/tt21265664/?ref_=nm_knf_t_3"
     },
     {
       id: 2,
-      image: "/lovable-uploads/291d4f04-279f-428a-9bcc-634c12250d2f.png",
+      image: "/lovable-uploads/26af3cda-d0cf-411b-8f0b-ac411f441ed3.png",
       title: "SPEECHLESS",
-      description: "Speechless - Coming soon.."
+      description: "Speechless - Coming soon..",
+      imdbLink: "https://www.imdb.com/title/tt28655918/?ref_=fn_all_ttl_27"
     },
     {
       id: 3,
-      image: "/lovable-uploads/b398eef9-af85-4f29-a70f-1a8b4edf44ca.png",
+      image: "/lovable-uploads/107207e5-b126-4464-b5ad-4576c7b7c1ae.png",
       title: "SOLITARITY",
-      description: "'Solitarity' is the surrealist exploration of depression through the experience of Jeremy, a man at the end of his rope. Succumbing to his numbness, Jeremey is ready to throw in the towel when depression manifests itself into a human like entity and forces Jeremy to look his issues in the eye and realize he cannot continue alone."
+      description: "'Solitarity' is the surrealist exploration of depression through the experience of Jeremy, a man at the end of his rope. Succumbing to his numbness, Jeremey is ready to throw in the towel when depression manifests itself into a human like entity and forces Jeremy to look his issues in the eye and realize he cannot continue alone.",
+      imdbLink: "https://www.imdb.com/title/tt18573788/?ref_=nv_sr_srsg_0_tt_8_nm_0_in_0_q_Solitarity"
     }
   ];
 
@@ -37,12 +40,18 @@ const Films = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {films.map((film) => (
-              <div key={film.id} className="bg-portfolio-dark rounded-lg overflow-hidden shadow-2xl hover:scale-105 transition-transform duration-300">
-                <div className="aspect-[16/9] overflow-hidden">
+              <a
+                key={film.id}
+                href={film.imdbLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-portfolio-dark rounded-lg overflow-hidden shadow-2xl hover:scale-105 transition-transform duration-300 cursor-pointer"
+              >
+                <div className="aspect-[3/4] overflow-hidden">
                   <img 
                     src={film.image}
                     alt={film.title}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-contain bg-black"
                   />
                 </div>
                 <div className="p-6">
@@ -51,7 +60,7 @@ const Films = () => {
                     {film.description}
                   </p>
                 </div>
-              </div>
+              </a>
             ))}
           </div>
         </div>

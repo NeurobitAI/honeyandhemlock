@@ -1,5 +1,6 @@
 
 import { useState } from 'react';
+import { ExternalLink } from 'lucide-react';
 
 const FoundersSection = () => {
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
@@ -9,12 +10,14 @@ const FoundersSection = () => {
       name: "Shanna Riker",
       title: "Co-Founder, Writer, Director & Producer",
       image: "/lovable-uploads/94dcbd50-94f9-49c9-a62e-e8f4082790d0.png",
+      imdb: "https://www.imdb.me/shannariker",
       bio: "Shanna Riker is a Writer, Director, and Producer and Co-Founder of Honey & Hemlock Productions. Her award winning short film, SPACEMAN, was an official selection in 15+ festivals. The Austin Revolution Film Festival named her the 2023 FEMALE FILMMAKER OF THE YEAR & Spaceman received 3 Best Director Nominations. Shanna has directed and produced multiple, award-winning short films. Highlights include: SOLITARITY (Co-directed with the talented Melissa Bronski) & THE LEAP. Shanna's most recent film, DUELING WATCHERS is currently in post production. Her screenplays BOTTOM OF THE BARREL, BLOOD SPLATTERED PEARLS, UNFINISHED WORKS, & THE LIGHT BEFORE CHRISTMAS have also created buzz in the festival circuit, claiming awards for Best Screenplay across various festivals. Shanna has produced 100+ national and award-winning commercials and client testimonials for SPECTRUM REACH. She also produces live events for clients such as DISNEY, NISSAN, BLIZZARD, and SPOTIFY. Shanna hopes her work with Honey & Hemlock inspires audiences and provides characters who are authentically human."
     },
     {
       name: "Melissa Bronski",
       title: "Co-Founder, Executive Producer & Director",
       image: "/lovable-uploads/53eb1d38-cf71-455a-be1e-9a7383960f98.png",
+      imdb: "https://www.imdb.com/name/nm10558693/?ref_=nv_sr_srsg_0_tt_0_nm_4_in_0_q_Melissa%2520Bronski",
       bio: "Melissa Bronski, Co-Founder, Executive Producer - Director, a California based female filmmaker dedicated to the art of storytelling. She has produced 5 short films, two seasons of 'Honey Writes Screenplay competition', Co-directed the short film Solitarity, made her solo directorial debut with 'Speechless' which is now in its festival run and has most recently won Best Short Drama and Directors Choice of Best Short at the Austin Revolution Film Festival. She is now in post production for the horror short Beholder. One of the true joys and dedications of her life is to her company Honey & Hemlock Productions, which she founded with producer/director Shanna Riker. Along with her work at Honey & Hemlock Melissa works at NBCUniversal in Lot operations and Corporate Services. She has a deep passion for the work that she does and hopes that her work inspires others to do and be more than they were before seeing it."
     }
   ];
@@ -54,6 +57,17 @@ const FoundersSection = () => {
                 <div className={`transition-transform duration-700 ease-out ${hoveredCard === index ? 'transform translate-y-0' : 'transform translate-y-8'}`}>
                   <h3 className="font-playfair text-2xl font-bold mb-2 text-white">{founder.name}</h3>
                   <h4 className="font-open-sans text-lg text-portfolio-gold mb-4">{founder.title}</h4>
+                  
+                  {/* IMDB Link */}
+                  <a 
+                    href={founder.imdb}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center space-x-2 text-portfolio-gold hover:text-white transition-colors mb-4"
+                  >
+                    <ExternalLink className="w-4 h-4" />
+                    <span className="text-sm">View IMDB Profile</span>
+                  </a>
                   
                   {/* Bio Text - Hidden by default, shown on hover */}
                   <p className={`font-open-sans text-sm leading-relaxed text-white/90 transition-all duration-700 ease-out ${

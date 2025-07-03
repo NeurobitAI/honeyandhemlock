@@ -27,12 +27,12 @@ const SkillsetSection = () => {
 
   return (
     <section className="bg-portfolio-black text-white py-20 relative overflow-hidden">
-      {/* Background Camera Lens Image - positioned subtly behind content */}
+      {/* Background Image - positioned on the left and more opaque */}
       <div 
-        className="absolute inset-0 opacity-8 z-0"
+        className="absolute inset-0 opacity-20 z-0"
         style={{
           backgroundImage: `url('/lovable-uploads/9cf1eb65-bc24-4062-9ec2-2bafdbaa9642.png')`,
-          backgroundPosition: 'right center',
+          backgroundPosition: 'left center',
           backgroundSize: 'contain',
           backgroundRepeat: 'no-repeat'
         }}
