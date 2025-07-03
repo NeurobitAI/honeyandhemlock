@@ -1,27 +1,27 @@
 
-import { User, Mountain, Briefcase, Heart } from "lucide-react";
+import { Film, Award, Camera, Video } from "lucide-react";
 
 const SkillsetSection = () => {
   const skills = [
     {
-      icon: User,
-      title: "Portraits",
-      description: "Capturing the essence of individuals"
+      icon: Film,
+      title: "Feature Films",
+      description: "Cinematic storytelling at its finest"
     },
     {
-      icon: Mountain,
-      title: "Landscapes", 
-      description: "Breathtaking natural scenery"
+      icon: Camera,
+      title: "Cinematography", 
+      description: "Visual artistry in motion"
     },
     {
-      icon: Briefcase,
-      title: "Commercial / Corporate",
-      description: "Professional business photography"
+      icon: Video,
+      title: "Production",
+      description: "End-to-end film production"
     },
     {
-      icon: Heart,
-      title: "Weddings",
-      description: "Your special day preserved forever"
+      icon: Award,
+      title: "Award Winners",
+      description: "Recognition for excellence"
     }
   ];
 
@@ -31,7 +31,7 @@ const SkillsetSection = () => {
         {/* Section Header */}
         <div className="text-center mb-16">
           <h2 className="font-playfair text-4xl font-bold mb-4">Our Work</h2>
-          <p className="font-open-sans text-lg text-portfolio-gold">I'm very talented. Check what I can do!</p>
+          <p className="font-open-sans text-lg text-portfolio-gold">Award Winning Films</p>
         </div>
 
         {/* Two Column Layout */}
