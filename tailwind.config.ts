@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,7 +62,15 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
-				}
+				},
+				// Custom photography portfolio colors
+				'portfolio-gold': '#BFA16F',
+				'portfolio-black': '#000000',
+				'portfolio-dark': '#090909'
+			},
+			fontFamily: {
+				'playfair': ['Playfair Display', 'serif'],
+				'open-sans': ['Open Sans', 'sans-serif'],
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
