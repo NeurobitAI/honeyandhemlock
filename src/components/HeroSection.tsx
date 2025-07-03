@@ -2,11 +2,11 @@
 const HeroSection = () => {
   return (
     <section className="bg-portfolio-black text-white py-20 relative overflow-hidden min-h-[700px] flex items-center">
-      {/* Background Camera Lens Watermark */}
+      {/* Background Camera Lens Image */}
       <div 
-        className="absolute inset-0 opacity-[0.08] z-0"
+        className="absolute inset-0 opacity-[0.05] z-0"
         style={{
-          backgroundImage: `url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><circle cx="100" cy="100" r="90" fill="none" stroke="white" stroke-width="2"/><circle cx="100" cy="100" r="70" fill="none" stroke="white" stroke-width="1.5"/><circle cx="100" cy="100" r="50" fill="none" stroke="white" stroke-width="1"/><circle cx="100" cy="100" r="30" fill="none" stroke="white" stroke-width="0.5"/></svg>')`,
+          backgroundImage: `url('/lovable-uploads/5270dfd1-9e29-4b9f-8a04-fc84ed90afa8.png')`,
           backgroundPosition: 'center',
           backgroundSize: 'cover',
           backgroundRepeat: 'no-repeat'
@@ -18,10 +18,10 @@ const HeroSection = () => {
           {/* Left Column - Image Collage */}
           <div className="lg:col-span-7 relative">
             <div className="relative h-[600px] mx-12">
-              {/* Main Portrait */}
+              {/* Main Portrait - Your uploaded image */}
               <div className="absolute top-0 left-0 z-30">
                 <img 
-                  src="https://images.unsplash.com/photo-1649972904349-6e44c42644a7?w=600&h=800&fit=crop"
+                  src="/lovable-uploads/06a85397-ee24-4888-91a0-8b608e65a420.png"
                   alt="Professional photographer portrait"
                   className="w-[300px] h-[400px] object-cover rounded-lg shadow-2xl"
                 />

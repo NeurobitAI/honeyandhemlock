@@ -1,5 +1,5 @@
 
-import { Camera, Facebook, Twitter, Instagram } from "lucide-react";
+import { Facebook, Twitter, Instagram } from "lucide-react";
 
 const Footer = () => {
   const navLinks = [
@@ -11,9 +11,12 @@ const Footer = () => {
       <div className="container mx-auto px-6">
         {/* Logo */}
         <div className="text-center mb-8">
-          <div className="flex items-center justify-center space-x-2 mb-2">
-            <Camera className="w-6 h-6 text-white" />
-            <span className="font-open-sans text-lg uppercase tracking-wider">Photography Joe Hendricks</span>
+          <div className="flex items-center justify-center mb-2">
+            <img 
+              src="/lovable-uploads/64475ea2-91fd-4af8-b8e0-4131e1f8ec82.png" 
+              alt="Honey & Hemlock Productions"
+              className="h-12 w-auto"
+            />
           </div>
         </div>
 

@@ -1,5 +1,5 @@
 
-import { Camera, Facebook, Twitter, Instagram } from "lucide-react";
+import { Facebook, Twitter, Instagram } from "lucide-react";
 
 const Header = () => {
   return (
@@ -39,11 +39,13 @@ const Header = () => {
 
           {/* Logo */}
           <div className="text-center">
-            <div className="flex items-center justify-center space-x-2 mb-1">
-              <Camera className="w-6 h-6 text-portfolio-gold" />
-              <span className="font-open-sans text-xl uppercase tracking-wider font-semibold">Photography</span>
+            <div className="flex items-center justify-center mb-1">
+              <img 
+                src="/lovable-uploads/64475ea2-91fd-4af8-b8e0-4131e1f8ec82.png" 
+                alt="Honey & Hemlock Productions"
+                className="h-16 w-auto"
+              />
             </div>
-            <div className="font-playfair text-sm text-gray-300">Joe Hendricks</div>
           </div>
 
           {/* Right Navigation */}
