@@ -35,7 +35,7 @@ const FeaturedProjects = () => {
     const STAGGER = 0.1;
     const DURATION = 1;
     const OFFSET = 0;
-    const BOXES = gsap.utils.toArray('.box');
+    const BOXES = gsap.utils.toArray('.box') as HTMLElement[];
 
     const LOOP = gsap.timeline({
       paused: true,
@@ -48,14 +48,14 @@ const FeaturedProjects = () => {
     SHIFTS.forEach((BOX, index) => {
       const BOX_TL = gsap
         .timeline()
-        .set(BOX, {
+        .set(BOX as HTMLElement, {
           xPercent: 250,
           rotateY: -50,
           opacity: 0,
           scale: 0.5,
         })
         .to(
-          BOX,
+          BOX as HTMLElement,
           {
             opacity: 1,
             scale: 1,
@@ -64,7 +64,7 @@ const FeaturedProjects = () => {
           0
         )
         .to(
-          BOX,
+          BOX as HTMLElement,
           {
             opacity: 0,
             scale: 0.5,
@@ -73,7 +73,7 @@ const FeaturedProjects = () => {
           0.9
         )
         .fromTo(
-          BOX,
+          BOX as HTMLElement,
           {
             xPercent: 250,
           },
@@ -86,7 +86,7 @@ const FeaturedProjects = () => {
           0
         )
         .fromTo(
-          BOX,
+          BOX as HTMLElement,
           {
             rotateY: -50,
           },
@@ -99,7 +99,7 @@ const FeaturedProjects = () => {
           0
         )
         .to(
-          BOX,
+          BOX as HTMLElement,
           {
             z: 100,
             scale: 1.25,
@@ -110,7 +110,7 @@ const FeaturedProjects = () => {
           0.4
         )
         .fromTo(
-          BOX,
+          BOX as HTMLElement,
           {
             zIndex: 1,
           },
@@ -173,14 +173,14 @@ const FeaturedProjects = () => {
         } else if (SCROLL < 1 && self.direction < 0) {
           WRAP(-1, self.end - 1);
         } else {
-          const NEW_POS = (iteration + self.progress) * LOOP_HEAD.duration();
+          const NEW_POS = (iteration + self.progress) * Number(LOOP_HEAD.duration());
           SCRUB.vars.position = NEW_POS;
           SCRUB.invalidate().restart();
         }
       },
     });
 
-    const WRAP = (iterationDelta, scrollTo) => {
+    const WRAP = (iterationDelta: number, scrollTo: number) => {
       iteration += iterationDelta;
       TRIGGER.scroll(scrollTo);
       TRIGGER.update();
@@ -188,30 +188,30 @@ const FeaturedProjects = () => {
 
     const SNAP = gsap.utils.snap(1 / BOXES.length);
 
-    const progressToScroll = progress =>
+    const progressToScroll = (progress: number) =>
       gsap.utils.clamp(
         1,
         TRIGGER.end - 1,
         gsap.utils.wrap(0, 1, progress) * TRIGGER.end
       );
 
-    const scrollToPosition = position => {
+    const scrollToPosition = (position: number) => {
       const SNAP_POS = SNAP(position);
       const PROGRESS =
-        (SNAP_POS - LOOP_HEAD.duration() * iteration) / LOOP_HEAD.duration();
+        (SNAP_POS - Number(LOOP_HEAD.duration()) * iteration) / Number(LOOP_HEAD.duration());
       const SCROLL = progressToScroll(PROGRESS);
       if (PROGRESS >= 1 || PROGRESS < 0) return WRAP(Math.floor(PROGRESS), SCROLL);
       TRIGGER.scroll(SCROLL);
     };
 
     ScrollTrigger.addEventListener('scrollEnd', () =>
-      scrollToPosition(SCRUB.vars.position)
+      scrollToPosition(Number(SCRUB.vars.position))
     );
 
-    const NEXT = () => scrollToPosition(SCRUB.vars.position - 1 / BOXES.length);
-    const PREV = () => scrollToPosition(SCRUB.vars.position + 1 / BOXES.length);
+    const NEXT = () => scrollToPosition(Number(SCRUB.vars.position) - 1 / BOXES.length);
+    const PREV = () => scrollToPosition(Number(SCRUB.vars.position) + 1 / BOXES.length);
 
-    const handleKeyDown = (event) => {
+    const handleKeyDown = (event: KeyboardEvent) => {
       if (event.code === 'ArrowLeft' || event.code === 'KeyA') NEXT();
       if (event.code === 'ArrowRight' || event.code === 'KeyD') PREV();
     };
@@ -219,14 +219,14 @@ const FeaturedProjects = () => {
     document.addEventListener('keydown', handleKeyDown);
 
     const boxesElement = document.querySelector('.boxes');
-    const handleBoxClick = (e) => {
-      const BOX = e.target.closest('.box');
+    const handleBoxClick = (e: Event) => {
+      const BOX = (e.target as HTMLElement).closest('.box') as HTMLElement;
       if (BOX) {
         let TARGET = BOXES.indexOf(BOX);
         let CURRENT = gsap.utils.wrap(
           0,
           BOXES.length,
-          Math.floor(BOXES.length * SCRUB.vars.position)
+          Math.floor(BOXES.length * Number(SCRUB.vars.position))
         );
         let BUMP = TARGET - CURRENT;
         if (TARGET > CURRENT && TARGET - CURRENT > BOXES.length * 0.5) {
@@ -235,7 +235,7 @@ const FeaturedProjects = () => {
         if (CURRENT > TARGET && CURRENT - TARGET > BOXES.length * 0.5) {
           BUMP = BOXES.length + BUMP;
         }
-        scrollToPosition(SCRUB.vars.position + BUMP * (1 / BOXES.length));
+        scrollToPosition(Number(SCRUB.vars.position) + BUMP * (1 / BOXES.length));
       }
     };
 
@@ -250,14 +250,14 @@ const FeaturedProjects = () => {
       type: 'x',
       trigger: '.box',
       onPress() {
-        this.startOffset = SCRUB.vars.position;
+        this.startOffset = Number(SCRUB.vars.position);
       },
       onDrag() {
         SCRUB.vars.position = this.startOffset + (this.startX - this.x) * 0.001;
         SCRUB.invalidate().restart();
       },
       onDragEnd() {
-        scrollToPosition(SCRUB.vars.position);
+        scrollToPosition(Number(SCRUB.vars.position));
       },
     });
 
