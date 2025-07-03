@@ -30,7 +30,7 @@ const SkillsetSection = () => {
       <div className="container mx-auto px-6">
         {/* Section Header */}
         <div className="text-center mb-16">
-          <h2 className="font-playfair text-4xl font-bold mb-4">My Skillset</h2>
+          <h2 className="font-playfair text-4xl font-bold mb-4">Our Work</h2>
           <p className="font-open-sans text-lg text-portfolio-gold">I'm very talented. Check what I can do!</p>
         </div>
 
@@ -50,40 +50,38 @@ const SkillsetSection = () => {
           {/* Right Column - Image Collage */}
           <div className="relative -ml-5 border-[2px] border-portfolio-gold rounded-lg p-6">
             <div className="relative h-[400px]">
-              {/* Studio lights shot - Top Left */}
+              {/* Main image - Hand holding yellow item */}
               <div className="absolute top-0 left-0 z-30">
                 <img 
-                  src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=320&h=200&fit=crop"
-                  alt="Studio lighting setup"
-                  className="w-[160px] h-[100px] object-cover rounded-md"
+                  src="/lovable-uploads/942653bf-d1b9-4433-ae2e-76e1c51bdc0c.png"
+                  alt="Creative work detail"
+                  className="w-[180px] h-[120px] object-cover rounded-md"
                 />
               </div>
 
-              {/* Photographer at work - Top Right (overlapped by top-left) */}
-              <div className="absolute top-0 right-0 z-20" style={{ right: '15px' }}>
+              {/* Second image - Couple touching foreheads */}
+              <div className="absolute top-0 right-0 z-20" style={{ right: '10px' }}>
                 <img 
-                  src="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=320&h=200&fit=crop"
-                  alt="Photographer working"
-                  className="w-[160px] h-[100px] object-cover rounded-md"
+                  src="/lovable-uploads/23281ae9-1a58-4a14-b30f-73803cecb1e9.png"
+                  alt="Intimate scene"
+                  className="w-[180px] h-[120px] object-cover rounded-md"
                 />
               </div>
 
-              {/* Urban street scene - Bottom Left */}
+              {/* Third image - Bar scene */}
               <div className="absolute bottom-0 left-0 z-20">
                 <img 
-                  src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=320&h=200&fit=crop"
-                  alt="Urban street photography"
-                  className="w-[160px] h-[100px] object-cover rounded-md"
+                  src="/lovable-uploads/66592ec3-dc1a-475b-9d26-f9f9cbe2ce08.png"
+                  alt="Bar scene"
+                  className="w-[180px] h-[120px] object-cover rounded-md"
                 />
               </div>
 
-              {/* DSLR close-up - Bottom Right (overlapped by bottom-left) */}
-              <div className="absolute bottom-0 right-0 z-10" style={{ right: '20px' }}>
-                <img 
-                  src="https://images.unsplash.com/photo-1500673922987-e212871fec22?w=320&h=200&fit=crop"
-                  alt="DSLR camera close-up"
-                  className="w-[160px] h-[100px] object-cover rounded-md"
-                />
+              {/* Fourth image overlapping - positioning to create overlap */}
+              <div className="absolute bottom-0 right-0 z-10" style={{ right: '15px' }}>
+                <div className="w-[180px] h-[120px] bg-portfolio-gold/20 rounded-md flex items-center justify-center">
+                  <span className="text-white text-sm">More Work</span>
+                </div>
               </div>
             </div>
           </div>
