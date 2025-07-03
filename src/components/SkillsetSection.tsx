@@ -47,43 +47,13 @@ const SkillsetSection = () => {
             ))}
           </div>
 
-          {/* Right Column - Image Collage */}
-          <div className="relative -ml-5 border-[2px] border-portfolio-gold rounded-lg p-6">
-            <div className="relative h-[400px]">
-              {/* Main image - Hand holding yellow item */}
-              <div className="absolute top-0 left-0 z-30">
-                <img 
-                  src="/lovable-uploads/942653bf-d1b9-4433-ae2e-76e1c51bdc0c.png"
-                  alt="Creative work detail"
-                  className="w-[180px] h-[120px] object-cover rounded-md"
-                />
-              </div>
-
-              {/* Second image - Couple touching foreheads */}
-              <div className="absolute top-0 right-0 z-20" style={{ right: '10px' }}>
-                <img 
-                  src="/lovable-uploads/23281ae9-1a58-4a14-b30f-73803cecb1e9.png"
-                  alt="Intimate scene"
-                  className="w-[180px] h-[120px] object-cover rounded-md"
-                />
-              </div>
-
-              {/* Third image - Bar scene */}
-              <div className="absolute bottom-0 left-0 z-20">
-                <img 
-                  src="/lovable-uploads/66592ec3-dc1a-475b-9d26-f9f9cbe2ce08.png"
-                  alt="Bar scene"
-                  className="w-[180px] h-[120px] object-cover rounded-md"
-                />
-              </div>
-
-              {/* Fourth image overlapping - positioning to create overlap */}
-              <div className="absolute bottom-0 right-0 z-10" style={{ right: '15px' }}>
-                <div className="w-[180px] h-[120px] bg-portfolio-gold/20 rounded-md flex items-center justify-center">
-                  <span className="text-white text-sm">More Work</span>
-                </div>
-              </div>
-            </div>
+          {/* Right Column - Single Image */}
+          <div className="relative">
+            <img 
+              src="/lovable-uploads/2b22540e-5ab5-40fb-bf0b-1b453ba62491.png"
+              alt="Our work showcase"
+              className="w-full h-auto object-cover rounded-lg shadow-2xl"
+            />
           </div>
         </div>
       </div>

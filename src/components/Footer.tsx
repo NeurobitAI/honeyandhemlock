@@ -9,13 +9,13 @@ const Footer = () => {
   return (
     <footer className="bg-portfolio-dark text-white py-16">
       <div className="container mx-auto px-6">
-        {/* Logo */}
+        {/* Logo - Increased size by 3x */}
         <div className="text-center mb-8">
           <div className="flex items-center justify-center mb-2">
             <img 
               src="/lovable-uploads/64475ea2-91fd-4af8-b8e0-4131e1f8ec82.png" 
               alt="Honey & Hemlock Productions"
-              className="h-20 w-auto"
+              className="h-60 w-auto"
             />
           </div>
         </div>

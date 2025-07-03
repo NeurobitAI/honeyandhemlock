@@ -28,7 +28,7 @@ const Header = () => {
               <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-portfolio-gold transition-all group-hover:w-full"></span>
             </a>
             <a href="#" className="font-open-sans text-sm uppercase tracking-wider hover:text-portfolio-gold transition-colors relative group">
-              Shop ▾
+              Films
               <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-portfolio-gold transition-all group-hover:w-full"></span>
             </a>
             <a href="#" className="font-open-sans text-sm uppercase tracking-wider hover:text-portfolio-gold transition-colors relative group">
@@ -37,13 +37,13 @@ const Header = () => {
             </a>
           </div>
 
-          {/* Logo */}
+          {/* Logo - Increased size by 3x */}
           <div className="text-center">
             <div className="flex items-center justify-center mb-1">
               <img 
                 src="/lovable-uploads/64475ea2-91fd-4af8-b8e0-4131e1f8ec82.png" 
                 alt="Honey & Hemlock Productions"
-                className="h-24 w-auto"
+                className="h-72 w-auto"
               />
             </div>
           </div>
@@ -51,15 +51,15 @@ const Header = () => {
           {/* Right Navigation */}
           <div className="flex space-x-8">
             <a href="#" className="font-open-sans text-sm uppercase tracking-wider hover:text-portfolio-gold transition-colors relative group">
-              Features
+              About
               <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-portfolio-gold transition-all group-hover:w-full"></span>
             </a>
             <a href="#" className="font-open-sans text-sm uppercase tracking-wider hover:text-portfolio-gold transition-colors relative group">
-              Courses
+              Services
               <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-portfolio-gold transition-all group-hover:w-full"></span>
             </a>
             <a href="#" className="font-open-sans text-sm uppercase tracking-wider hover:text-portfolio-gold transition-colors relative group">
-              Pages
+              Contact
               <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-portfolio-gold transition-all group-hover:w-full"></span>
             </a>
           </div>
