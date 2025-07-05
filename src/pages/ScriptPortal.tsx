@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Upload, FileText } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -7,6 +6,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 
 const ScriptPortal = () => {
   const [isUploading, setIsUploading] = useState(false);
@@ -106,6 +107,7 @@ const ScriptPortal = () => {
 
   return (
     <div className="min-h-screen bg-portfolio-black text-white">
+      <Header />
       <div className="container mx-auto px-6 py-20">
         <div className="text-center mb-16">
           <h1 className="font-playfair text-4xl font-bold mb-4">Script Review Portal</h1>
@@ -224,6 +226,7 @@ const ScriptPortal = () => {
           </Card>
         </div>
       </div>
+      <Footer />
     </div>
   );
 };

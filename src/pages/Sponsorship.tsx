@@ -1,6 +1,7 @@
 
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import SponsorshipSection from "@/components/SponsorshipSection";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 const Sponsorship = () => {
@@ -70,31 +71,11 @@ const Sponsorship = () => {
               </CardContent>
             </Card>
           </div>
-
-          {/* Call to Action */}
-          <div className="text-center">
-            <Card className="bg-portfolio-dark border-portfolio-gold/20 max-w-2xl mx-auto">
-              <CardHeader>
-                <CardTitle className="text-portfolio-gold">Ready to Support?</CardTitle>
-                <CardDescription className="text-white/70">
-                  Contact us to learn more about sponsorship opportunities
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="text-white/80 mb-4">
-                  Help us continue creating meaningful content that inspires and entertains while supporting female voices in filmmaking.
-                </p>
-                <a 
-                  href="mailto:contact@honeyandhemlock.productions" 
-                  className="inline-block bg-portfolio-gold text-black px-8 py-3 rounded-lg font-semibold hover:bg-portfolio-gold/90 transition-colors"
-                >
-                  Get in Touch
-                </a>
-              </CardContent>
-            </Card>
-          </div>
         </div>
       </section>
+
+      {/* Add the sponsorship payment section */}
+      <SponsorshipSection />
 
       <Footer />
     </div>
