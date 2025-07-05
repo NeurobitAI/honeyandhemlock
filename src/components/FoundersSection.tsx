@@ -29,11 +29,11 @@ const FoundersSection = () => {
           {founders.map((founder, index) => (
             <div key={index} className="group">
               <div className="bg-portfolio-black rounded-lg overflow-hidden shadow-2xl hover:shadow-portfolio-gold/20 transition-all duration-300 hover:scale-105">
-                <div className="aspect-[4/5] sm:aspect-[3/4] overflow-hidden">
+                <div className="aspect-square overflow-hidden">
                   <img 
                     src={founder.image}
                     alt={founder.name}
-                    className="w-full h-full object-cover object-top hover:scale-110 transition-transform duration-500"
+                    className="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
                   />
                 </div>
                 <div className="p-4 sm:p-6">
