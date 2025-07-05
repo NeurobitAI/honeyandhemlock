@@ -9,6 +9,7 @@ import { ScriptProvider } from "@/contexts/ScriptContext";
 import Index from "./pages/Index";
 import Films from "./pages/Films";
 import ScriptPortal from "./pages/ScriptPortal";
+import Sponsorship from "./pages/Sponsorship";
 import AdminLogin from "./pages/AdminLogin";
 import JudgeLogin from "./pages/JudgeLogin";
 import AdminDashboard from "./pages/AdminDashboard";
@@ -29,6 +30,7 @@ const App = () => (
               <Route path="/" element={<Index />} />
               <Route path="/films" element={<Films />} />
               <Route path="/script-portal" element={<ScriptPortal />} />
+              <Route path="/sponsorship" element={<Sponsorship />} />
               <Route path="/admin" element={<AdminLogin />} />
               <Route path="/judge" element={<JudgeLogin />} />
               <Route path="/admin-dashboard" element={<AdminDashboard />} />

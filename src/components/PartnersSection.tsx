@@ -17,23 +17,34 @@ const PartnersSection = () => {
   ];
 
   return (
-    <section className="bg-portfolio-black text-white py-16">
-      <div className="container mx-auto px-6">
-        <div className="text-center mb-12">
-          <h2 className="font-playfair text-2xl font-bold mb-2">Recognitions</h2>
-          <h3 className="font-playfair text-xl text-portfolio-gold">Awards and Nominations</h3>
+    <section 
+      className="bg-portfolio-black text-white py-12 sm:py-16 relative overflow-hidden"
+      style={{
+        backgroundImage: `url('/lovable-uploads/e8503f85-c9a3-4121-9343-fe3fcb38dbe5.png')`,
+        backgroundPosition: 'center',
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat'
+      }}
+    >
+      {/* Background overlay */}
+      <div className="absolute inset-0 bg-portfolio-black/80 z-0" />
+      
+      <div className="container mx-auto px-4 sm:px-6 relative z-10">
+        <div className="text-center mb-8 sm:mb-12">
+          <h2 className="font-playfair text-2xl sm:text-3xl lg:text-4xl font-bold mb-2 sm:mb-4">Recognitions</h2>
+          <h3 className="font-playfair text-lg sm:text-xl text-portfolio-gold">Awards and Nominations</h3>
         </div>
         
-        <div className="flex flex-wrap justify-center items-center gap-8 max-w-6xl mx-auto">
+        <div className="flex flex-wrap justify-center items-center gap-4 sm:gap-6 lg:gap-8 max-w-6xl mx-auto">
           {recognitions.map((recognition, index) => (
             <div 
               key={index}
-              className="hover:scale-105 transition-transform duration-300 cursor-pointer bg-white/10 p-4 rounded-lg backdrop-blur-sm"
+              className="hover:scale-105 transition-transform duration-300 cursor-pointer bg-white/10 p-3 sm:p-4 rounded-lg backdrop-blur-sm"
             >
               <img 
                 src={recognition}
                 alt={`Recognition ${index + 1}`}
-                className="w-32 h-auto object-contain filter brightness-100 hover:brightness-110 transition-all duration-300"
+                className="w-20 sm:w-24 lg:w-32 h-auto object-contain filter brightness-100 hover:brightness-110 transition-all duration-300"
               />
             </div>
           ))}

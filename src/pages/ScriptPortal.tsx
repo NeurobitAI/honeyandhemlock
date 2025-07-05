@@ -1,32 +1,24 @@
 
-import React, { useState, useEffect } from 'react';
-import { Upload, FileText, Clock, CheckCircle, XCircle } from 'lucide-react';
-import { useScripts } from '@/contexts/ScriptContext';
+import React, { useState } from 'react';
+import { Upload, FileText, Clock, CheckCircle, XCircle, ArrowLeft } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { useToast } from '@/hooks/use-toast';
+import { useSupabaseScripts } from '@/hooks/useSupabaseScripts';
+import { supabase } from '@/integrations/supabase/client';
 
 const ScriptPortal = () => {
-  const [isUploading, setIsUploading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [title, setTitle] = useState('');
+  const [authorName, setAuthorName] = useState('');
+  const [authorEmail, setAuthorEmail] = useState('');
+  const [authorPhone, setAuthorPhone] = useState('');
   const [file, setFile] = useState<File | null>(null);
-  const [browserId, setBrowserId] = useState('');
-  const { addScript, getUserScripts } = useScripts();
+  const { scripts, loading } = useSupabaseScripts();
   const { toast } = useToast();
-  const userScripts = getUserScripts();
-
-  useEffect(() => {
-    // Generate or retrieve browser ID
-    let id = localStorage.getItem('browserId');
-    if (!id) {
-      id = `browser_${Date.now()}`;
-      localStorage.setItem('browserId', id);
-    }
-    setBrowserId(id);
-  }, []);
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files?.[0];
@@ -37,36 +29,53 @@ const ScriptPortal = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title || !file) {
+    if (!title || !authorName || !authorEmail || !file) {
       toast({
         title: "Error",
-        description: "Please provide both title and file",
+        description: "Please fill in all required fields and upload a file",
         variant: "destructive"
       });
       return;
     }
 
-    setIsUploading(true);
+    setIsSubmitting(true);
     
-    // Simulate payment processing
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    addScript({
-      title,
-      uploadedBy: browserId,
-      status: 'pending',
-      paymentStatus: 'paid',
-      file
-    });
+    try {
+      // Create checkout session for payment
+      const { data, error } = await supabase.functions.invoke('create-checkout-session', {
+        body: {
+          amount: 5000, // $50.00 in cents
+          type: 'script',
+          metadata: {
+            title,
+            author_name: authorName,
+            author_email: authorEmail,
+            author_phone: authorPhone,
+            file_name: file.name,
+          }
+        }
+      });
 
-    toast({
-      title: "Success!",
-      description: "Script submitted successfully! Payment processed.",
-    });
+      if (error) throw error;
 
-    setTitle('');
-    setFile(null);
-    setIsUploading(false);
+      // Redirect to Stripe Checkout
+      window.open(data.url, '_blank');
+      
+      toast({
+        title: "Redirecting to Payment",
+        description: "You'll be redirected to Stripe to complete your payment.",
+      });
+
+    } catch (error) {
+      console.error('Error creating checkout session:', error);
+      toast({
+        title: "Error",
+        description: "Failed to create payment session. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const getStatusIcon = (status: string) => {
@@ -100,54 +109,117 @@ const ScriptPortal = () => {
   };
 
   return (
-    <div className="min-h-screen bg-portfolio-black text-white">
-      <div className="container mx-auto px-6 py-20">
-        <div className="text-center mb-16">
-          <h1 className="font-playfair text-4xl font-bold mb-4">Script Review Portal</h1>
-          <p className="font-open-sans text-lg text-portfolio-gold">Submit your script for professional review</p>
+    <div 
+      className="min-h-screen bg-portfolio-black text-white relative"
+      style={{
+        backgroundImage: `url('/lovable-uploads/42a45bb6-4cbb-4ef6-b2e0-14b799aee7c3.png')`,
+        backgroundPosition: 'center',
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat'
+      }}
+    >
+      {/* Background overlay */}
+      <div className="absolute inset-0 bg-portfolio-black/80 z-0" />
+      
+      {/* Header with logo */}
+      <div className="relative z-10 border-b border-gray-800">
+        <div className="container mx-auto px-4 sm:px-6 py-4">
+          <div className="flex items-center justify-between">
+            <Link to="/" className="flex items-center space-x-2 text-portfolio-gold hover:text-white transition-colors">
+              <ArrowLeft className="w-5 h-5" />
+              <span className="font-open-sans text-sm">Back to Home</span>
+            </Link>
+            <Link to="/" className="flex items-center justify-center">
+              <img 
+                src="/lovable-uploads/64475ea2-91fd-4af8-b8e0-4131e1f8ec82.png" 
+                alt="Honey & Hemlock Productions"
+                className="h-16 sm:h-20 w-auto"
+              />
+            </Link>
+            <div className="w-20"></div>
+          </div>
+        </div>
+      </div>
+
+      <div className="relative z-10 container mx-auto px-4 sm:px-6 py-8 sm:py-12">
+        <div className="text-center mb-8 sm:mb-12">
+          <h1 className="font-playfair text-2xl sm:text-3xl lg:text-4xl font-bold mb-4">Script Review Portal</h1>
+          <p className="font-open-sans text-base sm:text-lg text-portfolio-gold">Submit your script for professional review</p>
         </div>
 
-        <div className="max-w-4xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
             {/* Upload Section */}
-            <Card className="bg-portfolio-dark border-portfolio-gold/20">
+            <Card className="bg-portfolio-dark/90 border-portfolio-gold/20 backdrop-blur-sm">
               <CardHeader>
-                <CardTitle className="text-portfolio-gold">Submit New Script</CardTitle>
-                <CardDescription className="text-white/70">
+                <CardTitle className="text-portfolio-gold text-lg sm:text-xl">Submit New Script</CardTitle>
+                <CardDescription className="text-white/70 text-sm sm:text-base">
                   Upload your script for professional review. Payment required upon submission.
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <form onSubmit={handleSubmit} className="space-y-4">
+                <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
                   <div>
-                    <Label htmlFor="title" className="text-white">Script Title</Label>
+                    <Label htmlFor="title" className="text-white text-sm sm:text-base">Script Title *</Label>
                     <Input
                       id="title"
                       value={title}
                       onChange={(e) => setTitle(e.target.value)}
                       placeholder="Enter script title"
-                      className="bg-portfolio-black border-portfolio-gold/30 text-white"
+                      className="bg-portfolio-black/50 border-portfolio-gold/30 text-white text-sm sm:text-base h-10 sm:h-12"
                     />
                   </div>
                   <div>
-                    <Label htmlFor="file" className="text-white">Script File</Label>
+                    <Label htmlFor="author-name" className="text-white text-sm sm:text-base">Author Name *</Label>
+                    <Input
+                      id="author-name"
+                      value={authorName}
+                      onChange={(e) => setAuthorName(e.target.value)}
+                      placeholder="Enter author name"
+                      className="bg-portfolio-black/50 border-portfolio-gold/30 text-white text-sm sm:text-base h-10 sm:h-12"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="author-email" className="text-white text-sm sm:text-base">Author Email *</Label>
+                    <Input
+                      id="author-email"
+                      type="email"
+                      value={authorEmail}
+                      onChange={(e) => setAuthorEmail(e.target.value)}
+                      placeholder="Enter author email"
+                      className="bg-portfolio-black/50 border-portfolio-gold/30 text-white text-sm sm:text-base h-10 sm:h-12"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="author-phone" className="text-white text-sm sm:text-base">Author Phone</Label>
+                    <Input
+                      id="author-phone"
+                      type="tel"
+                      value={authorPhone}
+                      onChange={(e) => setAuthorPhone(e.target.value)}
+                      placeholder="Enter author phone (optional)"
+                      className="bg-portfolio-black/50 border-portfolio-gold/30 text-white text-sm sm:text-base h-10 sm:h-12"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="file" className="text-white text-sm sm:text-base">Script File *</Label>
                     <Input
                       id="file"
                       type="file"
                       accept=".pdf,.doc,.docx"
                       onChange={handleFileUpload}
-                      className="bg-portfolio-black border-portfolio-gold/30 text-white"
+                      className="bg-portfolio-black/50 border-portfolio-gold/30 text-white text-sm sm:text-base h-10 sm:h-12 file:text-white file:bg-portfolio-gold file:border-0 file:rounded file:px-2 file:py-1 file:mr-4"
                     />
                   </div>
                   <Button
                     type="submit"
-                    disabled={isUploading}
-                    className="w-full bg-portfolio-gold text-black hover:bg-portfolio-gold/90"
+                    disabled={isSubmitting}
+                    className="w-full bg-portfolio-gold text-black hover:bg-portfolio-gold/90 h-10 sm:h-12 text-sm sm:text-base font-semibold"
                   >
-                    {isUploading ? (
+                    {isSubmitting ? (
                       <>
                         <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-black mr-2"></div>
-                        Processing Payment...
+                        Processing...
                       </>
                     ) : (
                       <>
@@ -160,51 +232,42 @@ const ScriptPortal = () => {
               </CardContent>
             </Card>
 
-            {/* Status Overview */}
-            <Card className="bg-portfolio-dark border-portfolio-gold/20">
+            {/* Recent Submissions */}
+            <Card className="bg-portfolio-dark/90 border-portfolio-gold/20 backdrop-blur-sm">
               <CardHeader>
-                <CardTitle className="text-portfolio-gold">Your Submissions</CardTitle>
-                <CardDescription className="text-white/70">
-                  Track the status of your submitted scripts
+                <CardTitle className="text-portfolio-gold text-lg sm:text-xl">Recent Submissions</CardTitle>
+                <CardDescription className="text-white/70 text-sm sm:text-base">
+                  Latest script submissions and their status
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                {userScripts.length > 0 ? (
-                  <div className="space-y-3">
-                    {userScripts.map((script) => (
-                      <div key={script.id} className="flex items-center justify-between p-3 bg-portfolio-black rounded border border-portfolio-gold/20">
-                        <div className="flex items-center space-x-3">
+                {loading ? (
+                  <div className="text-center py-8">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-portfolio-gold mx-auto"></div>
+                    <p className="text-white/60 mt-4">Loading submissions...</p>
+                  </div>
+                ) : scripts.length > 0 ? (
+                  <div className="space-y-3 max-h-96 overflow-y-auto">
+                    {scripts.slice(0, 10).map((script) => (
+                      <div key={script.id} className="flex items-center justify-between p-3 bg-portfolio-black/50 rounded border border-portfolio-gold/20">
+                        <div className="flex items-center space-x-3 flex-1 min-w-0">
                           {getStatusIcon(script.status)}
-                          <div>
-                            <p className="font-medium text-white">{script.title}</p>
-                            <p className="text-sm text-white/60">{getStatusText(script.status)}</p>
+                          <div className="min-w-0 flex-1">
+                            <p className="font-medium text-white text-sm sm:text-base truncate">{script.title}</p>
+                            <p className="text-xs sm:text-sm text-white/60">by {script.author_name}</p>
+                            <p className="text-xs text-white/60">{getStatusText(script.status)}</p>
                           </div>
                         </div>
-                        <div className="text-right">
-                          <p className="text-sm text-white/60">
-                            {new Date(script.dateSubmitted).toLocaleDateString()}
+                        <div className="text-right flex-shrink-0 ml-2">
+                          <p className="text-xs text-white/60">
+                            {new Date(script.created_at).toLocaleDateString()}
                           </p>
-                          {script.feedback && (
-                            <Dialog>
-                              <DialogTrigger asChild>
-                                <Button variant="outline" size="sm" className="mt-1">
-                                  View Feedback
-                                </Button>
-                              </DialogTrigger>
-                              <DialogContent className="bg-portfolio-dark border-portfolio-gold/20">
-                                <DialogHeader>
-                                  <DialogTitle className="text-portfolio-gold">Feedback for "{script.title}"</DialogTitle>
-                                </DialogHeader>
-                                <p className="text-white">{script.feedback}</p>
-                              </DialogContent>
-                            </Dialog>
-                          )}
                         </div>
                       </div>
                     ))}
                   </div>
                 ) : (
-                  <p className="text-white/60 text-center py-8">No scripts submitted yet</p>
+                  <p className="text-white/60 text-center py-8 text-sm sm:text-base">No scripts submitted yet</p>
                 )}
               </CardContent>
             </Card>

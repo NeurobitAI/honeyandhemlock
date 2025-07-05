@@ -1,8 +1,9 @@
 
-import { Facebook, Instagram } from "lucide-react";
+import { Facebook, Instagram, Menu, X } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import ContactForm from "./ContactForm";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const TikTokIcon = () => (
   <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
@@ -12,33 +13,52 @@ const TikTokIcon = () => (
 
 const Header = () => {
   const [isContactOpen, setIsContactOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const isMobile = useIsMobile();
 
   const scrollToFounders = () => {
     const foundersSection = document.getElementById('founders');
     if (foundersSection) {
       foundersSection.scrollIntoView({ behavior: 'smooth' });
     }
+    setIsMobileMenuOpen(false);
   };
+
+  const handleContactClick = () => {
+    setIsContactOpen(true);
+    setIsMobileMenuOpen(false);
+  };
+
+  const navItems = [
+    { label: "Home", to: "/" },
+    { label: "Films", to: "/films" },
+    { label: "Upload Script", to: "/script-portal" },
+    { label: "About", onClick: scrollToFounders },
+    { label: "Sponsorship", to: "/sponsorship" },
+    { label: "Contact", onClick: handleContactClick },
+  ];
 
   return (
     <>
-      <header className="bg-portfolio-black text-white">
+      <header className="bg-portfolio-black text-white relative z-50">
         {/* Top Bar */}
         <div className="border-b border-gray-800">
-          <div className="container mx-auto px-6 py-3">
-            <div className="flex justify-end items-center space-x-6">
-              <div className="flex space-x-4">
+          <div className="container mx-auto px-4 sm:px-6 py-3">
+            <div className="flex justify-end items-center space-x-4 sm:space-x-6">
+              <div className="flex space-x-3 sm:space-x-4">
                 <a 
                   href="https://www.facebook.com/profile.php?id=100085916835325" 
                   target="_blank" 
                   rel="noopener noreferrer"
+                  className="hover:text-portfolio-gold transition-colors"
                 >
-                  <Facebook className="w-4 h-4 text-white hover:text-portfolio-gold transition-colors cursor-pointer" />
+                  <Facebook className="w-4 h-4" />
                 </a>
                 <a 
                   href="https://www.tiktok.com/@honeyandhemlock.prod" 
                   target="_blank" 
                   rel="noopener noreferrer"
+                  className="hover:text-portfolio-gold transition-colors"
                 >
                   <TikTokIcon />
                 </a>
@@ -46,8 +66,9 @@ const Header = () => {
                   href="https://www.instagram.com/honeyandhemlock_productions/" 
                   target="_blank" 
                   rel="noopener noreferrer"
+                  className="hover:text-portfolio-gold transition-colors"
                 >
-                  <Instagram className="w-4 h-4 text-white hover:text-portfolio-gold transition-colors cursor-pointer" />
+                  <Instagram className="w-4 h-4" />
                 </a>
               </div>
             </div>
@@ -55,10 +76,20 @@ const Header = () => {
         </div>
 
         {/* Main Navigation */}
-        <div className="container mx-auto px-6 py-6">
+        <div className="container mx-auto px-4 sm:px-6 py-4 sm:py-6">
           <nav className="flex items-center justify-between">
-            {/* Left Navigation */}
-            <div className="flex space-x-8">
+            {/* Mobile Menu Toggle */}
+            <div className="lg:hidden">
+              <button
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="text-white hover:text-portfolio-gold transition-colors"
+              >
+                {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              </button>
+            </div>
+
+            {/* Desktop Left Navigation */}
+            <div className="hidden lg:flex space-x-6 xl:space-x-8">
               <Link to="/" className="font-open-sans text-sm uppercase tracking-wider hover:text-portfolio-gold transition-colors relative group">
                 Home
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-portfolio-gold transition-all group-hover:w-full"></span>
@@ -73,19 +104,19 @@ const Header = () => {
               </Link>
             </div>
 
-            {/* Logo - Clickable */}
-            <div className="text-center">
-              <Link to="/" className="flex items-center justify-center mb-1">
+            {/* Logo - Clickable and Responsive */}
+            <div className="text-center flex-1 lg:flex-none">
+              <Link to="/" className="flex items-center justify-center">
                 <img 
                   src="/lovable-uploads/64475ea2-91fd-4af8-b8e0-4131e1f8ec82.png" 
                   alt="Honey & Hemlock Productions"
-                  className="h-72 w-auto"
+                  className="h-16 sm:h-20 lg:h-24 xl:h-28 w-auto"
                 />
               </Link>
             </div>
 
-            {/* Right Navigation */}
-            <div className="flex space-x-8">
+            {/* Desktop Right Navigation */}
+            <div className="hidden lg:flex space-x-6 xl:space-x-8">
               <button 
                 onClick={scrollToFounders}
                 className="font-open-sans text-sm uppercase tracking-wider hover:text-portfolio-gold transition-colors relative group"
@@ -93,10 +124,10 @@ const Header = () => {
                 About
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-portfolio-gold transition-all group-hover:w-full"></span>
               </button>
-              <a href="#" className="font-open-sans text-sm uppercase tracking-wider hover:text-portfolio-gold transition-colors relative group">
-                Services
+              <Link to="/sponsorship" className="font-open-sans text-sm uppercase tracking-wider hover:text-portfolio-gold transition-colors relative group">
+                Sponsorship
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-portfolio-gold transition-all group-hover:w-full"></span>
-              </a>
+              </Link>
               <button 
                 onClick={() => setIsContactOpen(true)}
                 className="font-open-sans text-sm uppercase tracking-wider hover:text-portfolio-gold transition-colors relative group"
@@ -105,7 +136,38 @@ const Header = () => {
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-portfolio-gold transition-all group-hover:w-full"></span>
               </button>
             </div>
+
+            {/* Mobile placeholder for balance */}
+            <div className="lg:hidden w-6"></div>
           </nav>
+
+          {/* Mobile Menu */}
+          {isMobileMenuOpen && (
+            <div className="lg:hidden mt-4 pt-4 border-t border-gray-800">
+              <div className="flex flex-col space-y-4">
+                {navItems.map((item, index) => (
+                  item.to ? (
+                    <Link
+                      key={index}
+                      to={item.to}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="font-open-sans text-sm uppercase tracking-wider text-white hover:text-portfolio-gold transition-colors py-2"
+                    >
+                      {item.label}
+                    </Link>
+                  ) : (
+                    <button
+                      key={index}
+                      onClick={item.onClick}
+                      className="font-open-sans text-sm uppercase tracking-wider text-white hover:text-portfolio-gold transition-colors py-2 text-left"
+                    >
+                      {item.label}
+                    </button>
+                  )
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </header>
       
