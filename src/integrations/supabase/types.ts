@@ -9,7 +9,206 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      contacts: {
+        Row: {
+          created_at: string | null
+          email: string
+          id: string
+          message: string
+          name: string
+          phone: string | null
+          status: string | null
+          subject: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          email: string
+          id?: string
+          message: string
+          name: string
+          phone?: string | null
+          status?: string | null
+          subject?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          email?: string
+          id?: string
+          message?: string
+          name?: string
+          phone?: string | null
+          status?: string | null
+          subject?: string | null
+        }
+        Relationships: []
+      }
+      judges: {
+        Row: {
+          created_at: string | null
+          email: string
+          id: string
+          name: string
+          password_hash: string
+          status: Database["public"]["Enums"]["judge_status"] | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          email: string
+          id?: string
+          name: string
+          password_hash: string
+          status?: Database["public"]["Enums"]["judge_status"] | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          email?: string
+          id?: string
+          name?: string
+          password_hash?: string
+          status?: Database["public"]["Enums"]["judge_status"] | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      script_reviews: {
+        Row: {
+          created_at: string | null
+          feedback: string | null
+          id: string
+          judge_id: string | null
+          recommendation: Database["public"]["Enums"]["script_status"] | null
+          script_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          feedback?: string | null
+          id?: string
+          judge_id?: string | null
+          recommendation?: Database["public"]["Enums"]["script_status"] | null
+          script_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          feedback?: string | null
+          id?: string
+          judge_id?: string | null
+          recommendation?: Database["public"]["Enums"]["script_status"] | null
+          script_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "script_reviews_judge_id_fkey"
+            columns: ["judge_id"]
+            isOneToOne: false
+            referencedRelation: "judges"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "script_reviews_script_id_fkey"
+            columns: ["script_id"]
+            isOneToOne: false
+            referencedRelation: "scripts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      scripts: {
+        Row: {
+          amount: number | null
+          assigned_judge_id: string | null
+          author_email: string
+          author_name: string
+          author_phone: string | null
+          created_at: string | null
+          file_name: string | null
+          file_url: string | null
+          id: string
+          payment_status: Database["public"]["Enums"]["payment_status"] | null
+          reviewed_at: string | null
+          status: Database["public"]["Enums"]["script_status"] | null
+          stripe_payment_intent_id: string | null
+          submitted_at: string | null
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          amount?: number | null
+          assigned_judge_id?: string | null
+          author_email: string
+          author_name: string
+          author_phone?: string | null
+          created_at?: string | null
+          file_name?: string | null
+          file_url?: string | null
+          id?: string
+          payment_status?: Database["public"]["Enums"]["payment_status"] | null
+          reviewed_at?: string | null
+          status?: Database["public"]["Enums"]["script_status"] | null
+          stripe_payment_intent_id?: string | null
+          submitted_at?: string | null
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          amount?: number | null
+          assigned_judge_id?: string | null
+          author_email?: string
+          author_name?: string
+          author_phone?: string | null
+          created_at?: string | null
+          file_name?: string | null
+          file_url?: string | null
+          id?: string
+          payment_status?: Database["public"]["Enums"]["payment_status"] | null
+          reviewed_at?: string | null
+          status?: Database["public"]["Enums"]["script_status"] | null
+          stripe_payment_intent_id?: string | null
+          submitted_at?: string | null
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "scripts_assigned_judge_id_fkey"
+            columns: ["assigned_judge_id"]
+            isOneToOne: false
+            referencedRelation: "judges"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sponsorship_payments: {
+        Row: {
+          amount: number
+          created_at: string | null
+          id: string
+          payment_status: Database["public"]["Enums"]["payment_status"] | null
+          sponsor_email: string | null
+          sponsor_name: string | null
+          stripe_payment_intent_id: string | null
+        }
+        Insert: {
+          amount: number
+          created_at?: string | null
+          id?: string
+          payment_status?: Database["public"]["Enums"]["payment_status"] | null
+          sponsor_email?: string | null
+          sponsor_name?: string | null
+          stripe_payment_intent_id?: string | null
+        }
+        Update: {
+          amount?: number
+          created_at?: string | null
+          id?: string
+          payment_status?: Database["public"]["Enums"]["payment_status"] | null
+          sponsor_email?: string | null
+          sponsor_name?: string | null
+          stripe_payment_intent_id?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -18,7 +217,9 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      judge_status: "pending" | "approved" | "declined"
+      payment_status: "pending" | "paid" | "failed"
+      script_status: "pending" | "assigned" | "approved" | "declined"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -133,6 +334,10 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      judge_status: ["pending", "approved", "declined"],
+      payment_status: ["pending", "paid", "failed"],
+      script_status: ["pending", "assigned", "approved", "declined"],
+    },
   },
 } as const
