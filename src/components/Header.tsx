@@ -20,13 +20,6 @@ const Header = () => {
     }
   };
 
-  const scrollToSponsorship = () => {
-    const sponsorshipSection = document.getElementById('sponsorship');
-    if (sponsorshipSection) {
-      sponsorshipSection.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
   return (
     <>
       <header className="bg-portfolio-black text-white">
@@ -100,13 +93,13 @@ const Header = () => {
                 About
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-portfolio-gold transition-all group-hover:w-full"></span>
               </button>
-              <button 
-                onClick={scrollToSponsorship}
+              <Link 
+                to="/sponsorship"
                 className="font-open-sans text-sm uppercase tracking-wider hover:text-portfolio-gold transition-colors relative group"
               >
                 Sponsorship
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-portfolio-gold transition-all group-hover:w-full"></span>
-              </button>
+              </Link>
               <button 
                 onClick={() => setIsContactOpen(true)}
                 className="font-open-sans text-sm uppercase tracking-wider hover:text-portfolio-gold transition-colors relative group"

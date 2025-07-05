@@ -16,13 +16,6 @@ const Footer = () => {
     }
   };
 
-  const scrollToSponsorship = () => {
-    const sponsorshipSection = document.getElementById('sponsorship');
-    if (sponsorshipSection) {
-      sponsorshipSection.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
   return (
     <footer className="bg-portfolio-dark text-white py-16">
       <div className="container mx-auto px-6">
@@ -45,9 +38,9 @@ const Footer = () => {
           <button onClick={scrollToFounders} className="font-open-sans text-sm text-white/80 hover:text-white transition-colors">
             About
           </button>
-          <button onClick={scrollToSponsorship} className="font-open-sans text-sm text-white/80 hover:text-white transition-colors">
+          <Link to="/sponsorship" className="font-open-sans text-sm text-white/80 hover:text-white transition-colors">
             Sponsorship
-          </button>
+          </Link>
           <Link to="/films" className="font-open-sans text-sm text-white/80 hover:text-white transition-colors">
             Films
           </Link>

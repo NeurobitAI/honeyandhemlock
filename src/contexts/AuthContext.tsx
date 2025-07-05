@@ -40,8 +40,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           const authUser: AuthUser = {
             ...session.user,
             role: session.user.user_metadata?.role || 
-                  session.user.raw_user_meta_data?.role || 
-                  (session.user.email === 'admin@honeyandhemlock.productions' ? 'admin' : undefined)
+                  (session.user.email === 'admin@honeyandhemlock.productions' ? 'admin' : 
+                   session.user.email === 'admin' ? 'admin' : undefined)
           };
           setUser(authUser);
         } else {
@@ -58,8 +58,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         const authUser: AuthUser = {
           ...session.user,
           role: session.user.user_metadata?.role || 
-                session.user.raw_user_meta_data?.role || 
-                (session.user.email === 'admin@honeyandhemlock.productions' ? 'admin' : undefined)
+                (session.user.email === 'admin@honeyandhemlock.productions' ? 'admin' : 
+                 session.user.email === 'admin' ? 'admin' : undefined)
         };
         setUser(authUser);
       }

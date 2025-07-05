@@ -6,7 +6,6 @@ import FeaturedProjects from "@/components/FeaturedProjects";
 import SkillsetSection from "@/components/SkillsetSection";
 import FoundersSection from "@/components/FoundersSection";
 import PartnersSection from "@/components/PartnersSection";
-import SponsorshipSection from "@/components/SponsorshipSection";
 import CallToAction from "@/components/CallToAction";
 
 const Index = () => {
@@ -18,7 +17,6 @@ const Index = () => {
       <SkillsetSection />
       <FoundersSection />
       <PartnersSection />
-      <SponsorshipSection />
       <CallToAction />
       <Footer />
     </div>
