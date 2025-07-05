@@ -1,55 +1,40 @@
 
-import { Award, Trophy, Star, Crown } from "lucide-react";
-
 const PartnersSection = () => {
   const recognitions = [
-    {
-      icon: Award,
-      title: "Film Festival Winners",
-      description: "Multiple awards at prestigious festivals"
-    },
-    {
-      icon: Trophy,
-      title: "Industry Recognition", 
-      description: "Acknowledged by peers and critics"
-    },
-    {
-      icon: Star,
-      title: "Critical Acclaim",
-      description: "Outstanding reviews and ratings"
-    },
-    {
-      icon: Crown,
-      title: "Excellence in Craft",
-      description: "Setting new standards in filmmaking"
-    }
+    "/lovable-uploads/e2050bdd-3ebf-4ba7-966d-ce1890f2b0ac.png",
+    "/lovable-uploads/006f06b8-073e-4954-91fd-26243a35ac99.png",
+    "/lovable-uploads/8503da56-823a-4c60-8deb-327a17127135.png",
+    "/lovable-uploads/dd4ddeb5-96e2-4c76-8bbe-ac90b5c33755.png",
+    "/lovable-uploads/b4b37d22-6783-4ebd-8088-867677f279f5.png",
+    "/lovable-uploads/65f0aa8c-5593-4fad-9aba-e7eea97f2988.png",
+    "/lovable-uploads/30432083-8e56-4a80-bb26-974c357354f7.png",
+    "/lovable-uploads/08354c69-e36b-4dc6-8756-1bdc0e435087.png",
+    "/lovable-uploads/b57fa408-4c81-4a6c-ba5f-64d2cf7d0dc4.png",
+    "/lovable-uploads/16a0fa7d-dd23-4385-a582-b0646598def1.png",
+    "/lovable-uploads/51574bd2-5bd6-4a97-bf51-91ac36ab41bc.png",
+    "/lovable-uploads/d3e6a88c-742d-4bcd-83b2-b895c032a1e7.png",
+    "/lovable-uploads/79fdfb56-6819-449c-89ce-1129134611c4.png"
   ];
 
   return (
-    <section className="bg-portfolio-dark text-white py-12 sm:py-20 relative overflow-hidden">
-      {/* Background Image */}
-      <div 
-        className="absolute inset-0 opacity-10 z-0"
-        style={{
-          backgroundImage: `url('/lovable-uploads/e8503f85-c9a3-4121-9343-fe3fcb38dbe5.png')`,
-          backgroundPosition: 'left center',
-          backgroundSize: 'contain',
-          backgroundRepeat: 'no-repeat'
-        }}
-      />
-      
-      <div className="container mx-auto px-4 sm:px-6 relative z-10">
-        <div className="text-center mb-12 sm:mb-16">
-          <h2 className="font-playfair text-3xl sm:text-4xl font-bold mb-4">Recognitions</h2>
-          <p className="font-open-sans text-base sm:text-lg text-portfolio-gold">Celebrating Our Achievements</p>
+    <section className="bg-portfolio-black text-white py-16">
+      <div className="container mx-auto px-6">
+        <div className="text-center mb-12">
+          <h2 className="font-playfair text-2xl font-bold mb-2">Recognitions</h2>
+          <h3 className="font-playfair text-xl text-portfolio-gold">Awards and Nominations</h3>
         </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+        
+        <div className="flex flex-wrap justify-center items-center gap-8 max-w-6xl mx-auto">
           {recognitions.map((recognition, index) => (
-            <div key={index} className="text-center p-6 sm:p-8 group hover:bg-white/5 transition-all duration-300 rounded-lg">
-              <recognition.icon className="w-10 h-10 sm:w-12 sm:h-12 text-portfolio-gold mx-auto mb-4 group-hover:scale-110 transition-transform duration-300" />
-              <h3 className="font-playfair text-lg sm:text-xl font-bold mb-2">{recognition.title}</h3>
-              <p className="font-open-sans text-sm text-white/80">{recognition.description}</p>
+            <div 
+              key={index}
+              className="hover:scale-105 transition-transform duration-300 cursor-pointer bg-white/10 p-4 rounded-lg backdrop-blur-sm"
+            >
+              <img 
+                src={recognition}
+                alt={`Recognition ${index + 1}`}
+                className="w-32 h-auto object-contain filter brightness-100 hover:brightness-110 transition-all duration-300"
+              />
             </div>
           ))}
         </div>

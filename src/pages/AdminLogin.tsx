@@ -1,13 +1,11 @@
 
 import React, { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { useAuth } from '@/contexts/AuthContext';
-import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
-import { Home } from 'lucide-react';
 
 const AdminLogin = () => {
   const [email, setEmail] = useState('');
@@ -24,23 +22,23 @@ const AdminLogin = () => {
     try {
       const success = await login(email, password, 'admin');
       if (success) {
-        navigate('/admin-dashboard');
         toast({
-          title: "Success!",
-          description: "Logged in successfully",
+          title: "Login successful",
+          description: "Welcome to the admin dashboard",
         });
+        navigate('/admin-dashboard');
       } else {
         toast({
-          title: "Error",
-          description: "Invalid credentials",
-          variant: "destructive"
+          title: "Login failed",
+          description: "Invalid email or password",
+          variant: "destructive",
         });
       }
     } catch (error) {
       toast({
         title: "Error",
-        description: "Login failed",
-        variant: "destructive"
+        description: "An error occurred during login",
+        variant: "destructive",
       });
     } finally {
       setIsLoading(false);
@@ -48,71 +46,66 @@ const AdminLogin = () => {
   };
 
   return (
-    <div className="min-h-screen bg-portfolio-black flex items-center justify-center p-4 sm:p-6">
-      <div className="w-full max-w-md">
-        <div className="flex justify-center mb-6">
-          <Button
-            variant="ghost"
-            onClick={() => navigate('/')}
-            className="text-white hover:text-portfolio-gold mb-4"
-          >
-            <Home className="w-4 h-4 mr-2" />
-            Back to Home
-          </Button>
-        </div>
-        
-        <Card className="bg-portfolio-dark border-portfolio-gold/20">
+    <div className="min-h-screen bg-portfolio-black flex items-center justify-center p-4">
+      <div className="w-full max-w-md space-y-6">
+        <Card className="bg-portfolio-dark border-portfolio-gold">
           <CardHeader className="text-center">
-            <CardTitle className="text-2xl font-playfair text-portfolio-gold">Admin & Judge Login</CardTitle>
-            <CardDescription className="text-white/70">
-              Access the dashboard with your credentials
+            <CardTitle className="text-2xl font-playfair text-portfolio-gold">Admin Login</CardTitle>
+            <CardDescription className="text-white/80">
+              Access the admin dashboard
             </CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <Label htmlFor="email" className="text-white">Email</Label>
                 <Input
-                  id="email"
                   type="email"
+                  placeholder="Email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="bg-portfolio-black border-portfolio-gold/30 text-white"
                   required
+                  className="bg-portfolio-black border-gray-600 text-white placeholder-gray-400"
                 />
               </div>
               <div>
-                <Label htmlFor="password" className="text-white">Password</Label>
                 <Input
-                  id="password"
                   type="password"
+                  placeholder="Password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="bg-portfolio-black border-portfolio-gold/30 text-white"
                   required
+                  className="bg-portfolio-black border-gray-600 text-white placeholder-gray-400"
                 />
               </div>
               <Button
                 type="submit"
-                disabled={isLoading}
                 className="w-full bg-portfolio-gold text-black hover:bg-portfolio-gold/90"
+                disabled={isLoading}
               >
                 {isLoading ? 'Logging in...' : 'Login'}
               </Button>
             </form>
-            
-            <div className="mt-6 text-center">
-              <p className="text-white/60 text-sm mb-2">Need a judge account?</p>
-              <Button
-                variant="outline"
-                onClick={() => navigate('/judge')}
-                className="border-portfolio-gold/30 text-portfolio-gold hover:bg-portfolio-gold/10"
-              >
-                Sign Up as Judge
-              </Button>
+          </CardContent>
+        </Card>
+
+        <Card className="bg-portfolio-dark border-portfolio-gold">
+          <CardContent className="pt-6">
+            <div className="text-center space-y-4">
+              <p className="text-white/80">Judge Login</p>
+              <Link to="/judge">
+                <Button variant="outline" className="w-full border-portfolio-gold text-portfolio-gold hover:bg-portfolio-gold hover:text-black">
+                  Judge Login
+                </Button>
+              </Link>
             </div>
           </CardContent>
         </Card>
+
+        <div className="text-center">
+          <Link to="/" className="text-portfolio-gold hover:text-white transition-colors">
+            ← Back to Home
+          </Link>
+        </div>
       </div>
     </div>
   );
