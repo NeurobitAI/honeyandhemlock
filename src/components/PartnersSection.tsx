@@ -17,18 +17,7 @@ const PartnersSection = () => {
   ];
 
   return (
-    <section 
-      className="bg-portfolio-black text-white py-12 sm:py-16 relative overflow-hidden"
-      style={{
-        backgroundImage: `url('/lovable-uploads/e8503f85-c9a3-4121-9343-fe3fcb38dbe5.png')`,
-        backgroundPosition: 'center',
-        backgroundSize: 'cover',
-        backgroundRepeat: 'no-repeat'
-      }}
-    >
-      {/* Background overlay - made more opaque and darker */}
-      <div className="absolute inset-0 bg-portfolio-black/90 z-0" />
-      
+    <section className="bg-portfolio-black text-white py-12 sm:py-16 relative overflow-hidden">
       <div className="container mx-auto px-4 sm:px-6 relative z-10">
         <div className="text-center mb-8 sm:mb-12">
           <h2 className="font-playfair text-2xl sm:text-3xl lg:text-4xl font-bold mb-2 sm:mb-4">Recognitions</h2>
