@@ -26,8 +26,8 @@ const PartnersSection = () => {
         backgroundRepeat: 'no-repeat'
       }}
     >
-      {/* Background overlay */}
-      <div className="absolute inset-0 bg-portfolio-black/80 z-0" />
+      {/* Background overlay - made more opaque and darker */}
+      <div className="absolute inset-0 bg-portfolio-black/90 z-0" />
       
       <div className="container mx-auto px-4 sm:px-6 relative z-10">
         <div className="text-center mb-8 sm:mb-12">

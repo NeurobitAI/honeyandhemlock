@@ -138,7 +138,7 @@ const Sponsorship = () => {
                       className="inline-block hover:scale-105 transition-transform duration-300"
                     >
                       <img 
-                        src="/lovable-uploads/e8503f85-c9a3-4121-9343-fe3fcb38dbe5.png"
+                        src="/lovable-uploads/db101ea7-051d-469b-b2b1-3a6ddc81674d.png"
                         alt="The Field"
                         className="h-16 sm:h-20 w-auto"
                       />
@@ -209,7 +209,7 @@ const Sponsorship = () => {
                     </div>
 
                     <div>
-                      <Label className="text-white text-sm sm:text-base mb-3 block">Donation Amount *</Label>
+                      <Label className="text-white text-sm sm:text-base mb-3 block">Sponsorship Amount *</Label>
                       <div className="grid grid-cols-2 gap-2 sm:gap-3 mb-4">
                         {predefinedAmounts.map((amount) => (
                           <Button
@@ -220,7 +220,7 @@ const Sponsorship = () => {
                             className={`h-10 sm:h-12 text-sm sm:text-base ${
                               selectedAmount === amount
                                 ? "bg-portfolio-gold text-black hover:bg-portfolio-gold/90"
-                                : "border-portfolio-gold/30 text-white hover:bg-portfolio-gold/10"
+                                : "border-portfolio-gold/50 bg-portfolio-black text-portfolio-gold hover:bg-portfolio-gold/20 hover:text-white"
                             }`}
                           >
                             ${amount / 100}
