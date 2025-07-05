@@ -10,25 +10,8 @@ const TikTokIcon = () => (
 
 const Footer = () => {
   const navLinks = [
-    { label: "Home", to: "/" },
-    { label: "Films", to: "/films" },
-    { label: "Upload Script", to: "/script-portal" },
-    { label: "About", action: "scroll" },
-    { label: "Sponsorship", to: "/sponsorship" },
-    { label: "Contact", action: "contact" }
+    "Home", "About", "Services", "Films", "Upload Script", "Contact"
   ];
-
-  const scrollToFounders = () => {
-    const foundersSection = document.getElementById('founders');
-    if (foundersSection) {
-      foundersSection.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
-  const handleContactClick = () => {
-    // You can implement contact modal or scroll to contact section here
-    console.log('Contact clicked');
-  };
 
   return (
     <footer className="bg-portfolio-dark text-white py-16">
@@ -47,23 +30,13 @@ const Footer = () => {
         {/* Navigation Links */}
         <div className="flex flex-wrap justify-center space-x-8 mb-8">
           {navLinks.map((link, index) => (
-            link.to ? (
-              <Link
-                key={index}
-                to={link.to}
-                className="font-open-sans text-sm text-white/80 hover:text-white transition-colors"
-              >
-                {link.label}
-              </Link>
-            ) : (
-              <button
-                key={index}
-                onClick={link.action === 'scroll' ? scrollToFounders : handleContactClick}
-                className="font-open-sans text-sm text-white/80 hover:text-white transition-colors"
-              >
-                {link.label}
-              </button>
-            )
+            <a 
+              key={index}
+              href="#" 
+              className="font-open-sans text-sm text-white/80 hover:text-white transition-colors"
+            >
+              {link}
+            </a>
           ))}
         </div>
 

@@ -1,27 +1,19 @@
 
-import React, { useState, useEffect } from 'react';
-import { useAuth } from '@/contexts/AuthContext';
+import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
-import { Home, Lock, User } from 'lucide-react';
 
 const AdminLogin = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const { login, user } = useAuth();
+  const { login } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
-
-  useEffect(() => {
-    if (user && user.role === 'admin') {
-      navigate('/admin-dashboard');
-    }
-  }, [user, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,22 +23,22 @@ const AdminLogin = () => {
       const success = await login(email, password, 'admin');
       if (success) {
         toast({
-          title: "Login Successful",
-          description: "Welcome back!",
+          title: "Login successful",
+          description: "Welcome to the admin dashboard",
         });
         navigate('/admin-dashboard');
       } else {
         toast({
-          title: "Login Failed",
-          description: "Invalid credentials. Please try again.",
-          variant: "destructive"
+          title: "Login failed",
+          description: "Invalid email or password",
+          variant: "destructive",
         });
       }
     } catch (error) {
       toast({
         title: "Error",
-        description: "An error occurred during login. Please try again.",
-        variant: "destructive"
+        description: "An error occurred during login",
+        variant: "destructive",
       });
     } finally {
       setIsLoading(false);
@@ -55,67 +47,65 @@ const AdminLogin = () => {
 
   return (
     <div className="min-h-screen bg-portfolio-black flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
-        {/* Home Button */}
-        <div className="mb-6 text-center">
-          <Link to="/" className="inline-flex items-center space-x-2 text-portfolio-gold hover:text-white transition-colors">
-            <Home className="w-5 h-5" />
-            <span className="font-open-sans text-sm">Back to Home</span>
-          </Link>
-        </div>
-
-        <Card className="bg-portfolio-dark border-portfolio-gold/20">
-          <CardHeader className="text-center pb-2">
-            <div className="w-16 h-16 bg-portfolio-gold rounded-full flex items-center justify-center mx-auto mb-4">
-              <User className="w-8 h-8 text-portfolio-black" />
-            </div>
-            <CardTitle className="text-portfolio-gold text-2xl">Admin Login</CardTitle>
+      <div className="w-full max-w-md space-y-6">
+        <Card className="bg-portfolio-dark border-portfolio-gold">
+          <CardHeader className="text-center">
+            <CardTitle className="text-2xl font-playfair text-portfolio-gold">Admin Login</CardTitle>
+            <CardDescription className="text-white/80">
+              Access the admin dashboard
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <Label htmlFor="email" className="text-white">Email</Label>
                 <Input
-                  id="email"
                   type="email"
+                  placeholder="Email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="admin@honeyandhemlock.productions"
-                  className="bg-portfolio-black border-portfolio-gold/30 text-white"
                   required
+                  className="bg-portfolio-black border-gray-600 text-white placeholder-gray-400"
                 />
               </div>
               <div>
-                <Label htmlFor="password" className="text-white">Password</Label>
                 <Input
-                  id="password"
                   type="password"
+                  placeholder="Password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="bg-portfolio-black border-portfolio-gold/30 text-white"
                   required
+                  className="bg-portfolio-black border-gray-600 text-white placeholder-gray-400"
                 />
               </div>
               <Button
                 type="submit"
-                disabled={isLoading}
                 className="w-full bg-portfolio-gold text-black hover:bg-portfolio-gold/90"
+                disabled={isLoading}
               >
-                {isLoading ? (
-                  <>
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-black mr-2"></div>
-                    Signing In...
-                  </>
-                ) : (
-                  <>
-                    <Lock className="w-4 h-4 mr-2" />
-                    Sign In
-                  </>
-                )}
+                {isLoading ? 'Logging in...' : 'Login'}
               </Button>
             </form>
           </CardContent>
         </Card>
+
+        <Card className="bg-portfolio-dark border-portfolio-gold">
+          <CardContent className="pt-6">
+            <div className="text-center space-y-4">
+              <p className="text-white/80">Judge Login</p>
+              <Link to="/judge">
+                <Button variant="outline" className="w-full border-portfolio-gold text-portfolio-gold hover:bg-portfolio-gold hover:text-black">
+                  Judge Login
+                </Button>
+              </Link>
+            </div>
+          </CardContent>
+        </Card>
+
+        <div className="text-center">
+          <Link to="/" className="text-portfolio-gold hover:text-white transition-colors">
+            ← Back to Home
+          </Link>
+        </div>
       </div>
     </div>
   );
