@@ -32,7 +32,7 @@ const AdminLogin = () => {
       if (success) {
         toast({
           title: "Login Successful",
-          description: "Welcome back, Admin!",
+          description: "Welcome back!",
         });
         navigate('/admin-dashboard');
       } else {
@@ -109,7 +109,7 @@ const AdminLogin = () => {
                 ) : (
                   <>
                     <Lock className="w-4 h-4 mr-2" />
-                    Sign In as Admin
+                    Sign In
                   </>
                 )}
               </Button>

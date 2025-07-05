@@ -7,7 +7,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
-import { useSupabaseScripts } from '@/hooks/useSupabaseScripts';
 import { supabase } from '@/integrations/supabase/client';
 
 const ScriptPortal = () => {
@@ -17,7 +16,6 @@ const ScriptPortal = () => {
   const [authorEmail, setAuthorEmail] = useState('');
   const [authorPhone, setAuthorPhone] = useState('');
   const [file, setFile] = useState<File | null>(null);
-  const { scripts, loading } = useSupabaseScripts();
   const { toast } = useToast();
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -78,36 +76,6 @@ const ScriptPortal = () => {
     }
   };
 
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case 'pending':
-        return <Clock className="w-4 h-4 text-yellow-500" />;
-      case 'assigned':
-        return <FileText className="w-4 h-4 text-blue-500" />;
-      case 'approved':
-        return <CheckCircle className="w-4 h-4 text-green-500" />;
-      case 'declined':
-        return <XCircle className="w-4 h-4 text-red-500" />;
-      default:
-        return <Clock className="w-4 h-4 text-gray-500" />;
-    }
-  };
-
-  const getStatusText = (status: string) => {
-    switch (status) {
-      case 'pending':
-        return 'Pending Review';
-      case 'assigned':
-        return 'Assigned to Judge';
-      case 'approved':
-        return 'Approved';
-      case 'declined':
-        return 'Declined';
-      default:
-        return 'Unknown';
-    }
-  };
-
   return (
     <div 
       className="min-h-screen bg-portfolio-black text-white relative"
@@ -133,7 +101,7 @@ const ScriptPortal = () => {
               <img 
                 src="/lovable-uploads/64475ea2-91fd-4af8-b8e0-4131e1f8ec82.png" 
                 alt="Honey & Hemlock Productions"
-                className="h-16 sm:h-20 w-auto"
+                className="h-22 sm:h-28 w-auto"
               />
             </Link>
             <div className="w-20"></div>
@@ -147,131 +115,89 @@ const ScriptPortal = () => {
           <p className="font-open-sans text-base sm:text-lg text-portfolio-gold">Submit your script for professional review</p>
         </div>
 
-        <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
-            {/* Upload Section */}
-            <Card className="bg-portfolio-dark/90 border-portfolio-gold/20 backdrop-blur-sm">
-              <CardHeader>
-                <CardTitle className="text-portfolio-gold text-lg sm:text-xl">Submit New Script</CardTitle>
-                <CardDescription className="text-white/70 text-sm sm:text-base">
-                  Upload your script for professional review. Payment required upon submission.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
-                  <div>
-                    <Label htmlFor="title" className="text-white text-sm sm:text-base">Script Title *</Label>
-                    <Input
-                      id="title"
-                      value={title}
-                      onChange={(e) => setTitle(e.target.value)}
-                      placeholder="Enter script title"
-                      className="bg-portfolio-black/50 border-portfolio-gold/30 text-white text-sm sm:text-base h-10 sm:h-12"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="author-name" className="text-white text-sm sm:text-base">Author Name *</Label>
-                    <Input
-                      id="author-name"
-                      value={authorName}
-                      onChange={(e) => setAuthorName(e.target.value)}
-                      placeholder="Enter author name"
-                      className="bg-portfolio-black/50 border-portfolio-gold/30 text-white text-sm sm:text-base h-10 sm:h-12"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="author-email" className="text-white text-sm sm:text-base">Author Email *</Label>
-                    <Input
-                      id="author-email"
-                      type="email"
-                      value={authorEmail}
-                      onChange={(e) => setAuthorEmail(e.target.value)}
-                      placeholder="Enter author email"
-                      className="bg-portfolio-black/50 border-portfolio-gold/30 text-white text-sm sm:text-base h-10 sm:h-12"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="author-phone" className="text-white text-sm sm:text-base">Author Phone</Label>
-                    <Input
-                      id="author-phone"
-                      type="tel"
-                      value={authorPhone}
-                      onChange={(e) => setAuthorPhone(e.target.value)}
-                      placeholder="Enter author phone (optional)"
-                      className="bg-portfolio-black/50 border-portfolio-gold/30 text-white text-sm sm:text-base h-10 sm:h-12"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="file" className="text-white text-sm sm:text-base">Script File *</Label>
-                    <Input
-                      id="file"
-                      type="file"
-                      accept=".pdf,.doc,.docx"
-                      onChange={handleFileUpload}
-                      className="bg-portfolio-black/50 border-portfolio-gold/30 text-white text-sm sm:text-base h-10 sm:h-12 file:text-white file:bg-portfolio-gold file:border-0 file:rounded file:px-2 file:py-1 file:mr-4"
-                    />
-                  </div>
-                  <Button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="w-full bg-portfolio-gold text-black hover:bg-portfolio-gold/90 h-10 sm:h-12 text-sm sm:text-base font-semibold"
-                  >
-                    {isSubmitting ? (
-                      <>
-                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-black mr-2"></div>
-                        Processing...
-                      </>
-                    ) : (
-                      <>
-                        <Upload className="w-4 h-4 mr-2" />
-                        Submit Script ($50)
-                      </>
-                    )}
-                  </Button>
-                </form>
-              </CardContent>
-            </Card>
-
-            {/* Recent Submissions */}
-            <Card className="bg-portfolio-dark/90 border-portfolio-gold/20 backdrop-blur-sm">
-              <CardHeader>
-                <CardTitle className="text-portfolio-gold text-lg sm:text-xl">Recent Submissions</CardTitle>
-                <CardDescription className="text-white/70 text-sm sm:text-base">
-                  Latest script submissions and their status
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                {loading ? (
-                  <div className="text-center py-8">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-portfolio-gold mx-auto"></div>
-                    <p className="text-white/60 mt-4">Loading submissions...</p>
-                  </div>
-                ) : scripts.length > 0 ? (
-                  <div className="space-y-3 max-h-96 overflow-y-auto">
-                    {scripts.slice(0, 10).map((script) => (
-                      <div key={script.id} className="flex items-center justify-between p-3 bg-portfolio-black/50 rounded border border-portfolio-gold/20">
-                        <div className="flex items-center space-x-3 flex-1 min-w-0">
-                          {getStatusIcon(script.status)}
-                          <div className="min-w-0 flex-1">
-                            <p className="font-medium text-white text-sm sm:text-base truncate">{script.title}</p>
-                            <p className="text-xs sm:text-sm text-white/60">by {script.author_name}</p>
-                            <p className="text-xs text-white/60">{getStatusText(script.status)}</p>
-                          </div>
-                        </div>
-                        <div className="text-right flex-shrink-0 ml-2">
-                          <p className="text-xs text-white/60">
-                            {new Date(script.created_at).toLocaleDateString()}
-                          </p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <p className="text-white/60 text-center py-8 text-sm sm:text-base">No scripts submitted yet</p>
-                )}
-              </CardContent>
-            </Card>
-          </div>
+        <div className="max-w-2xl mx-auto">
+          {/* Upload Section */}
+          <Card className="bg-portfolio-dark/90 border-portfolio-gold/20 backdrop-blur-sm">
+            <CardHeader>
+              <CardTitle className="text-portfolio-gold text-lg sm:text-xl">Submit New Script</CardTitle>
+              <CardDescription className="text-white/70 text-sm sm:text-base">
+                Upload your script for professional review. Payment required upon submission.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
+                <div>
+                  <Label htmlFor="title" className="text-white text-sm sm:text-base">Script Title *</Label>
+                  <Input
+                    id="title"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    placeholder="Enter script title"
+                    className="bg-portfolio-black/50 border-portfolio-gold/30 text-white text-sm sm:text-base h-10 sm:h-12"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="author-name" className="text-white text-sm sm:text-base">Author Name *</Label>
+                  <Input
+                    id="author-name"
+                    value={authorName}
+                    onChange={(e) => setAuthorName(e.target.value)}
+                    placeholder="Enter author name"
+                    className="bg-portfolio-black/50 border-portfolio-gold/30 text-white text-sm sm:text-base h-10 sm:h-12"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="author-email" className="text-white text-sm sm:text-base">Author Email *</Label>
+                  <Input
+                    id="author-email"
+                    type="email"
+                    value={authorEmail}
+                    onChange={(e) => setAuthorEmail(e.target.value)}
+                    placeholder="Enter author email"
+                    className="bg-portfolio-black/50 border-portfolio-gold/30 text-white text-sm sm:text-base h-10 sm:h-12"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="author-phone" className="text-white text-sm sm:text-base">Author Phone</Label>
+                  <Input
+                    id="author-phone"
+                    type="tel"
+                    value={authorPhone}
+                    onChange={(e) => setAuthorPhone(e.target.value)}
+                    placeholder="Enter author phone (optional)"
+                    className="bg-portfolio-black/50 border-portfolio-gold/30 text-white text-sm sm:text-base h-10 sm:h-12"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="file" className="text-white text-sm sm:text-base">Script File *</Label>
+                  <Input
+                    id="file"
+                    type="file"
+                    accept=".pdf,.doc,.docx"
+                    onChange={handleFileUpload}
+                    className="bg-portfolio-black/50 border-portfolio-gold/30 text-white text-sm sm:text-base h-10 sm:h-12 file:text-white file:bg-portfolio-gold file:border-0 file:rounded file:px-2 file:py-1 file:mr-4"
+                  />
+                </div>
+                <Button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="w-full bg-portfolio-gold text-black hover:bg-portfolio-gold/90 h-10 sm:h-12 text-sm sm:text-base font-semibold"
+                >
+                  {isSubmitting ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-black mr-2"></div>
+                      Processing...
+                    </>
+                  ) : (
+                    <>
+                      <Upload className="w-4 h-4 mr-2" />
+                      Submit Script ($50)
+                    </>
+                  )}
+                </Button>
+              </form>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </div>

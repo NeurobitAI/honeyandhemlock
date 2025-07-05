@@ -104,13 +104,13 @@ const Header = () => {
               </Link>
             </div>
 
-            {/* Logo - Increased size by 50% */}
+            {/* Logo - Increased size by 40% */}
             <div className="text-center flex-1 lg:flex-none">
               <Link to="/" className="flex items-center justify-center">
                 <img 
                   src="/lovable-uploads/64475ea2-91fd-4af8-b8e0-4131e1f8ec82.png" 
                   alt="Honey & Hemlock Productions"
-                  className="h-24 sm:h-30 lg:h-36 xl:h-42 w-auto"
+                  className="h-34 sm:h-42 lg:h-50 xl:h-58 w-auto"
                 />
               </Link>
             </div>

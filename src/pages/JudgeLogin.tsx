@@ -32,7 +32,7 @@ const JudgeLogin = () => {
       if (success) {
         toast({
           title: "Login Successful",
-          description: "Welcome back, Judge!",
+          description: "Welcome back!",
         });
         navigate('/judge-dashboard');
       } else {
@@ -109,7 +109,7 @@ const JudgeLogin = () => {
                 ) : (
                   <>
                     <Gavel className="w-4 h-4 mr-2" />
-                    Sign In as Judge
+                    Sign In
                   </>
                 )}
               </Button>
