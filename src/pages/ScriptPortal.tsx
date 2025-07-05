@@ -125,9 +125,9 @@ const ScriptPortal = () => {
       <div 
         className="absolute inset-0 opacity-10 z-0"
         style={{
-          backgroundImage: `url('/lovable-uploads/325d73e2-d687-4668-aa2f-5127ad2bbfbb.png')`,
-          backgroundPosition: 'right center',
-          backgroundSize: 'contain',
+          backgroundImage: `url('/lovable-uploads/42a45bb6-4cbb-4ef6-b2e0-14b799aee7c3.png')`,
+          backgroundPosition: 'center center',
+          backgroundSize: 'cover',
           backgroundRepeat: 'no-repeat'
         }}
       />

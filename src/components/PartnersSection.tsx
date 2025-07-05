@@ -31,7 +31,7 @@ const PartnersSection = () => {
       <div 
         className="absolute inset-0 opacity-10 z-0"
         style={{
-          backgroundImage: `url('/lovable-uploads/23281ae9-1a58-4a14-b30f-73803cecb1e9.png')`,
+          backgroundImage: `url('/lovable-uploads/e8503f85-c9a3-4121-9343-fe3fcb38dbe5.png')`,
           backgroundPosition: 'left center',
           backgroundSize: 'contain',
           backgroundRepeat: 'no-repeat'

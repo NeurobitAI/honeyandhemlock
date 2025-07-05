@@ -44,10 +44,10 @@ const Sponsorship = () => {
   };
 
   const handleSponsor = async () => {
-    if (!formData.sponsor_name || !formData.sponsor_email || !formData.amount) {
+    if (!formData.sponsor_name || !formData.sponsor_email || !formData.amount || formData.amount <= 0) {
       toast({
         title: "Error",
-        description: "Please fill in all fields",
+        description: "Please fill in all fields with valid information",
         variant: "destructive"
       });
       return;
@@ -164,7 +164,7 @@ const Sponsorship = () => {
                   </div>
                   
                   <div>
-                    <Label htmlFor="amount" className="text-white">Donation Amount ($)</Label>
+                    <Label htmlFor="amount" className="text-white">Custom Donation Amount ($)</Label>
                     <Input
                       id="amount"
                       type="number"
