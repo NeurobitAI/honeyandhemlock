@@ -1,22 +1,24 @@
 
 import Header from "@/components/Header";
-import HeroSection from "@/components/HeroSection";
-import SkillsetSection from "@/components/SkillsetSection";
-import PartnersSection from "@/components/PartnersSection";
-import FeaturedProjects from "@/components/FeaturedProjects";
-import FoundersSection from "@/components/FoundersSection";
-import CallToAction from "@/components/CallToAction";
 import Footer from "@/components/Footer";
+import HeroSection from "@/components/HeroSection";
+import FeaturedProjects from "@/components/FeaturedProjects";
+import SkillsetSection from "@/components/SkillsetSection";
+import FoundersSection from "@/components/FoundersSection";
+import PartnersSection from "@/components/PartnersSection";
+import SponsorshipSection from "@/components/SponsorshipSection";
+import CallToAction from "@/components/CallToAction";
 
 const Index = () => {
   return (
     <div className="min-h-screen bg-portfolio-black">
       <Header />
       <HeroSection />
-      <SkillsetSection />
-      <PartnersSection />
       <FeaturedProjects />
+      <SkillsetSection />
       <FoundersSection />
+      <PartnersSection />
+      <SponsorshipSection />
       <CallToAction />
       <Footer />
     </div>

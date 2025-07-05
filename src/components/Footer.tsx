@@ -9,9 +9,19 @@ const TikTokIcon = () => (
 );
 
 const Footer = () => {
-  const navLinks = [
-    "Home", "About", "Services", "Films", "Upload Script", "Contact"
-  ];
+  const scrollToFounders = () => {
+    const foundersSection = document.getElementById('founders');
+    if (foundersSection) {
+      foundersSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  const scrollToSponsorship = () => {
+    const sponsorshipSection = document.getElementById('sponsorship');
+    if (sponsorshipSection) {
+      sponsorshipSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   return (
     <footer className="bg-portfolio-dark text-white py-16">
@@ -29,15 +39,24 @@ const Footer = () => {
 
         {/* Navigation Links */}
         <div className="flex flex-wrap justify-center space-x-8 mb-8">
-          {navLinks.map((link, index) => (
-            <a 
-              key={index}
-              href="#" 
-              className="font-open-sans text-sm text-white/80 hover:text-white transition-colors"
-            >
-              {link}
-            </a>
-          ))}
+          <Link to="/" className="font-open-sans text-sm text-white/80 hover:text-white transition-colors">
+            Home
+          </Link>
+          <button onClick={scrollToFounders} className="font-open-sans text-sm text-white/80 hover:text-white transition-colors">
+            About
+          </button>
+          <button onClick={scrollToSponsorship} className="font-open-sans text-sm text-white/80 hover:text-white transition-colors">
+            Sponsorship
+          </button>
+          <Link to="/films" className="font-open-sans text-sm text-white/80 hover:text-white transition-colors">
+            Films
+          </Link>
+          <Link to="/script-portal" className="font-open-sans text-sm text-white/80 hover:text-white transition-colors">
+            Upload Script
+          </Link>
+          <a href="#contact" className="font-open-sans text-sm text-white/80 hover:text-white transition-colors">
+            Contact
+          </a>
         </div>
 
         {/* Social Icons */}

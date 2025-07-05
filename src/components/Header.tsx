@@ -20,6 +20,13 @@ const Header = () => {
     }
   };
 
+  const scrollToSponsorship = () => {
+    const sponsorshipSection = document.getElementById('sponsorship');
+    if (sponsorshipSection) {
+      sponsorshipSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <>
       <header className="bg-portfolio-black text-white">
@@ -79,7 +86,7 @@ const Header = () => {
                 <img 
                   src="/lovable-uploads/64475ea2-91fd-4af8-b8e0-4131e1f8ec82.png" 
                   alt="Honey & Hemlock Productions"
-                  className="h-72 w-auto"
+                  className="h-80 w-auto"
                 />
               </Link>
             </div>
@@ -93,10 +100,13 @@ const Header = () => {
                 About
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-portfolio-gold transition-all group-hover:w-full"></span>
               </button>
-              <a href="#" className="font-open-sans text-sm uppercase tracking-wider hover:text-portfolio-gold transition-colors relative group">
-                Services
+              <button 
+                onClick={scrollToSponsorship}
+                className="font-open-sans text-sm uppercase tracking-wider hover:text-portfolio-gold transition-colors relative group"
+              >
+                Sponsorship
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-portfolio-gold transition-all group-hover:w-full"></span>
-              </a>
+              </button>
               <button 
                 onClick={() => setIsContactOpen(true)}
                 className="font-open-sans text-sm uppercase tracking-wider hover:text-portfolio-gold transition-colors relative group"

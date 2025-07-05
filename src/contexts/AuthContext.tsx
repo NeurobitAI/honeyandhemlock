@@ -1,17 +1,19 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { supabase } from '@/integrations/supabase/client';
+import type { User, Session } from '@supabase/supabase-js';
 
-interface User {
-  id: string;
-  email: string;
-  role: 'admin' | 'judge';
+interface AuthUser extends User {
+  role?: 'admin' | 'judge';
 }
 
 interface AuthContextType {
-  user: User | null;
-  login: (email: string, password: string, role: 'admin' | 'judge') => Promise<boolean>;
-  logout: () => void;
+  user: AuthUser | null;
+  session: Session | null;
+  login: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
+  logout: () => Promise<void>;
   isAuthenticated: boolean;
+  loading: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -25,43 +27,77 @@ export const useAuth = () => {
 };
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<AuthUser | null>(null);
+  const [session, setSession] = useState<Session | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Set up auth state listener
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        setSession(session);
+        if (session?.user) {
+          const authUser: AuthUser = {
+            ...session.user,
+            role: session.user.user_metadata?.role || 
+                  session.user.raw_user_meta_data?.role || 
+                  (session.user.email === 'admin@honeyandhemlock.productions' ? 'admin' : undefined)
+          };
+          setUser(authUser);
+        } else {
+          setUser(null);
+        }
+        setLoading(false);
+      }
+    );
+
     // Check for existing session
-    const savedUser = localStorage.getItem('scriptPortalUser');
-    if (savedUser) {
-      setUser(JSON.parse(savedUser));
-    }
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+      if (session?.user) {
+        const authUser: AuthUser = {
+          ...session.user,
+          role: session.user.user_metadata?.role || 
+                session.user.raw_user_meta_data?.role || 
+                (session.user.email === 'admin@honeyandhemlock.productions' ? 'admin' : undefined)
+        };
+        setUser(authUser);
+      }
+      setLoading(false);
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
 
-  const login = async (email: string, password: string, role: 'admin' | 'judge'): Promise<boolean> => {
-    // Mock authentication - in real app, this would call an API
-    const mockUsers = {
-      admin: { email: 'admin@honeyandhemlock.productions', password: 'Neurobit@123' },
-      judge: { email: 'judge@honeyandhemlock.productions', password: 'judge123' }
-    };
+  const login = async (email: string, password: string): Promise<{ success: boolean; error?: string }> => {
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
 
-    if (mockUsers[role].email === email && mockUsers[role].password === password) {
-      const userData = { id: `${role}_1`, email, role };
-      setUser(userData);
-      localStorage.setItem('scriptPortalUser', JSON.stringify(userData));
-      return true;
+      if (error) {
+        return { success: false, error: error.message };
+      }
+
+      return { success: true };
+    } catch (error) {
+      return { success: false, error: 'An unexpected error occurred' };
     }
-    return false;
   };
 
-  const logout = () => {
-    setUser(null);
-    localStorage.removeItem('scriptPortalUser');
+  const logout = async () => {
+    await supabase.auth.signOut();
   };
 
   return (
     <AuthContext.Provider value={{
       user,
+      session,
       login,
       logout,
-      isAuthenticated: !!user
+      isAuthenticated: !!user,
+      loading
     }}>
       {children}
     </AuthContext.Provider>
