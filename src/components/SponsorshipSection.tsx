@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
@@ -12,7 +13,7 @@ const SponsorshipSection = () => {
           </p>
           <div className="flex justify-center mb-8">
             <img 
-              src="/lovable-uploads/f7d688c7-3b2d-4f60-9146-4e8fb17518a4.png" 
+              src="/lovable-uploads/4774b947-de46-4d2c-aec1-c15b60d7b422.png" 
               alt="The Field Organization" 
               className="max-w-md w-full h-auto rounded-lg shadow-lg"
             />
