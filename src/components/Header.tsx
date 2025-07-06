@@ -1,5 +1,5 @@
 
-import { Facebook, Instagram } from "lucide-react";
+import { Facebook, Instagram, Linkedin } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import ContactForm from "./ContactForm";
@@ -7,6 +7,12 @@ import ContactForm from "./ContactForm";
 const TikTokIcon = () => (
   <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
     <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43V7.56a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.05z"/>
+  </svg>
+);
+
+const IMDBIcon = () => (
+  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M22 12c0 5.52-4.48 10-10 10S2 17.52 2 12 6.48 2 12 2s10 4.48 10 10zM5.61 8.8v6.4h1.43V8.8H5.61zm2.488 0v6.4h1.43l.9-4.64.9 4.64h1.43V8.8h-1.1v4.26l-.65-4.26h-.86l-.65 4.26V8.8h-1.1zm5.382 0v6.4h2.33c1.43 0 2.145-.715 2.145-2.145v-2.11c0-1.43-.715-2.145-2.145-2.145h-2.33zm1.43 1.1h.715c.572 0 .858.286 .858.858v1.584c0 .572-.286.858-.858.858h-.715V9.9z"/>
   </svg>
 );
 
@@ -48,6 +54,20 @@ const Header = () => {
                   rel="noopener noreferrer"
                 >
                   <Instagram className="w-4 h-4 text-white hover:text-portfolio-gold transition-colors cursor-pointer" />
+                </a>
+                <a 
+                  href="https://www.linkedin.com/company/honey-hemlock-productions/" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                >
+                  <Linkedin className="w-4 h-4 text-white hover:text-portfolio-gold transition-colors cursor-pointer" />
+                </a>
+                <a 
+                  href="https://pro.imdb.com/company/co0912607?r=cons_ats_co_pro&ref=cons_ats_co_pro" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                >
+                  <IMDBIcon />
                 </a>
               </div>
             </div>
