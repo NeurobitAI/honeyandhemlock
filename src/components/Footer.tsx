@@ -53,9 +53,6 @@ const Footer = () => {
           <Link to="/script-portal" className="font-open-sans text-sm text-white/80 hover:text-white transition-colors">
             Upload Script
           </Link>
-          <button onClick={() => setIsContactOpen && setIsContactOpen(true)} className="font-open-sans text-sm text-white/80 hover:text-white transition-colors">
-            Contact
-          </button>
         </div>
 
         {/* Social Icons */}
