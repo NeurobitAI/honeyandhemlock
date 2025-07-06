@@ -47,6 +47,7 @@ export type Database = {
           created_at: string | null
           email: string
           id: string
+          is_admin: boolean | null
           name: string
           password_hash: string
           status: Database["public"]["Enums"]["judge_status"] | null
@@ -56,6 +57,7 @@ export type Database = {
           created_at?: string | null
           email: string
           id?: string
+          is_admin?: boolean | null
           name: string
           password_hash: string
           status?: Database["public"]["Enums"]["judge_status"] | null
@@ -65,6 +67,7 @@ export type Database = {
           created_at?: string | null
           email?: string
           id?: string
+          is_admin?: boolean | null
           name?: string
           password_hash?: string
           status?: Database["public"]["Enums"]["judge_status"] | null
@@ -214,7 +217,15 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      authenticate_admin: {
+        Args: { admin_email: string; admin_password: string }
+        Returns: {
+          id: string
+          email: string
+          name: string
+          is_admin: boolean
+        }[]
+      }
     }
     Enums: {
       judge_status: "pending" | "approved" | "declined"

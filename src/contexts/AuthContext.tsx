@@ -5,6 +5,7 @@ import type { User, Session } from '@supabase/supabase-js';
 
 interface AuthUser extends User {
   role?: 'admin' | 'judge';
+  isAdmin?: boolean;
 }
 
 interface AuthContextType {
@@ -69,6 +70,38 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const login = async (email: string, password: string): Promise<{ success: boolean; error?: string }> => {
     try {
+      // Check if this is the admin user trying to log in
+      if (email === 'admin@honeyandhemlock.productions') {
+        // Use our custom admin authentication function
+        const { data, error } = await supabase.rpc('authenticate_admin', {
+          admin_email: email,
+          admin_password: password
+        });
+
+        if (error || !data || data.length === 0) {
+          return { success: false, error: 'Invalid admin credentials' };
+        }
+
+        // Create a mock session for the admin user
+        const adminUser: AuthUser = {
+          id: data[0].id,
+          email: data[0].email,
+          user_metadata: { role: 'admin' },
+          role: 'admin',
+          isAdmin: true,
+          aud: 'authenticated',
+          created_at: new Date().toISOString(),
+          app_metadata: {},
+          confirmed_at: new Date().toISOString(),
+        };
+
+        setUser(adminUser);
+        // Store admin session in localStorage for persistence
+        localStorage.setItem('admin_session', JSON.stringify(adminUser));
+        return { success: true };
+      }
+
+      // Regular Supabase auth for other users
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
@@ -85,8 +118,25 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const logout = async () => {
+    // Clear admin session if it exists
+    localStorage.removeItem('admin_session');
     await supabase.auth.signOut();
   };
+
+  // Check for stored admin session on app start
+  useEffect(() => {
+    const storedAdminSession = localStorage.getItem('admin_session');
+    if (storedAdminSession && !user) {
+      try {
+        const adminUser = JSON.parse(storedAdminSession);
+        setUser(adminUser);
+        setLoading(false);
+      } catch (error) {
+        localStorage.removeItem('admin_session');
+        setLoading(false);
+      }
+    }
+  }, [user]);
 
   return (
     <AuthContext.Provider value={{
