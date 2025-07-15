@@ -90,20 +90,20 @@ const PricingPage = () => {
         }}
       />
       
-      <div className="container mx-auto px-6 py-20 relative z-10">
-        <div className="text-center mb-16">
-          <h1 className="font-playfair text-5xl font-bold mb-4 text-portfolio-gold">
+      <div className="container mx-auto px-4 sm:px-6 py-12 md:py-20 relative z-10">
+        <div className="text-center mb-12 md:mb-16">
+          <h1 className="font-playfair text-3xl sm:text-4xl md:text-5xl font-bold mb-4 text-portfolio-gold px-4">
             Honey Writes
           </h1>
-          <p className="font-open-sans text-2xl mb-8 text-white">
+          <p className="font-open-sans text-xl sm:text-2xl mb-6 md:mb-8 text-white px-4">
             By producers for production
           </p>
-          <p className="font-open-sans text-lg text-white/80 max-w-3xl mx-auto">
+          <p className="font-open-sans text-base sm:text-lg text-white/80 max-w-3xl mx-auto px-4 leading-relaxed">
             Professional script review services designed by industry professionals to help you refine your screenplay and bring it closer to production-ready quality.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mb-12 md:mb-16 px-4">
           {pricingTiers.map((tier) => (
             <Card 
               key={tier.id} 
@@ -114,28 +114,28 @@ const PricingPage = () => {
               }`}
               onClick={() => handleTierSelection(tier)}
             >
-              <CardHeader className="text-center">
-                <CardTitle className="text-portfolio-gold text-2xl font-playfair">
+              <CardHeader className="text-center p-4 sm:p-6">
+                <CardTitle className="text-portfolio-gold text-xl sm:text-2xl font-playfair mb-2">
                   {tier.name}
                 </CardTitle>
-                <div className="text-4xl font-bold text-white mb-4">
+                <div className="text-3xl sm:text-4xl font-bold text-white mb-4">
                   ${tier.price}
                 </div>
                 <p className="text-white/80 text-sm leading-relaxed">
                   {tier.description}
                 </p>
               </CardHeader>
-              <CardContent>
+              <CardContent className="p-4 sm:p-6 pt-0">
                 <ul className="space-y-3 mb-6">
                   {tier.features.map((feature, index) => (
                     <li key={index} className="flex items-start space-x-3">
-                      <Check className="w-5 h-5 text-portfolio-gold mt-0.5 flex-shrink-0" />
-                      <span className="text-white/90 text-sm">{feature}</span>
+                      <Check className="w-4 h-4 sm:w-5 sm:h-5 text-portfolio-gold mt-0.5 flex-shrink-0" />
+                      <span className="text-white/90 text-sm leading-relaxed">{feature}</span>
                     </li>
                   ))}
                 </ul>
                 <Button 
-                  className="w-full bg-portfolio-gold text-black hover:bg-portfolio-gold/90 font-semibold"
+                  className="w-full bg-portfolio-gold text-black hover:bg-portfolio-gold/90 font-semibold py-3 text-sm sm:text-base"
                   onClick={(e) => {
                     e.stopPropagation();
                     handleTierSelection(tier);
@@ -149,7 +149,7 @@ const PricingPage = () => {
         </div>
 
         {/* Additional Pricing Info */}
-        <div className="text-center">
+        <div className="text-center px-4">
           <p className="text-white/80 text-lg font-open-sans">
             90-120 pages: Additional $5 per page
           </p>

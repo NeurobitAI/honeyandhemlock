@@ -1,5 +1,5 @@
 
-import { Facebook, Instagram, Linkedin } from "lucide-react";
+import { Facebook, Instagram, Linkedin, Menu, X } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import ContactForm from "./ContactForm";
@@ -20,20 +20,26 @@ const IMDBIcon = () => (
 const Header = () => {
   const [isContactOpen, setIsContactOpen] = useState(false);
   const [isJudgeSignupOpen, setIsJudgeSignupOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const scrollToFounders = () => {
     const foundersSection = document.getElementById('founders');
     if (foundersSection) {
       foundersSection.scrollIntoView({ behavior: 'smooth' });
     }
+    setIsMobileMenuOpen(false);
+  };
+
+  const closeMobileMenu = () => {
+    setIsMobileMenuOpen(false);
   };
 
   return (
     <>
-      <header className="bg-portfolio-black text-white">
-        {/* Top Bar */}
-        <div className="border-b border-gray-800">
-          <div className="container mx-auto px-6 py-3">
+      <header className="bg-portfolio-black text-white relative">
+        {/* Top Bar - Hidden on mobile */}
+        <div className="border-b border-gray-800 hidden md:block">
+          <div className="container mx-auto px-4 sm:px-6 py-3">
             <div className="flex justify-between items-center">
               <div className="flex items-center space-x-4">
                 <button
@@ -85,10 +91,10 @@ const Header = () => {
         </div>
 
         {/* Main Navigation */}
-        <div className="container mx-auto px-6 py-6">
+        <div className="container mx-auto px-4 sm:px-6 py-4 lg:py-6">
           <nav className="flex items-center justify-between">
-            {/* Left Navigation */}
-            <div className="flex space-x-8">
+            {/* Desktop Left Navigation */}
+            <div className="hidden lg:flex space-x-6 xl:space-x-8">
               <Link to="/" className="font-open-sans text-sm uppercase tracking-wider hover:text-portfolio-gold transition-colors relative group">
                 Home
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-portfolio-gold transition-all group-hover:w-full"></span>
@@ -103,19 +109,32 @@ const Header = () => {
               </Link>
             </div>
 
-            {/* Logo - Clickable */}
-            <div className="text-center">
-              <Link to="/" className="flex items-center justify-center mb-1">
+            {/* Mobile Menu Button */}
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="lg:hidden z-50 relative p-2"
+              aria-label="Toggle menu"
+            >
+              {isMobileMenuOpen ? (
+                <X className="w-6 h-6 text-white" />
+              ) : (
+                <Menu className="w-6 h-6 text-white" />
+              )}
+            </button>
+
+            {/* Logo - Responsive sizing */}
+            <div className="flex-1 lg:flex-none text-center">
+              <Link to="/" className="flex items-center justify-center">
                 <img 
                   src="/lovable-uploads/64475ea2-91fd-4af8-b8e0-4131e1f8ec82.png" 
                   alt="Honey & Hemlock Productions"
-                  className="h-80 w-auto"
+                  className="h-32 sm:h-40 md:h-60 lg:h-80 w-auto"
                 />
               </Link>
             </div>
 
-            {/* Right Navigation */}
-            <div className="flex space-x-8">
+            {/* Desktop Right Navigation */}
+            <div className="hidden lg:flex space-x-6 xl:space-x-8">
               <button 
                 onClick={scrollToFounders}
                 className="font-open-sans text-sm uppercase tracking-wider hover:text-portfolio-gold transition-colors relative group"
@@ -140,6 +159,111 @@ const Header = () => {
             </div>
           </nav>
         </div>
+
+        {/* Mobile Menu Overlay */}
+        {isMobileMenuOpen && (
+          <div className="lg:hidden fixed inset-0 bg-portfolio-black bg-opacity-95 z-40">
+            <div className="flex flex-col items-center justify-center h-full space-y-8">
+              {/* Mobile Social Icons */}
+              <div className="flex space-x-6 mb-8">
+                <a 
+                  href="https://www.facebook.com/profile.php?id=100085916835325" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  onClick={closeMobileMenu}
+                >
+                  <Facebook className="w-6 h-6 text-white hover:text-portfolio-gold transition-colors" />
+                </a>
+                <a 
+                  href="https://www.tiktok.com/@honeyandhemlock.prod" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  onClick={closeMobileMenu}
+                >
+                  <TikTokIcon />
+                </a>
+                <a 
+                  href="https://www.instagram.com/honeyandhemlock_productions/" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  onClick={closeMobileMenu}
+                >
+                  <Instagram className="w-6 h-6 text-white hover:text-portfolio-gold transition-colors" />
+                </a>
+                <a 
+                  href="https://www.linkedin.com/company/honey-hemlock-productions/" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  onClick={closeMobileMenu}
+                >
+                  <Linkedin className="w-6 h-6 text-white hover:text-portfolio-gold transition-colors" />
+                </a>
+                <a 
+                  href="https://pro.imdb.com/company/co0912607?r=cons_ats_co_pro&ref=cons_ats_co_pro" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  onClick={closeMobileMenu}
+                >
+                  <IMDBIcon />
+                </a>
+              </div>
+
+              {/* Mobile Navigation Links */}
+              <Link 
+                to="/" 
+                className="font-open-sans text-xl uppercase tracking-wider hover:text-portfolio-gold transition-colors text-center py-3"
+                onClick={closeMobileMenu}
+              >
+                Home
+              </Link>
+              <Link 
+                to="/films" 
+                className="font-open-sans text-xl uppercase tracking-wider hover:text-portfolio-gold transition-colors text-center py-3"
+                onClick={closeMobileMenu}
+              >
+                Films
+              </Link>
+              <Link 
+                to="/script-portal" 
+                className="font-open-sans text-xl uppercase tracking-wider hover:text-portfolio-gold transition-colors text-center py-3"
+                onClick={closeMobileMenu}
+              >
+                Honey Writes
+              </Link>
+              <button 
+                onClick={scrollToFounders}
+                className="font-open-sans text-xl uppercase tracking-wider hover:text-portfolio-gold transition-colors text-center py-3"
+              >
+                About
+              </button>
+              <Link 
+                to="/sponsorship"
+                className="font-open-sans text-xl uppercase tracking-wider hover:text-portfolio-gold transition-colors text-center py-3"
+                onClick={closeMobileMenu}
+              >
+                Sponsorship
+              </Link>
+              <button 
+                onClick={() => {
+                  setIsContactOpen(true);
+                  closeMobileMenu();
+                }}
+                className="font-open-sans text-xl uppercase tracking-wider hover:text-portfolio-gold transition-colors text-center py-3"
+              >
+                Contact
+              </button>
+              <button
+                onClick={() => {
+                  setIsJudgeSignupOpen(true);
+                  closeMobileMenu();
+                }}
+                className="font-open-sans text-lg text-portfolio-gold hover:text-white transition-colors text-center py-3 border border-portfolio-gold rounded px-6"
+              >
+                Become a Judge
+              </button>
+            </div>
+          </div>
+        )}
       </header>
       
       <ContactForm isOpen={isContactOpen} onClose={() => setIsContactOpen(false)} />
