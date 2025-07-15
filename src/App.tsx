@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import Index from "./pages/Index";
 import Films from "./pages/Films";
+import PricingPage from "./pages/PricingPage";
 import ScriptPortal from "./pages/ScriptPortal";
 import Sponsorship from "./pages/Sponsorship";
 import AdminLogin from "./pages/AdminLogin";
@@ -28,7 +29,8 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/films" element={<Films />} />
-            <Route path="/script-portal" element={<ScriptPortal />} />
+            <Route path="/script-portal" element={<PricingPage />} />
+            <Route path="/script-upload" element={<ScriptPortal />} />
             <Route path="/sponsorship" element={<Sponsorship />} />
             <Route path="/admin" element={<AdminLogin />} />
             <Route path="/judge" element={<JudgeLogin />} />

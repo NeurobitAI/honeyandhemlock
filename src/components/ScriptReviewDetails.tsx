@@ -1,16 +1,29 @@
 
 import React from 'react';
 
-const ScriptReviewDetails: React.FC = () => {
+interface PricingTier {
+  id: string;
+  name: string;
+  price: number;
+  features: string[];
+  description: string;
+}
+
+interface ScriptReviewDetailsProps {
+  selectedTier: PricingTier;
+}
+
+const ScriptReviewDetails: React.FC<ScriptReviewDetailsProps> = ({ selectedTier }) => {
   return (
     <div className="bg-portfolio-black p-4 rounded border border-portfolio-gold/20">
-      <h3 className="text-portfolio-gold font-semibold mb-2">Review Details:</h3>
+      <h3 className="text-portfolio-gold font-semibold mb-2">Review Details for {selectedTier.name}:</h3>
       <ul className="text-white/80 text-sm space-y-1">
-        <li>• Professional script review by industry experts</li>
-        <li>• Detailed feedback on story, structure, and characters</li>
-        <li>• Recommendations for improvement</li>
+        {selectedTier.features.map((feature, index) => (
+          <li key={index}>• {feature}</li>
+        ))}
         <li>• Turnaround time: 7-14 business days</li>
-        <li>• Cost: $50 (payment required before review)</li>
+        <li>• Cost: ${selectedTier.price}</li>
+        <li>• 90-120 pages: Additional $5 per page</li>
       </ul>
     </div>
   );

@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
@@ -7,7 +8,6 @@ import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { useToast } from '@/hooks/use-toast';
 import { 
-  Users, 
   LayoutDashboard, 
   User, 
   Settings, 
@@ -46,11 +46,9 @@ const AdminDashboard = () => {
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [activeTab, setActiveTab] = useState('dashboard');
 
-  // Mock data for metrics
+  // Mock data for metrics - updated to USD
   const metrics = {
-    totalUsers: 1250,
-    userGrowth: 15.3,
-    totalPayments: 324000,
+    totalPayments: 162000, // Updated to USD
     paymentGrowth: 8.7,
     scriptUploads: 430,
     scriptGrowth: -2.4,
@@ -100,35 +98,14 @@ const AdminDashboard = () => {
   const renderDashboard = () => (
     <div className="space-y-6">
       {/* Top Metrics Row */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* Users Card */}
-        <Card className="bg-[#282828] border-none relative overflow-hidden">
-          <CardContent className="p-6">
-            <div className="flex justify-between items-start">
-              <div>
-                <p className="text-gray-400 text-sm">Registered Users</p>
-                <p className="text-3xl font-bold text-white mt-2">{metrics.totalUsers.toLocaleString()}</p>
-                <p className="text-sm mt-2">
-                  <span className={`${metrics.userGrowth > 0 ? 'text-green-400' : 'text-red-400'}`}>
-                    {metrics.userGrowth > 0 ? '+' : ''}{metrics.userGrowth}% 
-                  </span>
-                  <span className="text-gray-400 ml-1">Since Last Month</span>
-                </p>
-              </div>
-              <div className="w-12 h-12 bg-[#FFB300] rounded-full flex items-center justify-center">
-                <Users className="w-6 h-6 text-black" />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Payments Card */}
         <Card className="bg-[#282828] border-none relative overflow-hidden">
           <CardContent className="p-6">
             <div className="flex justify-between items-start">
               <div>
                 <p className="text-gray-400 text-sm">Total Payments Received</p>
-                <p className="text-3xl font-bold text-white mt-2">₹{metrics.totalPayments.toLocaleString()}</p>
+                <p className="text-3xl font-bold text-white mt-2">${metrics.totalPayments.toLocaleString()}</p>
                 <p className="text-sm mt-2">
                   <span className={`${metrics.paymentGrowth > 0 ? 'text-green-400' : 'text-red-400'}`}>
                     {metrics.paymentGrowth > 0 ? '+' : ''}{metrics.paymentGrowth}% 
@@ -137,7 +114,7 @@ const AdminDashboard = () => {
                 </p>
               </div>
               <div className="w-12 h-12 bg-[#FFB300] rounded-full flex items-center justify-center">
-                <span className="text-black font-bold text-lg">₹</span>
+                <span className="text-black font-bold text-lg">$</span>
               </div>
             </div>
           </CardContent>
@@ -310,11 +287,9 @@ const AdminDashboard = () => {
           <ul className="space-y-2">
             {[
               { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
-              { id: 'users', label: 'Users', icon: Users },
               { id: 'judges', label: 'Judges', icon: User },
               { id: 'scripts', label: 'Scripts', icon: () => <span>📄</span> },
               { id: 'payments', label: 'Payments', icon: () => <span>💳</span> },
-              { id: 'analytics', label: 'Analytics', icon: () => <span>📊</span> },
               { id: 'settings', label: 'Settings', icon: Settings }
             ].map((item) => (
               <li key={item.id}>

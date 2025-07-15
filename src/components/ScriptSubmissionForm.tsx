@@ -7,14 +7,24 @@ import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 
+interface PricingTier {
+  id: string;
+  name: string;
+  price: number;
+  features: string[];
+  description: string;
+}
+
 interface ScriptSubmissionFormProps {
   onSubmissionStart: () => void;
   onSubmissionEnd: () => void;
+  selectedTier: PricingTier;
 }
 
 const ScriptSubmissionForm: React.FC<ScriptSubmissionFormProps> = ({
   onSubmissionStart,
-  onSubmissionEnd
+  onSubmissionEnd,
+  selectedTier
 }) => {
   const [title, setTitle] = useState('');
   const [authorName, setAuthorName] = useState('');
@@ -68,13 +78,16 @@ const ScriptSubmissionForm: React.FC<ScriptSubmissionFormProps> = ({
     onSubmissionStart();
 
     try {
-      // Create Stripe payment session
+      // Create Stripe payment session with the selected tier price
       const { data, error } = await supabase.functions.invoke('create-script-payment', {
         body: {
           title,
           authorName,
           authorEmail,
           authorPhone,
+          amount: selectedTier.price * 100, // Convert to cents
+          tierName: selectedTier.name,
+          tierId: selectedTier.id,
         },
       });
 
@@ -87,7 +100,8 @@ const ScriptSubmissionForm: React.FC<ScriptSubmissionFormProps> = ({
           authorName,
           authorEmail,
           authorPhone,
-          fileName: file.name
+          fileName: file.name,
+          selectedTier: selectedTier
         }));
         
         // Redirect to Stripe checkout
@@ -95,7 +109,7 @@ const ScriptSubmissionForm: React.FC<ScriptSubmissionFormProps> = ({
         
         toast({
           title: "Redirecting to Payment",
-          description: "Please complete your payment to submit your script for review.",
+          description: `Please complete your payment of $${selectedTier.price} to submit your script for review.`,
         });
       }
     } catch (error) {
@@ -186,7 +200,7 @@ const ScriptSubmissionForm: React.FC<ScriptSubmissionFormProps> = ({
         className="w-full bg-portfolio-gold text-black hover:bg-portfolio-gold/90 text-lg py-3"
       >
         <Upload className="w-5 h-5 mr-2" />
-        Pay $50 & Submit Script
+        Pay ${selectedTier.price} & Submit Script
       </Button>
     </form>
   );

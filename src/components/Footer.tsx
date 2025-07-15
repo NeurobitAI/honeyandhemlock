@@ -10,7 +10,7 @@ const TikTokIcon = () => (
 
 const IMDBIcon = () => (
   <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-    <path d="M22 12c0 5.52-4.48 10-10 10S2 17.52 2 12 6.48 2 12 2s10 4.48 10 10zM5.61 8.8v6.4h1.43V8.8H5.61zm2.488 0v6.4h1.43l.9-4.64.9 4.64h1.43V8.8h-1.1v4.26l-.65-4.26h-.86l-.65 4.26V8.8h-1.1zm5.382 0v6.4h2.33c1.43 0 2.145-.715 2.145-2.145v-2.11c0-1.43-.715-2.145-2.145-2.145h-2.33zm1.43 1.1h.715c.572 0 .858.286 .858.858v1.584c0 .572-.286.858-.858.858h-.715V9.9z"/>
+    <path d="M22 12c0 5.52-4.48 10-10 10S2 17.52 2 12 6.48 2 12 2s10 4.48 10 10zM5.61 8.8v6.4h1.43V8.8H5.61zm2.488 0v6.4h1.43l.9-4.64.9 4.64h1.43V8.8h-1.1v4.26l-.65-4.26h-.86l-.65 4.26V8.8h-1.1zm5.382 0v6.4h2.33c1.43 0 2.145-.715 2.145-2.145h-2.33zm1.43 1.1h.715c.572 0 .858.286 .858.858v1.584c0 .572-.286.858-.858.858h-.715V9.9z"/>
   </svg>
 );
 
@@ -51,7 +51,7 @@ const Footer = () => {
             Films
           </Link>
           <Link to="/script-portal" className="font-open-sans text-sm text-white/80 hover:text-white transition-colors">
-            Upload Script
+            Honey Writes
           </Link>
         </div>
 
