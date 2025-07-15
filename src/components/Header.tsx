@@ -3,6 +3,7 @@ import { Facebook, Instagram, Linkedin } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import ContactForm from "./ContactForm";
+import JudgeSignupForm from "./JudgeSignupForm";
 
 const TikTokIcon = () => (
   <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
@@ -18,6 +19,7 @@ const IMDBIcon = () => (
 
 const Header = () => {
   const [isContactOpen, setIsContactOpen] = useState(false);
+  const [isJudgeSignupOpen, setIsJudgeSignupOpen] = useState(false);
 
   const scrollToFounders = () => {
     const foundersSection = document.getElementById('founders');
@@ -32,7 +34,15 @@ const Header = () => {
         {/* Top Bar */}
         <div className="border-b border-gray-800">
           <div className="container mx-auto px-6 py-3">
-            <div className="flex justify-end items-center space-x-6">
+            <div className="flex justify-between items-center">
+              <div className="flex items-center space-x-4">
+                <button
+                  onClick={() => setIsJudgeSignupOpen(true)}
+                  className="text-sm text-portfolio-gold hover:text-white transition-colors"
+                >
+                  Become a Judge
+                </button>
+              </div>
               <div className="flex space-x-4">
                 <a 
                   href="https://www.facebook.com/profile.php?id=100085916835325" 
@@ -133,6 +143,7 @@ const Header = () => {
       </header>
       
       <ContactForm isOpen={isContactOpen} onClose={() => setIsContactOpen(false)} />
+      <JudgeSignupForm isOpen={isJudgeSignupOpen} onClose={() => setIsJudgeSignupOpen(false)} />
     </>
   );
 };

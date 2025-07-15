@@ -88,6 +88,7 @@ const ScriptSubmissionForm: React.FC<ScriptSubmissionFormProps> = ({
           amount: selectedTier.price * 100, // Convert to cents
           tierName: selectedTier.name,
           tierId: selectedTier.id,
+          tierDescription: selectedTier.description,
         },
       });
 

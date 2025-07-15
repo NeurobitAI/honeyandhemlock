@@ -14,6 +14,54 @@ export type Database = {
   }
   public: {
     Tables: {
+      activity_log: {
+        Row: {
+          activity_type: string
+          created_at: string | null
+          description: string
+          id: string
+          judge_id: string | null
+          metadata: Json | null
+          script_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          activity_type: string
+          created_at?: string | null
+          description: string
+          id?: string
+          judge_id?: string | null
+          metadata?: Json | null
+          script_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          activity_type?: string
+          created_at?: string | null
+          description?: string
+          id?: string
+          judge_id?: string | null
+          metadata?: Json | null
+          script_id?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "activity_log_judge_id_fkey"
+            columns: ["judge_id"]
+            isOneToOne: false
+            referencedRelation: "judges"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "activity_log_script_id_fkey"
+            columns: ["script_id"]
+            isOneToOne: false
+            referencedRelation: "scripts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       contacts: {
         Row: {
           created_at: string | null
@@ -47,35 +95,89 @@ export type Database = {
         }
         Relationships: []
       }
+      judge_applications: {
+        Row: {
+          availability: string | null
+          bio: string | null
+          created_at: string | null
+          email: string
+          experience_years: number | null
+          id: string
+          name: string
+          specialization: string | null
+          status: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          availability?: string | null
+          bio?: string | null
+          created_at?: string | null
+          email: string
+          experience_years?: number | null
+          id?: string
+          name: string
+          specialization?: string | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          availability?: string | null
+          bio?: string | null
+          created_at?: string | null
+          email?: string
+          experience_years?: number | null
+          id?: string
+          name?: string
+          specialization?: string | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       judges: {
         Row: {
+          availability: string | null
+          average_turnaround_days: number | null
           created_at: string | null
+          current_workload: number | null
           email: string
           id: string
           is_admin: boolean | null
           name: string
           password_hash: string
+          specialization: string | null
           status: Database["public"]["Enums"]["judge_status"] | null
+          total_scripts_reviewed: number | null
           updated_at: string | null
         }
         Insert: {
+          availability?: string | null
+          average_turnaround_days?: number | null
           created_at?: string | null
+          current_workload?: number | null
           email: string
           id?: string
           is_admin?: boolean | null
           name: string
           password_hash: string
+          specialization?: string | null
           status?: Database["public"]["Enums"]["judge_status"] | null
+          total_scripts_reviewed?: number | null
           updated_at?: string | null
         }
         Update: {
+          availability?: string | null
+          average_turnaround_days?: number | null
           created_at?: string | null
+          current_workload?: number | null
           email?: string
           id?: string
           is_admin?: boolean | null
           name?: string
           password_hash?: string
+          specialization?: string | null
           status?: Database["public"]["Enums"]["judge_status"] | null
+          total_scripts_reviewed?: number | null
           updated_at?: string | null
         }
         Relationships: []
@@ -138,6 +240,9 @@ export type Database = {
           status: Database["public"]["Enums"]["script_status"] | null
           stripe_payment_intent_id: string | null
           submitted_at: string | null
+          tier_description: string | null
+          tier_id: string | null
+          tier_name: string | null
           title: string
           updated_at: string | null
         }
@@ -156,6 +261,9 @@ export type Database = {
           status?: Database["public"]["Enums"]["script_status"] | null
           stripe_payment_intent_id?: string | null
           submitted_at?: string | null
+          tier_description?: string | null
+          tier_id?: string | null
+          tier_name?: string | null
           title: string
           updated_at?: string | null
         }
@@ -174,6 +282,9 @@ export type Database = {
           status?: Database["public"]["Enums"]["script_status"] | null
           stripe_payment_intent_id?: string | null
           submitted_at?: string | null
+          tier_description?: string | null
+          tier_id?: string | null
+          tier_name?: string | null
           title?: string
           updated_at?: string | null
         }
@@ -186,6 +297,33 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      site_settings: {
+        Row: {
+          category: string | null
+          created_at: string | null
+          id: string
+          setting_key: string
+          setting_value: Json | null
+          updated_at: string | null
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string | null
+          id?: string
+          setting_key: string
+          setting_value?: Json | null
+          updated_at?: string | null
+        }
+        Update: {
+          category?: string | null
+          created_at?: string | null
+          id?: string
+          setting_key?: string
+          setting_value?: Json | null
+          updated_at?: string | null
+        }
+        Relationships: []
       }
       sponsorship_payments: {
         Row: {
@@ -230,6 +368,17 @@ export type Database = {
           name: string
           is_admin: boolean
         }[]
+      }
+      log_activity: {
+        Args: {
+          p_activity_type: string
+          p_description: string
+          p_user_id?: string
+          p_script_id?: string
+          p_judge_id?: string
+          p_metadata?: Json
+        }
+        Returns: undefined
       }
     }
     Enums: {

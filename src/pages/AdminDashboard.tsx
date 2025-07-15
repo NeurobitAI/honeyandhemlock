@@ -7,64 +7,36 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 import { 
   LayoutDashboard, 
   User, 
   Settings, 
   LogOut, 
   Search, 
-  Bell 
+  Bell,
+  FileText,
+  DollarSign
 } from 'lucide-react';
 
-interface Script {
-  id: number;
-  title: string;
-  uploadedBy: string;
-  status: 'pending' | 'assigned' | 'approved' | 'declined';
-  assignedJudge?: string;
-  dateSubmitted: string;
-  feedback?: string;
-  paymentStatus: 'paid' | 'pending';
-}
-
-interface Contact {
-  id: number;
-  name: string;
-  email: string;
-  phone: string;
-  subject: string;
-  message: string;
-  date: string;
-  status: 'new' | 'read';
-}
+// Import the new sections
+import JudgesSection from '@/components/admin/JudgesSection';
+import ScriptsSection from '@/components/admin/ScriptsSection';
+import SettingsSection from '@/components/admin/SettingsSection';
 
 const AdminDashboard = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [scripts, setScripts] = useState<Script[]>([]);
-  const [contacts, setContacts] = useState<Contact[]>([]);
   const [activeTab, setActiveTab] = useState('dashboard');
-
-  // Mock data for metrics - updated to USD
-  const metrics = {
-    totalPayments: 162000, // Updated to USD
-    paymentGrowth: 8.7,
-    scriptUploads: 430,
-    scriptGrowth: -2.4,
-    assignedScripts: 300,
-    pendingScripts: 130,
-    totalJudges: 15,
-    newJudges: 3
-  };
-
-  const recentActivity = [
-    { id: 1, type: 'approval', message: 'Script "Solitary" approved by Judge Sarah', time: '2 hours ago' },
-    { id: 2, type: 'payment', message: 'Payment received from User #1203', time: '3 hours ago' },
-    { id: 3, type: 'registration', message: 'Judge John Smith registered', time: '5 hours ago' },
-    { id: 4, type: 'assignment', message: 'Script "Spaceman" assigned to Judge Mike', time: '1 day ago' },
-    { id: 5, type: 'decline', message: 'Script "Untitled" declined by Judge Lisa', time: '1 day ago' }
-  ];
+  const [dashboardData, setDashboardData] = useState({
+    totalPayments: 0,
+    scriptUploads: 0,
+    assignedScripts: 0,
+    pendingScripts: 0,
+    totalJudges: 0,
+    recentActivity: []
+  });
 
   useEffect(() => {
     // Check if user is admin
@@ -73,11 +45,58 @@ const AdminDashboard = () => {
       return;
     }
 
-    const savedScripts = JSON.parse(localStorage.getItem('scripts') || '[]');
-    const savedContacts = JSON.parse(localStorage.getItem('contacts') || '[]');
-    setScripts(savedScripts);
-    setContacts(savedContacts);
+    fetchDashboardData();
   }, [user, navigate]);
+
+  const fetchDashboardData = async () => {
+    try {
+      // Fetch scripts data
+      const { data: scripts, error: scriptsError } = await supabase
+        .from('scripts')
+        .select('*');
+      
+      if (scriptsError) throw scriptsError;
+
+      // Fetch judges data
+      const { data: judges, error: judgesError } = await supabase
+        .from('judges')
+        .select('*');
+      
+      if (judgesError) throw judgesError;
+
+      // Fetch recent activity
+      const { data: activity, error: activityError } = await supabase
+        .from('activity_log')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(10);
+      
+      if (activityError) throw activityError;
+
+      // Calculate metrics
+      const totalPayments = scripts?.filter(s => s.payment_status === 'paid')
+        .reduce((sum, s) => sum + (s.amount || 0), 0) || 0;
+      
+      const assignedScripts = scripts?.filter(s => s.status === 'assigned').length || 0;
+      const pendingScripts = scripts?.filter(s => s.status === 'pending').length || 0;
+
+      setDashboardData({
+        totalPayments: totalPayments / 100, // Convert from cents to dollars
+        scriptUploads: scripts?.length || 0,
+        assignedScripts,
+        pendingScripts,
+        totalJudges: judges?.length || 0,
+        recentActivity: activity || []
+      });
+    } catch (error) {
+      console.error('Error fetching dashboard data:', error);
+      toast({
+        title: "Error",
+        description: "Failed to fetch dashboard data",
+        variant: "destructive"
+      });
+    }
+  };
 
   const handleLogout = () => {
     logout();
@@ -105,16 +124,14 @@ const AdminDashboard = () => {
             <div className="flex justify-between items-start">
               <div>
                 <p className="text-gray-400 text-sm">Total Payments Received</p>
-                <p className="text-3xl font-bold text-white mt-2">${metrics.totalPayments.toLocaleString()}</p>
+                <p className="text-3xl font-bold text-white mt-2">${dashboardData.totalPayments.toLocaleString()}</p>
                 <p className="text-sm mt-2">
-                  <span className={`${metrics.paymentGrowth > 0 ? 'text-green-400' : 'text-red-400'}`}>
-                    {metrics.paymentGrowth > 0 ? '+' : ''}{metrics.paymentGrowth}% 
-                  </span>
+                  <span className="text-green-400">+8.7%</span>
                   <span className="text-gray-400 ml-1">Since Last Month</span>
                 </p>
               </div>
               <div className="w-12 h-12 bg-[#FFB300] rounded-full flex items-center justify-center">
-                <span className="text-black font-bold text-lg">$</span>
+                <DollarSign className="w-6 h-6 text-black" />
               </div>
             </div>
           </CardContent>
@@ -126,16 +143,14 @@ const AdminDashboard = () => {
             <div className="flex justify-between items-start">
               <div>
                 <p className="text-gray-400 text-sm">Scripts Uploaded</p>
-                <p className="text-3xl font-bold text-white mt-2">{metrics.scriptUploads}</p>
+                <p className="text-3xl font-bold text-white mt-2">{dashboardData.scriptUploads}</p>
                 <p className="text-sm mt-2">
-                  <span className={`${metrics.scriptGrowth > 0 ? 'text-green-400' : 'text-red-400'}`}>
-                    {metrics.scriptGrowth > 0 ? '+' : ''}{metrics.scriptGrowth}% 
-                  </span>
+                  <span className="text-green-400">+12.3%</span>
                   <span className="text-gray-400 ml-1">Since Last Month</span>
                 </p>
               </div>
               <div className="w-12 h-12 bg-[#FFB300] rounded-full flex items-center justify-center">
-                <span className="text-black font-bold text-lg">📄</span>
+                <FileText className="w-6 h-6 text-black" />
               </div>
             </div>
           </CardContent>
@@ -153,15 +168,17 @@ const AdminDashboard = () => {
             <div className="space-y-4">
               <div className="flex justify-between items-center">
                 <span className="text-gray-400">Assigned to Judges</span>
-                <span className="text-2xl font-bold text-white">{metrics.assignedScripts}</span>
+                <span className="text-2xl font-bold text-white">{dashboardData.assignedScripts}</span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-gray-400">Pending Assignment</span>
-                <span className="text-2xl font-bold text-[#FFB300]">{metrics.pendingScripts}</span>
+                <span className="text-2xl font-bold text-[#FFB300]">{dashboardData.pendingScripts}</span>
               </div>
               <div className="mt-4">
                 <Progress 
-                  value={(metrics.assignedScripts / (metrics.assignedScripts + metrics.pendingScripts)) * 100} 
+                  value={dashboardData.assignedScripts + dashboardData.pendingScripts > 0 
+                    ? (dashboardData.assignedScripts / (dashboardData.assignedScripts + dashboardData.pendingScripts)) * 100 
+                    : 0} 
                   className="h-2"
                 />
               </div>
@@ -175,9 +192,9 @@ const AdminDashboard = () => {
             <div className="flex justify-between items-start">
               <div>
                 <p className="text-gray-400 text-sm">Judges Registered</p>
-                <p className="text-3xl font-bold text-white mt-2">{metrics.totalJudges}</p>
+                <p className="text-3xl font-bold text-white mt-2">{dashboardData.totalJudges}</p>
                 <p className="text-sm mt-2">
-                  <span className="text-green-400">+{metrics.newJudges}</span>
+                  <span className="text-green-400">+3</span>
                   <span className="text-gray-400 ml-1">New This Month</span>
                 </p>
               </div>
@@ -190,23 +207,28 @@ const AdminDashboard = () => {
       </div>
 
       {/* Bottom Row */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Recent Actions */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Recent Activity */}
         <Card className="bg-[#282828] border-none">
           <CardHeader>
-            <CardTitle className="text-white">Recent Actions</CardTitle>
+            <CardTitle className="text-white">Recent Activity</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
-              {recentActivity.slice(0, 5).map((activity) => (
+              {dashboardData.recentActivity.slice(0, 5).map((activity) => (
                 <div key={activity.id} className="flex items-start space-x-3">
-                  <span className="text-lg">{getActivityIcon(activity.type)}</span>
+                  <span className="text-lg">{getActivityIcon(activity.activity_type)}</span>
                   <div className="flex-1">
-                    <p className="text-sm text-white">{activity.message}</p>
-                    <p className="text-xs text-gray-400">{activity.time}</p>
+                    <p className="text-sm text-white">{activity.description}</p>
+                    <p className="text-xs text-gray-400">
+                      {new Date(activity.created_at).toLocaleString()}
+                    </p>
                   </div>
                 </div>
               ))}
+              {dashboardData.recentActivity.length === 0 && (
+                <p className="text-gray-400 text-sm">No recent activity</p>
+              )}
             </div>
           </CardContent>
         </Card>
@@ -214,7 +236,7 @@ const AdminDashboard = () => {
         {/* Payment Progress */}
         <Card className="bg-[#282828] border-none">
           <CardHeader>
-            <CardTitle className="text-white">Total Payment Progress</CardTitle>
+            <CardTitle className="text-white">Payment Progress</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col items-center">
             <div className="relative w-32 h-32 mb-4">
@@ -234,35 +256,17 @@ const AdminDashboard = () => {
                   stroke="#FFB300"
                   strokeWidth="8"
                   fill="none"
-                  strokeDasharray={`${70 * 3.14159} ${(100 - 70) * 3.14159}`}
+                  strokeDasharray={`${Math.min(dashboardData.totalPayments / 1000, 1) * 314} ${(1 - Math.min(dashboardData.totalPayments / 1000, 1)) * 314}`}
                   strokeLinecap="round"
                 />
               </svg>
               <div className="absolute inset-0 flex items-center justify-center">
-                <span className="text-2xl font-bold text-white">70%</span>
+                <span className="text-2xl font-bold text-white">
+                  {Math.min(Math.round(dashboardData.totalPayments / 10), 100)}%
+                </span>
               </div>
             </div>
-            <p className="text-gray-400 text-sm text-center">Payment goal reached</p>
-          </CardContent>
-        </Card>
-
-        {/* Recent Activity Details */}
-        <Card className="bg-[#282828] border-none">
-          <CardHeader>
-            <CardTitle className="text-white">Recent Activity</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-3">
-              {recentActivity.map((activity) => (
-                <div key={activity.id} className="flex items-start space-x-3">
-                  <span className="text-sm">{getActivityIcon(activity.type)}</span>
-                  <div className="flex-1">
-                    <p className="text-xs text-white leading-tight">{activity.message}</p>
-                    <p className="text-xs text-gray-400">{activity.time}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
+            <p className="text-gray-400 text-sm text-center">Monthly payment goal</p>
           </CardContent>
         </Card>
       </div>
@@ -288,8 +292,7 @@ const AdminDashboard = () => {
             {[
               { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
               { id: 'judges', label: 'Judges', icon: User },
-              { id: 'scripts', label: 'Scripts', icon: () => <span>📄</span> },
-              { id: 'payments', label: 'Payments', icon: () => <span>💳</span> },
+              { id: 'scripts', label: 'Scripts', icon: FileText },
               { id: 'settings', label: 'Settings', icon: Settings }
             ].map((item) => (
               <li key={item.id}>
@@ -341,14 +344,9 @@ const AdminDashboard = () => {
         {/* Main Content Area */}
         <main className="flex-1 p-6 overflow-auto">
           {activeTab === 'dashboard' && renderDashboard()}
-          {activeTab !== 'dashboard' && (
-            <div className="text-center py-20">
-              <h2 className="text-2xl font-bold text-white mb-4">
-                {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)} Section
-              </h2>
-              <p className="text-gray-400">This section is under development.</p>
-            </div>
-          )}
+          {activeTab === 'judges' && <JudgesSection />}
+          {activeTab === 'scripts' && <ScriptsSection />}
+          {activeTab === 'settings' && <SettingsSection />}
         </main>
       </div>
     </div>
