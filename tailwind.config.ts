@@ -63,14 +63,15 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-				// Custom photography portfolio colors
-				'portfolio-gold': '#BFA16F',
+				// Updated more vibrant and bright gold color
+				'portfolio-gold': '#FFD700',
 				'portfolio-black': '#000000',
 				'portfolio-dark': '#090909'
 			},
 			fontFamily: {
-				'playfair': ['Playfair Display', 'serif'],
-				'open-sans': ['Open Sans', 'sans-serif'],
+				// Updated to more minimalistic fonts
+				'playfair': ['Inter', 'system-ui', 'sans-serif'],
+				'open-sans': ['Inter', 'system-ui', 'sans-serif'],
 			},
 			borderRadius: {
 				lg: 'var(--radius)',

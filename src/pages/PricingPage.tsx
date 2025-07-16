@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Check } from 'lucide-react';
-import Header from "@/components/Header";
+import HoneyWritesHeader from "@/components/HoneyWritesHeader";
 import Footer from "@/components/Footer";
 
 interface PricingTier {
@@ -77,7 +77,7 @@ const PricingPage = () => {
 
   return (
     <div className="min-h-screen bg-portfolio-black text-white">
-      <Header />
+      <HoneyWritesHeader />
       
       {/* Background Image */}
       <div 
