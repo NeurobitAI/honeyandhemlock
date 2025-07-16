@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import HoneyWritesHeader from "@/components/HoneyWritesHeader";
+import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ScriptSubmissionForm from "@/components/ScriptSubmissionForm";
 import ScriptReviewDetails from "@/components/ScriptReviewDetails";
@@ -59,7 +59,7 @@ const ScriptPortal = () => {
 
   return (
     <div className="min-h-screen bg-portfolio-black text-white">
-      <HoneyWritesHeader />
+      <Header />
       <div className="container mx-auto px-4 sm:px-6 py-12 md:py-20">
         <div className="text-center mb-12 md:mb-16">
           <Button
