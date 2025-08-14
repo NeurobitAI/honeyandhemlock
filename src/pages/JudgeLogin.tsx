@@ -46,12 +46,31 @@ const JudgeLogin = () => {
   };
 
   return (
-    <div className="min-h-screen bg-portfolio-black flex items-center justify-center p-4">
-      <div className="w-full max-w-md space-y-6">
+    <div className="min-h-screen bg-portfolio-black flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Background Lens Images */}
+      <div 
+        className="absolute top-0 right-1/3 w-1/3 h-1/2 opacity-18 z-0 pointer-events-none"
+        style={{
+          backgroundImage: `url('/lovable-uploads/74c9a851-6d57-412e-9a5e-b83bc5a76b7c.png')`,
+          backgroundPosition: 'center',
+          backgroundSize: 'contain',
+          backgroundRepeat: 'no-repeat'
+        }}
+      />
+      <div 
+        className="absolute bottom-1/4 left-1/4 w-1/4 h-1/3 opacity-16 z-0 pointer-events-none"
+        style={{
+          backgroundImage: `url('/lovable-uploads/9cf1eb65-bc24-4062-9ec2-2bafdbaa9642.png')`,
+          backgroundPosition: 'center',
+          backgroundSize: 'contain',
+          backgroundRepeat: 'no-repeat'
+        }}
+      />
+      <div className="w-full max-w-md space-y-6 relative z-10">
         <Card className="bg-portfolio-dark border-portfolio-gold">
           <CardHeader className="text-center">
-            <CardTitle className="text-2xl font-playfair text-portfolio-gold">Judge Login</CardTitle>
-            <CardDescription className="text-white/80">
+            <CardTitle className="text-2xl font-special-elite text-portfolio-gold">Judge Login</CardTitle>
+            <CardDescription className="text-portfolio-white/80">
               Access your judge dashboard
             </CardDescription>
           </CardHeader>
@@ -64,7 +83,7 @@ const JudgeLogin = () => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="bg-portfolio-black border-gray-600 text-white placeholder-gray-400"
+                  className="bg-portfolio-black border-gray-600 text-portfolio-white placeholder-gray-400"
                 />
               </div>
               <div>
@@ -74,7 +93,7 @@ const JudgeLogin = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  className="bg-portfolio-black border-gray-600 text-white placeholder-gray-400"
+                  className="bg-portfolio-black border-gray-600 text-portfolio-white placeholder-gray-400"
                 />
               </div>
               <Button
@@ -89,10 +108,10 @@ const JudgeLogin = () => {
         </Card>
 
         <div className="text-center">
-          <p className="text-white/60 text-sm mb-4">
+          <p className="text-portfolio-white/60 text-sm mb-4">
             Don't have an account? <Link to="/judge-signup" className="text-portfolio-gold hover:underline">Sign Up</Link>
           </p>
-          <Link to="/" className="text-portfolio-gold hover:text-white transition-colors">
+          <Link to="/" className="text-portfolio-gold hover:text-portfolio-white transition-colors">
             ← Back to Home
           </Link>
         </div>

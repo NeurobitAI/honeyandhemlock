@@ -1,7 +1,7 @@
 
 const HeroSection = () => {
   return (
-    <section className="bg-portfolio-black text-white py-20 relative overflow-hidden min-h-[700px] flex items-center">
+    <section className="bg-portfolio-black text-portfolio-white py-20 relative overflow-hidden min-h-[700px] flex items-center">
       {/* Background Camera Lens Image - positioned on the right side */}
       <div 
         className="absolute top-0 right-0 w-1/2 h-full opacity-15 z-0"
@@ -31,10 +31,10 @@ const HeroSection = () => {
 
           {/* Right Column - Content */}
           <div className="lg:col-span-5 relative z-20">
-            <h1 className="font-playfair text-4xl lg:text-5xl font-bold mb-6 leading-tight">
+            <h1 className="font-special-elite text-4xl lg:text-5xl font-semibold mb-6 leading-tight">
               Honey & Hemlock Productions
             </h1>
-            <p className="font-open-sans text-lg leading-relaxed text-white/80 max-w-md">
+            <p className="font-special-elite text-lg leading-relaxed text-portfolio-white/80 max-w-md">
               A female run production company committed to captivating audiences by creating new worlds through the art of filmmaking.
             </p>
           </div>

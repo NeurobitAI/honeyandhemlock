@@ -31,18 +31,31 @@ const ScriptsSection = () => {
 
   const fetchScripts = async () => {
     try {
+      console.log('Fetching scripts data...');
       const { data, error } = await supabase
         .from('scripts')
         .select('*')
         .order('created_at', { ascending: false });
       
-      if (error) throw error;
+      if (error) {
+        console.error('Scripts fetch error:', error);
+        setScripts([]);
+        toast({
+          title: "Database Error",
+          description: `Failed to fetch scripts: ${error.message}`,
+          variant: "destructive"
+        });
+        return;
+      }
+      
+      console.log('Scripts fetched:', data?.length || 0);
       setScripts(data || []);
     } catch (error) {
       console.error('Error fetching scripts:', error);
+      setScripts([]);
       toast({
         title: "Error",
-        description: "Failed to fetch scripts",
+        description: "Failed to fetch scripts. Check console for details.",
         variant: "destructive"
       });
     } finally {
@@ -52,14 +65,22 @@ const ScriptsSection = () => {
 
   const fetchJudges = async () => {
     try {
+      console.log('Fetching judges data for scripts section...');
       const { data, error } = await supabase
         .from('judges')
         .select('*');
       
-      if (error) throw error;
+      if (error) {
+        console.error('Judges fetch error:', error);
+        setJudges([]);
+        return;
+      }
+      
+      console.log('Judges fetched for scripts:', data?.length || 0);
       setJudges(data || []);
     } catch (error) {
       console.error('Error fetching judges:', error);
+      setJudges([]);
     }
   };
 
@@ -118,7 +139,14 @@ const ScriptsSection = () => {
   };
 
   if (loading) {
-    return <div className="text-white">Loading scripts...</div>;
+    return (
+      <div className="flex items-center justify-center py-12">
+        <div className="text-portfolio-white text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-portfolio-gold mx-auto mb-4"></div>
+          <p>Loading scripts data...</p>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -126,7 +154,7 @@ const ScriptsSection = () => {
       {/* Scripts Overview */}
       <Card className="bg-[#282828] border-none">
         <CardHeader>
-          <CardTitle className="text-white flex items-center">
+          <CardTitle className="text-portfolio-white flex items-center">
             <FileText className="w-5 h-5 mr-2" />
             Scripts Overview
           </CardTitle>
@@ -134,7 +162,7 @@ const ScriptsSection = () => {
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="text-center">
-              <div className="text-3xl font-bold text-white">{scripts.length}</div>
+              <div className="text-3xl font-bold text-portfolio-white">{scripts.length}</div>
               <div className="text-gray-400">Total Scripts</div>
             </div>
             <div className="text-center">
@@ -169,11 +197,11 @@ const ScriptsSection = () => {
                 placeholder="Search scripts..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="bg-[#232323] text-white border-gray-600 w-64"
+                className="bg-[#232323] text-portfolio-white border-gray-600 w-64"
               />
             </div>
             <Select value={statusFilter} onValueChange={setStatusFilter}>
-              <SelectTrigger className="w-[150px] bg-[#232323] text-white">
+              <SelectTrigger className="w-[150px] bg-[#232323] text-portfolio-white">
                 <SelectValue placeholder="Status" />
               </SelectTrigger>
               <SelectContent>
@@ -185,7 +213,7 @@ const ScriptsSection = () => {
               </SelectContent>
             </Select>
             <Select value={tierFilter} onValueChange={setTierFilter}>
-              <SelectTrigger className="w-[150px] bg-[#232323] text-white">
+              <SelectTrigger className="w-[150px] bg-[#232323] text-portfolio-white">
                 <SelectValue placeholder="Tier" />
               </SelectTrigger>
               <SelectContent>
@@ -195,7 +223,7 @@ const ScriptsSection = () => {
                 <SelectItem value="Package 3">Package 3</SelectItem>
               </SelectContent>
             </Select>
-            <Button className="bg-[#FFB300] text-black hover:bg-[#FFB300]/90">
+            <Button className="bg-[#FFD62F] text-black hover:bg-[#FFD62F]/90">
               <Download className="w-4 h-4 mr-2" />
               Export
             </Button>
@@ -206,7 +234,7 @@ const ScriptsSection = () => {
       {/* Scripts Table */}
       <Card className="bg-[#282828] border-none">
         <CardHeader>
-          <CardTitle className="text-white">All Scripts</CardTitle>
+          <CardTitle className="text-portfolio-white">All Scripts</CardTitle>
         </CardHeader>
         <CardContent>
           <Table>
@@ -224,28 +252,45 @@ const ScriptsSection = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filteredScripts.map((script) => (
-                <TableRow key={script.id}>
-                  <TableCell className="text-white font-medium">{script.title}</TableCell>
-                  <TableCell className="text-white">{script.author_name}</TableCell>
-                  <TableCell className="text-white">{script.tier_name}</TableCell>
-                  <TableCell className="text-white">${script.amount / 100}</TableCell>
-                  <TableCell>{getPaymentStatusBadge(script.payment_status)}</TableCell>
-                  <TableCell>{getStatusBadge(script.status)}</TableCell>
-                  <TableCell className="text-white">{getJudgeName(script.assigned_judge_id)}</TableCell>
-                  <TableCell className="text-white">
-                    {new Date(script.created_at).toLocaleDateString()}
-                  </TableCell>
-                  <TableCell>
-                    <Button
-                      size="sm"
-                      className="bg-[#FFB300] text-black hover:bg-[#FFB300]/90"
-                    >
-                      View
-                    </Button>
+              {filteredScripts.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={9} className="text-center py-8">
+                    <div className="text-portfolio-white/60">
+                      <FileText className="w-12 h-12 mx-auto mb-4 opacity-50" />
+                      <p className="text-lg mb-2">No scripts found</p>
+                      <p className="text-sm">
+                        {scripts.length === 0 
+                          ? "Scripts will appear here once submissions are received."
+                          : "Try adjusting your filters to see scripts."
+                        }
+                      </p>
+                    </div>
                   </TableCell>
                 </TableRow>
-              ))}
+              ) : (
+                filteredScripts.map((script) => (
+                  <TableRow key={script.id}>
+                    <TableCell className="text-portfolio-white font-medium">{script.title || 'Untitled'}</TableCell>
+                    <TableCell className="text-portfolio-white">{script.author_name || 'Unknown'}</TableCell>
+                    <TableCell className="text-portfolio-white">{script.tier_name || 'N/A'}</TableCell>
+                    <TableCell className="text-portfolio-white">${(script.amount || 0) / 100}</TableCell>
+                    <TableCell>{getPaymentStatusBadge(script.payment_status || 'pending')}</TableCell>
+                    <TableCell>{getStatusBadge(script.status || 'pending')}</TableCell>
+                    <TableCell className="text-portfolio-white">{getJudgeName(script.assigned_judge_id)}</TableCell>
+                    <TableCell className="text-portfolio-white">
+                      {script.created_at ? new Date(script.created_at).toLocaleDateString() : 'N/A'}
+                    </TableCell>
+                    <TableCell>
+                      <Button
+                        size="sm"
+                        className="bg-[#FFD62F] text-black hover:bg-[#FFD62F]/90"
+                      >
+                        View
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
             </TableBody>
           </Table>
         </CardContent>

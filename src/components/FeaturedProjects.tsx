@@ -1,45 +1,56 @@
 
+import { useNavigate } from 'react-router-dom';
+
 const FeaturedProjects = () => {
+  const navigate = useNavigate();
+
   const projects = [
     {
-      image: "/lovable-uploads/55b25aea-6a37-4ad7-92fb-78df6ded0d21.png",
-      title: "SPACEMAN"
+      image: "/lovable-uploads/spaceman-poster.png",
+      title: "SPACEMAN",
+      slug: "spaceman"
     },
     {
-      image: "/lovable-uploads/7a1ff599-69f2-4905-a0ce-0bb4fc99215c.png",
-      title: "SPEECHLESS"
+      image: "/lovable-uploads/speechless-poster.png",
+      title: "SPEECHLESS",
+      slug: "speechless"
     },
     {
-      image: "/lovable-uploads/325d73e2-d687-4668-aa2f-5127ad2bbfbb.png",
-      title: "SOLITARITY"
-    },
-    {
-      image: "/lovable-uploads/921dc20e-d8e8-4341-8aa0-c542f110c9c8.png",
-      title: "BEHIND THE SCENES"
+      image: "/lovable-uploads/solitarity-poster.png",
+      title: "SOLITARITY",
+      slug: "solitarity"
     }
   ];
 
+  const handleProjectClick = (slug: string) => {
+    navigate(`/film-gallery/${slug}`);
+  };
+
   return (
-    <section className="bg-portfolio-black text-white py-20">
+    <section className="bg-portfolio-black text-portfolio-white py-20">
       <div className="container mx-auto px-6">
         <div className="text-center mb-16">
-          <h2 className="font-playfair text-4xl font-bold">Featured Projects</h2>
+          <h2 className="font-special-elite text-4xl font-semibold">Featured Projects</h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {projects.map((project, index) => (
             <div 
               key={index}
               className="relative group cursor-pointer overflow-hidden rounded-lg shadow-2xl hover:scale-105 transition-transform duration-300"
+              onClick={() => handleProjectClick(project.slug)}
             >
               <img 
                 src={project.image}
                 alt={project.title}
-                className="w-full h-64 object-cover"
+                className="w-full h-auto object-contain"
               />
               <div className="absolute inset-0 bg-black/50 group-hover:bg-black/30 transition-colors duration-300 flex items-end">
                 <div className="p-4">
-                  <span className="text-white font-playfair text-lg font-bold">{project.title}</span>
+                  <span className="text-portfolio-white font-special-elite text-lg font-semibold">{project.title}</span>
+                  <div className="text-portfolio-gold text-sm mt-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    Click to view stills
+                  </div>
                 </div>
               </div>
             </div>

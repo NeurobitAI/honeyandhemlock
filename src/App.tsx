@@ -5,8 +5,10 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { useScrollToTop } from "@/hooks/useScrollToTop";
 import Index from "./pages/Index";
 import Films from "./pages/Films";
+import FilmGallery from "./pages/FilmGallery";
 import PricingPage from "./pages/PricingPage";
 import ScriptPortal from "./pages/ScriptPortal";
 import Sponsorship from "./pages/Sponsorship";
@@ -19,6 +21,11 @@ import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
+const ScrollToTopWrapper = () => {
+  useScrollToTop();
+  return null;
+};
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
@@ -26,9 +33,11 @@ const App = () => (
         <Toaster />
         <Sonner />
         <BrowserRouter>
+          <ScrollToTopWrapper />
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/films" element={<Films />} />
+            <Route path="/film-gallery/:filmName" element={<FilmGallery />} />
             <Route path="/script-portal" element={<PricingPage />} />
             <Route path="/script-upload" element={<ScriptPortal />} />
             <Route path="/sponsorship" element={<Sponsorship />} />

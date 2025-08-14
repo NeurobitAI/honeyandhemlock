@@ -74,46 +74,46 @@ const JudgeSignup = () => {
       <div className="w-full max-w-md">
         <Card className="bg-portfolio-dark border-portfolio-gold">
           <CardHeader className="text-center">
-            <CardTitle className="text-2xl font-playfair text-portfolio-gold">Judge Sign Up</CardTitle>
-            <CardDescription className="text-white/80">
+            <CardTitle className="text-2xl font-special-elite text-portfolio-gold">Judge Sign Up</CardTitle>
+            <CardDescription className="text-portfolio-white/80">
               Apply to become a script reviewer
             </CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <Label htmlFor="name" className="text-white">Full Name</Label>
+                <Label htmlFor="name" className="text-portfolio-white">Full Name</Label>
                 <Input
                   id="name"
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Enter your full name"
-                  className="bg-portfolio-black border-gray-600 text-white placeholder-gray-400"
+                  className="bg-portfolio-black border-gray-600 text-portfolio-white placeholder-gray-400"
                   required
                 />
               </div>
               <div>
-                <Label htmlFor="email" className="text-white">Email</Label>
+                <Label htmlFor="email" className="text-portfolio-white">Email</Label>
                 <Input
                   id="email"
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Enter your email"
-                  className="bg-portfolio-black border-gray-600 text-white placeholder-gray-400"
+                  className="bg-portfolio-black border-gray-600 text-portfolio-white placeholder-gray-400"
                   required
                 />
               </div>
               <div>
-                <Label htmlFor="password" className="text-white">Password</Label>
+                <Label htmlFor="password" className="text-portfolio-white">Password</Label>
                 <Input
                   id="password"
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Create a password"
-                  className="bg-portfolio-black border-gray-600 text-white placeholder-gray-400"
+                  className="bg-portfolio-black border-gray-600 text-portfolio-white placeholder-gray-400"
                   required
                 />
               </div>
@@ -127,7 +127,7 @@ const JudgeSignup = () => {
             </form>
             
             <div className="mt-6 text-center">
-              <p className="text-white/60 text-sm">
+              <p className="text-portfolio-white/60 text-sm">
                 Already have an account? <Link to="/judge" className="text-portfolio-gold hover:underline">Login</Link>
               </p>
             </div>
@@ -135,7 +135,7 @@ const JudgeSignup = () => {
         </Card>
 
         <div className="text-center mt-6">
-          <Link to="/" className="text-portfolio-gold hover:text-white transition-colors">
+          <Link to="/" className="text-portfolio-gold hover:text-portfolio-white transition-colors">
             ← Back to Home
           </Link>
         </div>

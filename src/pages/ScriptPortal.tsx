@@ -26,7 +26,19 @@ const ScriptPortal = () => {
     // Get the selected tier from localStorage
     const tierData = localStorage.getItem('selectedTier');
     if (tierData) {
-      setSelectedTier(JSON.parse(tierData));
+      const parsedTier = JSON.parse(tierData);
+      
+      // Debug: Log the tier data to check pricing
+      console.log('Retrieved tier from localStorage:', parsedTier);
+      
+      // Validate that the tier has proper pricing (should be 500, 750, or 1000)
+      if (parsedTier.price && (parsedTier.price === 500 || parsedTier.price === 750 || parsedTier.price === 1000)) {
+        setSelectedTier(parsedTier);
+      } else {
+        console.warn('Invalid tier pricing detected, clearing localStorage and redirecting');
+        localStorage.removeItem('selectedTier');
+        navigate('/script-portal');
+      }
     } else {
       // If no tier selected, redirect to pricing page
       navigate('/script-portal');
@@ -43,12 +55,13 @@ const ScriptPortal = () => {
 
   const handleBackToPricing = () => {
     localStorage.removeItem('selectedTier');
+    localStorage.removeItem('pendingScript'); // Clear any pending script data too
     navigate('/script-portal');
   };
 
   if (!selectedTier) {
     return (
-      <div className="min-h-screen bg-portfolio-black text-white flex items-center justify-center">
+      <div className="min-h-screen bg-portfolio-black text-portfolio-white flex items-center justify-center">
         <div className="text-center px-4">
           <h2 className="text-xl sm:text-2xl font-bold mb-4">Loading...</h2>
           <p className="text-sm sm:text-base">Redirecting to pricing page...</p>
@@ -58,9 +71,28 @@ const ScriptPortal = () => {
   }
 
   return (
-    <div className="min-h-screen bg-portfolio-black text-white">
+    <div className="min-h-screen bg-portfolio-black text-portfolio-white relative overflow-hidden">
+      {/* Background Lens Images */}
+      <div 
+        className="absolute top-0 right-1/3 w-1/4 h-1/3 opacity-16 z-0 pointer-events-none"
+        style={{
+          backgroundImage: `url('/lovable-uploads/9cf1eb65-bc24-4062-9ec2-2bafdbaa9642.png')`,
+          backgroundPosition: 'center',
+          backgroundSize: 'contain',
+          backgroundRepeat: 'no-repeat'
+        }}
+      />
+      <div 
+        className="absolute bottom-1/4 left-1/4 w-1/5 h-1/4 opacity-17 z-0 pointer-events-none"
+        style={{
+          backgroundImage: `url('/lovable-uploads/74c9a851-6d57-412e-9a5e-b83bc5a76b7c.png')`,
+          backgroundPosition: 'center',
+          backgroundSize: 'contain',
+          backgroundRepeat: 'no-repeat'
+        }}
+      />
       <Header />
-      <div className="container mx-auto px-4 sm:px-6 py-12 md:py-20">
+      <div className="container mx-auto px-4 sm:px-6 py-12 md:py-20 relative z-10">
         <div className="text-center mb-12 md:mb-16">
           <Button
             onClick={handleBackToPricing}
@@ -71,13 +103,13 @@ const ScriptPortal = () => {
             Back to Pricing
           </Button>
           
-          <h1 className="font-playfair text-2xl sm:text-3xl md:text-4xl font-bold mb-4 px-4">Submit Your Script</h1>
+          <h1 className="font-special-elite text-2xl sm:text-3xl md:text-4xl font-semibold mb-4 px-4">Submit Your Script</h1>
           <div className="bg-portfolio-dark border border-portfolio-gold/20 rounded-lg p-4 sm:p-6 mb-8 max-w-md mx-auto">
             <h2 className="text-portfolio-gold text-lg sm:text-xl font-semibold mb-2">
               Selected Package: {selectedTier.name}
             </h2>
-            <p className="text-2xl sm:text-3xl font-bold text-white">${selectedTier.price}</p>
-            <p className="text-white/80 text-xs sm:text-sm mt-2 leading-relaxed">{selectedTier.description}</p>
+            <p className="text-2xl sm:text-3xl font-bold text-portfolio-white">${selectedTier.price}</p>
+            <p className="text-portfolio-white/80 text-xs sm:text-sm mt-2 leading-relaxed">{selectedTier.description}</p>
           </div>
         </div>
 
@@ -85,8 +117,8 @@ const ScriptPortal = () => {
           <Card className="bg-portfolio-dark border-portfolio-gold/20">
             <CardHeader className="p-4 sm:p-6">
               <CardTitle className="text-portfolio-gold text-lg sm:text-xl">Upload Your Script</CardTitle>
-              <CardDescription className="text-white/70 text-sm sm:text-base">
-                Upload your script and complete payment for professional review. All fields marked with * are required.
+              <CardDescription className="text-portfolio-white/70 text-sm sm:text-base">
+                Upload your script for a professional review. All fields marked with * are required.
               </CardDescription>
             </CardHeader>
             <CardContent className="p-4 sm:p-6 pt-0">
@@ -103,7 +135,7 @@ const ScriptPortal = () => {
                 <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
                   <div className="bg-portfolio-dark p-6 rounded-lg flex items-center space-x-3 max-w-sm w-full">
                     <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-portfolio-gold"></div>
-                    <span className="text-white text-sm sm:text-base">Processing...</span>
+                    <span className="text-portfolio-white text-sm sm:text-base">Processing...</span>
                   </div>
                 </div>
               )}

@@ -1,10 +1,8 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { X } from "lucide-react";
+import { X, Send } from "lucide-react";
 
 interface ContactFormProps {
   isOpen: boolean;
@@ -19,9 +17,28 @@ const ContactForm: React.FC<ContactFormProps> = ({ isOpen, onClose }) => {
     subject: '',
     message: ''
   });
+  
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [focusedField, setFocusedField] = useState<string | null>(null);
+  const [showForm, setShowForm] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // Animate form entrance
+  useEffect(() => {
+    if (isOpen) {
+      setTimeout(() => setShowForm(true), 100);
+    } else {
+      setShowForm(false);
+      setIsSuccess(false);
+    }
+  }, [isOpen]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmitting(true);
+    
+    // Simulate API call
+    await new Promise(resolve => setTimeout(resolve, 2000));
     
     // Save to localStorage for admin to see
     const contacts = JSON.parse(localStorage.getItem('contacts') || '[]');
@@ -34,12 +51,16 @@ const ContactForm: React.FC<ContactFormProps> = ({ isOpen, onClose }) => {
     contacts.push(newContact);
     localStorage.setItem('contacts', JSON.stringify(contacts));
     
-    // Reset form and close
-    setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
-    onClose();
+    setIsSubmitting(false);
+    setIsSuccess(true);
     
-    // Show success message
-    alert('Thank you for your message! We will get back to you soon.');
+    // Reset form after success animation
+    setTimeout(() => {
+      setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
+      setTimeout(() => {
+        onClose();
+      }, 1000);
+    }, 2500);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -52,73 +73,199 @@ const ContactForm: React.FC<ContactFormProps> = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <Card className="w-full max-w-md bg-portfolio-dark border-portfolio-gold">
-        <CardHeader className="relative">
-          <CardTitle className="text-portfolio-gold font-playfair text-2xl text-center">
-            Contact Us
-          </CardTitle>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="absolute right-2 top-2 text-white hover:text-portfolio-gold"
+    <div className={`fixed inset-0 z-50 flex items-center justify-center p-4 transition-all duration-700 ${
+      showForm ? 'opacity-100' : 'opacity-0'
+    }`}>
+      
+      {/* Liquid Glass Backdrop */}
+      <div className="absolute inset-0 bg-black/20">
+        <div className="absolute inset-0 backdrop-blur-md"></div>
+      </div>
+
+      {/* Main Glass Container */}
+      <div className={`relative w-full max-w-lg transform transition-all duration-800 delay-100 ${
+        showForm ? 'scale-100 translate-y-0 opacity-100' : 'scale-95 translate-y-4 opacity-0'
+      }`}>
+        
+        {/* Success State */}
+        {isSuccess && (
+          <div className="absolute inset-0 z-10 flex items-center justify-center liquid-glass rounded-2xl">
+            <div className="text-center p-8">
+              <div className="text-5xl mb-4">✨</div>
+              <h2 className="text-2xl font-special-elite text-portfolio-gold mb-3">
+                Message Sent
+              </h2>
+              <p className="text-portfolio-white/80">
+                Thank you! We'll be in touch soon.
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* Liquid Glass Form Container */}
+        <div className="liquid-glass rounded-2xl p-8 relative overflow-hidden">
+          
+          {/* Subtle Inner Glow */}
+          <div className="absolute top-0 left-0 w-full h-1/3 bg-gradient-to-b from-white/5 to-transparent rounded-t-2xl pointer-events-none"></div>
+          
+          {/* Header */}
+          <div className="text-center mb-8">
+            <h2 className="text-2xl font-special-elite text-portfolio-gold mb-2">
+              Contact Us
+            </h2>
+            <div className="w-16 h-px bg-portfolio-gold/40 mx-auto"></div>
+          </div>
+
+          {/* Close Button */}
+          <button
             onClick={onClose}
+            className="absolute top-4 right-4 p-2 rounded-full text-portfolio-gold/70 hover:text-portfolio-gold hover:bg-white/10 transition-all duration-300"
           >
-            <X className="h-4 w-4" />
-          </Button>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <Input
-              name="name"
-              placeholder="Your Name"
-              value={formData.name}
-              onChange={handleChange}
-              required
-              className="bg-portfolio-black border-gray-600 text-white placeholder-gray-400"
-            />
-            <Input
-              name="email"
-              type="email"
-              placeholder="Your Email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-              className="bg-portfolio-black border-gray-600 text-white placeholder-gray-400"
-            />
-            <Input
-              name="phone"
-              placeholder="Your Phone"
-              value={formData.phone}
-              onChange={handleChange}
-              className="bg-portfolio-black border-gray-600 text-white placeholder-gray-400"
-            />
-            <Input
-              name="subject"
-              placeholder="Subject"
-              value={formData.subject}
-              onChange={handleChange}
-              required
-              className="bg-portfolio-black border-gray-600 text-white placeholder-gray-400"
-            />
-            <Textarea
-              name="message"
-              placeholder="Your Message"
-              value={formData.message}
-              onChange={handleChange}
-              required
-              rows={4}
-              className="bg-portfolio-black border-gray-600 text-white placeholder-gray-400"
-            />
+            <X className="w-5 h-5" />
+          </button>
+
+          <form onSubmit={handleSubmit} className="space-y-5">
+            
+            {/* Name Field */}
+            <div className="space-y-2">
+              <label className={`block text-sm font-special-elite transition-all duration-300 ${
+                focusedField === 'name' || formData.name 
+                  ? 'text-portfolio-gold' 
+                  : 'text-portfolio-white/80'
+              }`}>
+                Name
+              </label>
+              <Input
+                name="name"
+                placeholder="Your name"
+                value={formData.name}
+                onChange={handleChange}
+                onFocus={() => setFocusedField('name')}
+                onBlur={() => setFocusedField(null)}
+                required
+                className={`liquid-field h-12 transition-all duration-300 ${
+                  focusedField === 'name' ? 'liquid-field-focus' : ''
+                }`}
+              />
+            </div>
+
+            {/* Email Field */}
+            <div className="space-y-2">
+              <label className={`block text-sm font-special-elite transition-all duration-300 ${
+                focusedField === 'email' || formData.email 
+                  ? 'text-portfolio-gold' 
+                  : 'text-portfolio-white/80'
+              }`}>
+                Email
+              </label>
+              <Input
+                name="email"
+                type="email"
+                placeholder="your.email@example.com"
+                value={formData.email}
+                onChange={handleChange}
+                onFocus={() => setFocusedField('email')}
+                onBlur={() => setFocusedField(null)}
+                required
+                className={`liquid-field h-12 transition-all duration-300 ${
+                  focusedField === 'email' ? 'liquid-field-focus' : ''
+                }`}
+              />
+            </div>
+
+            {/* Phone Field */}
+            <div className="space-y-2">
+              <label className={`block text-sm font-special-elite transition-all duration-300 ${
+                focusedField === 'phone' || formData.phone 
+                  ? 'text-portfolio-gold' 
+                  : 'text-portfolio-white/80'
+              }`}>
+                Phone
+              </label>
+              <Input
+                name="phone"
+                placeholder="(555) 123-4567"
+                value={formData.phone}
+                onChange={handleChange}
+                onFocus={() => setFocusedField('phone')}
+                onBlur={() => setFocusedField(null)}
+                className={`liquid-field h-12 transition-all duration-300 ${
+                  focusedField === 'phone' ? 'liquid-field-focus' : ''
+                }`}
+              />
+            </div>
+
+            {/* Subject Field */}
+            <div className="space-y-2">
+              <label className={`block text-sm font-special-elite transition-all duration-300 ${
+                focusedField === 'subject' || formData.subject 
+                  ? 'text-portfolio-gold' 
+                  : 'text-portfolio-white/80'
+              }`}>
+                Subject
+              </label>
+              <Input
+                name="subject"
+                placeholder="What's this about?"
+                value={formData.subject}
+                onChange={handleChange}
+                onFocus={() => setFocusedField('subject')}
+                onBlur={() => setFocusedField(null)}
+                required
+                className={`liquid-field h-12 transition-all duration-300 ${
+                  focusedField === 'subject' ? 'liquid-field-focus' : ''
+                }`}
+              />
+            </div>
+
+            {/* Message Field */}
+            <div className="space-y-2">
+              <label className={`block text-sm font-special-elite transition-all duration-300 ${
+                focusedField === 'message' || formData.message 
+                  ? 'text-portfolio-gold' 
+                  : 'text-portfolio-white/80'
+              }`}>
+                Message
+              </label>
+              <Textarea
+                name="message"
+                placeholder="Tell us about your project..."
+                value={formData.message}
+                onChange={handleChange}
+                onFocus={() => setFocusedField('message')}
+                onBlur={() => setFocusedField(null)}
+                required
+                rows={4}
+                className={`liquid-field transition-all duration-300 resize-none ${
+                  focusedField === 'message' ? 'liquid-field-focus' : ''
+                }`}
+              />
+            </div>
+
+            {/* Submit Button */}
             <Button 
               type="submit" 
-              className="w-full bg-portfolio-gold text-black hover:bg-portfolio-gold/90"
+              disabled={isSubmitting}
+              className="liquid-button w-full h-12 relative overflow-hidden group"
             >
-              Send Message
+              {isSubmitting ? (
+                <div className="flex items-center justify-center">
+                  <div className="animate-spin mr-2 w-4 h-4 border-2 border-black/20 border-t-black rounded-full"></div>
+                  <span className="font-special-elite">Sending...</span>
+                </div>
+              ) : (
+                <>
+                  <span className="relative z-10 font-special-elite flex items-center justify-center">
+                    <Send className="w-4 h-4 mr-2" />
+                    Send Message
+                  </span>
+                  <div className="absolute inset-0 bg-white/10 -translate-x-full group-hover:translate-x-full transition-transform duration-700 skew-x-12"></div>
+                </>
+              )}
             </Button>
           </form>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </div>
   );
 };

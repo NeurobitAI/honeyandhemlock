@@ -82,7 +82,7 @@ const JudgeSignupForm: React.FC<JudgeSignupFormProps> = ({ isOpen, onClose }) =>
             <BookOpen className="w-5 h-5 mr-2" />
             Apply to Become a Judge
           </CardTitle>
-          <CardDescription className="text-white/70">
+          <CardDescription className="text-portfolio-white/70">
             Join our team of script reviewers and help shape the future of screenwriting
           </CardDescription>
         </CardHeader>
@@ -90,23 +90,23 @@ const JudgeSignupForm: React.FC<JudgeSignupFormProps> = ({ isOpen, onClose }) =>
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <Label htmlFor="name" className="text-white">Full Name *</Label>
+                <Label htmlFor="name" className="text-portfolio-white">Full Name *</Label>
                 <Input
                   id="name"
                   value={formData.name}
                   onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-                  className="bg-portfolio-black border-portfolio-gold/30 text-white"
+                  className="bg-portfolio-black border-portfolio-gold/30 text-portfolio-white"
                   required
                 />
               </div>
               <div>
-                <Label htmlFor="email" className="text-white">Email Address *</Label>
+                <Label htmlFor="email" className="text-portfolio-white">Email Address *</Label>
                 <Input
                   id="email"
                   type="email"
                   value={formData.email}
                   onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
-                  className="bg-portfolio-black border-portfolio-gold/30 text-white"
+                  className="bg-portfolio-black border-portfolio-gold/30 text-portfolio-white"
                   required
                 />
               </div>
@@ -114,31 +114,31 @@ const JudgeSignupForm: React.FC<JudgeSignupFormProps> = ({ isOpen, onClose }) =>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <Label htmlFor="specialization" className="text-white">Specialization</Label>
+                <Label htmlFor="specialization" className="text-portfolio-white">Specialization</Label>
                 <Input
                   id="specialization"
                   value={formData.specialization}
                   onChange={(e) => setFormData(prev => ({ ...prev, specialization: e.target.value }))}
                   placeholder="e.g., Drama, Comedy, Horror, etc."
-                  className="bg-portfolio-black border-portfolio-gold/30 text-white"
+                  className="bg-portfolio-black border-portfolio-gold/30 text-portfolio-white"
                 />
               </div>
               <div>
-                <Label htmlFor="experience" className="text-white">Years of Experience</Label>
+                <Label htmlFor="experience" className="text-portfolio-white">Years of Experience</Label>
                 <Input
                   id="experience"
                   type="number"
                   value={formData.experience_years}
                   onChange={(e) => setFormData(prev => ({ ...prev, experience_years: e.target.value }))}
-                  className="bg-portfolio-black border-portfolio-gold/30 text-white"
+                  className="bg-portfolio-black border-portfolio-gold/30 text-portfolio-white"
                 />
               </div>
             </div>
 
             <div>
-              <Label htmlFor="availability" className="text-white">Availability</Label>
+              <Label htmlFor="availability" className="text-portfolio-white">Availability</Label>
               <Select value={formData.availability} onValueChange={(value) => setFormData(prev => ({ ...prev, availability: value }))}>
-                <SelectTrigger className="bg-portfolio-black border-portfolio-gold/30 text-white">
+                <SelectTrigger className="bg-portfolio-black border-portfolio-gold/30 text-portfolio-white">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -151,13 +151,13 @@ const JudgeSignupForm: React.FC<JudgeSignupFormProps> = ({ isOpen, onClose }) =>
             </div>
 
             <div>
-              <Label htmlFor="bio" className="text-white">Tell us about yourself</Label>
+              <Label htmlFor="bio" className="text-portfolio-white">Tell us about yourself</Label>
               <Textarea
                 id="bio"
                 value={formData.bio}
                 onChange={(e) => setFormData(prev => ({ ...prev, bio: e.target.value }))}
                 placeholder="Share your background, experience with scripts, and why you'd like to be a judge..."
-                className="bg-portfolio-black border-portfolio-gold/30 text-white min-h-[100px]"
+                className="bg-portfolio-black border-portfolio-gold/30 text-portfolio-white min-h-[100px]"
               />
             </div>
 

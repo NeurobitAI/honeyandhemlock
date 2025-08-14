@@ -10,7 +10,8 @@ const TikTokIcon = () => (
 
 const IMDBIcon = () => (
   <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-    <path d="M22 12c0 5.52-4.48 10-10 10S2 17.52 2 12 6.48 2 12 2s10 4.48 10 10zM5.61 8.8v6.4h1.43V8.8H5.61zm2.488 0v6.4h1.43l.9-4.64.9 4.64h1.43V8.8h-1.1v4.26l-.65-4.26h-.86l-.65 4.26V8.8h-1.1zm5.382 0v6.4h2.33c1.43 0 2.145-.715 2.145-2.145h-2.33zm1.43 1.1h.715c.572 0 .858.286 .858.858v1.584c0 .572-.286.858-.858.858h-.715V9.9z"/>
+    <rect x="1" y="6" width="22" height="12" rx="2" ry="2" fill="currentColor"/>
+    <path d="M4 9h1v6H4zm2 0h1v6H6zm2 0h2l.5 3L11 9h2v6h-1v-4l-.5 3h-1L10 11v4H8zm4 0h3c1 0 1.5.5 1.5 1.5v3c0 1-.5 1.5-1.5 1.5h-3zm1 1v4h2c.3 0 .5-.2.5-.5v-3c0-.3-.2-.5-.5-.5h-2z" fill="black"/>
   </svg>
 );
 
@@ -23,7 +24,7 @@ const Footer = () => {
   };
 
   return (
-    <footer className="bg-portfolio-dark text-white py-16">
+    <footer className="bg-portfolio-black text-portfolio-white py-16">
       <div className="container mx-auto px-6">
         {/* Logo - Clickable */}
         <div className="text-center mb-8">
@@ -38,19 +39,19 @@ const Footer = () => {
 
         {/* Navigation Links */}
         <div className="flex flex-wrap justify-center space-x-8 mb-8">
-          <Link to="/" className="font-open-sans text-sm text-white/80 hover:text-white transition-colors">
+          <Link to="/" className="font-special-elite text-sm text-portfolio-white/80 hover:text-portfolio-white transition-colors">
             Home
           </Link>
-          <button onClick={scrollToFounders} className="font-open-sans text-sm text-white/80 hover:text-white transition-colors">
+          <button onClick={scrollToFounders} className="font-special-elite text-sm text-portfolio-white/80 hover:text-portfolio-white transition-colors">
             About
           </button>
-          <Link to="/sponsorship" className="font-open-sans text-sm text-white/80 hover:text-white transition-colors">
+          <Link to="/sponsorship" className="font-special-elite text-sm text-portfolio-white/80 hover:text-portfolio-white transition-colors">
             Sponsorship
           </Link>
-          <Link to="/films" className="font-open-sans text-sm text-white/80 hover:text-white transition-colors">
+          <Link to="/films" className="font-special-elite text-sm text-portfolio-white/80 hover:text-portfolio-white transition-colors">
             Films
           </Link>
-          <Link to="/script-portal" className="font-open-sans text-sm text-white/80 hover:text-white transition-colors">
+          <Link to="/script-portal" className="font-special-elite text-sm text-portfolio-white/80 hover:text-portfolio-white transition-colors">
             Honey Writes
           </Link>
         </div>
@@ -62,7 +63,7 @@ const Footer = () => {
             target="_blank" 
             rel="noopener noreferrer"
           >
-            <Facebook className="w-5 h-5 text-white hover:text-portfolio-gold transition-colors cursor-pointer" />
+            <Facebook className="w-5 h-5 text-portfolio-white hover:text-portfolio-gold transition-colors cursor-pointer" />
           </a>
           <a 
             href="https://www.tiktok.com/@honeyandhemlock.prod" 
@@ -76,21 +77,23 @@ const Footer = () => {
             target="_blank" 
             rel="noopener noreferrer"
           >
-            <Instagram className="w-5 h-5 text-white hover:text-portfolio-gold transition-colors cursor-pointer" />
+            <Instagram className="w-5 h-5 text-portfolio-white hover:text-portfolio-gold transition-colors cursor-pointer" />
           </a>
           <a 
             href="https://www.linkedin.com/company/honey-hemlock-productions/" 
             target="_blank" 
             rel="noopener noreferrer"
           >
-            <Linkedin className="w-5 h-5 text-white hover:text-portfolio-gold transition-colors cursor-pointer" />
+            <Linkedin className="w-5 h-5 text-portfolio-white hover:text-portfolio-gold transition-colors cursor-pointer" />
           </a>
           <a 
             href="https://pro.imdb.com/company/co0912607?r=cons_ats_co_pro&ref=cons_ats_co_pro" 
             target="_blank" 
             rel="noopener noreferrer"
           >
-            <IMDBIcon />
+            <div className="w-5 h-5 text-portfolio-white hover:text-portfolio-gold transition-colors cursor-pointer">
+              <IMDBIcon />
+            </div>
           </a>
         </div>
       </div>

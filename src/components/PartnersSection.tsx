@@ -17,23 +17,25 @@ const PartnersSection = () => {
   ];
 
   return (
-    <section className="bg-portfolio-black text-white py-16">
+    <section className="bg-portfolio-black text-portfolio-white py-16">
       <div className="container mx-auto px-6">
         <div className="text-center mb-12">
-          <h2 className="font-playfair text-2xl font-bold mb-2">Recognitions</h2>
-          <h3 className="font-playfair text-xl text-portfolio-gold">Awards and Nominations</h3>
+          <h2 className="font-special-elite text-2xl font-semibold mb-2">Recognitions</h2>
+          <h3 className="font-special-elite text-xl text-portfolio-gold">Awards and Nominations</h3>
         </div>
         
         <div className="flex flex-wrap justify-center items-center gap-8 max-w-6xl mx-auto">
           {recognitions.map((recognition, index) => (
             <div 
               key={index}
-              className="hover:scale-105 transition-transform duration-300 cursor-pointer bg-white/10 p-4 rounded-lg backdrop-blur-sm"
+              className="hover:scale-105 transition-transform duration-300 cursor-pointer"
             >
               <img 
                 src={recognition}
                 alt={`Recognition ${index + 1}`}
-                className="w-32 h-auto object-contain filter brightness-100 hover:brightness-110 transition-all duration-300"
+                className={`w-32 h-auto object-contain filter brightness-100 hover:brightness-110 transition-all duration-300 ${
+                  [0, 4, 5, 8, 9].includes(index) ? 'invert' : ''
+                }`}
               />
             </div>
           ))}

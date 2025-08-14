@@ -126,23 +126,23 @@ const JudgeDashboard = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-portfolio-black flex items-center justify-center">
-        <div className="text-white">Loading...</div>
+        <div className="text-portfolio-white">Loading...</div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-portfolio-black text-white">
+    <div className="min-h-screen bg-portfolio-black text-portfolio-white">
       <div className="container mx-auto px-6 py-8">
         <div className="flex justify-between items-center mb-8">
           <div>
-            <h1 className="font-playfair text-3xl font-bold text-portfolio-gold">Judge Dashboard</h1>
-            <p className="text-white/70">Welcome back, {user?.user_metadata?.name || user?.email}</p>
+            <h1 className="font-special-elite text-3xl font-semibold text-portfolio-gold">Judge Dashboard</h1>
+            <p className="text-portfolio-white/70">Welcome back, {user?.user_metadata?.name || user?.email}</p>
           </div>
           <Button 
             onClick={handleLogout}
             variant="outline"
-            className="border-red-500 text-red-500 bg-transparent hover:bg-red-500 hover:text-white"
+            className="border-red-500 text-red-500 bg-transparent hover:bg-red-500 hover:text-portfolio-white"
           >
             <LogOut className="w-4 h-4 mr-2" />
             Logout
@@ -157,7 +157,7 @@ const JudgeDashboard = () => {
                 <FileText className="w-5 h-5 mr-2" />
                 Assigned Scripts ({scripts.length})
               </CardTitle>
-              <CardDescription className="text-white/70">
+              <CardDescription className="text-portfolio-white/70">
                 Scripts assigned to you for review
               </CardDescription>
             </CardHeader>
@@ -168,9 +168,9 @@ const JudgeDashboard = () => {
                     <div key={script.id} className="p-4 bg-portfolio-black rounded border border-portfolio-gold/20">
                       <div className="flex items-start justify-between mb-2">
                         <div className="flex-1">
-                          <h3 className="font-semibold text-white">{script.title}</h3>
-                          <p className="text-sm text-white/60">by {script.author_name}</p>
-                          <p className="text-xs text-white/50">
+                          <h3 className="font-semibold text-portfolio-white">{script.title}</h3>
+                          <p className="text-sm text-portfolio-white/60">by {script.author_name}</p>
+                          <p className="text-xs text-portfolio-white/50">
                             Submitted: {new Date(script.submitted_at).toLocaleDateString()}
                           </p>
                         </div>
@@ -192,7 +192,7 @@ const JudgeDashboard = () => {
                   ))}
                 </div>
               ) : (
-                <p className="text-white/60 text-center py-8">No scripts assigned yet</p>
+                <p className="text-portfolio-white/60 text-center py-8">No scripts assigned yet</p>
               )}
             </CardContent>
           </Card>
@@ -202,24 +202,24 @@ const JudgeDashboard = () => {
             <Card className="bg-portfolio-dark border-portfolio-gold/20">
               <CardHeader>
                 <CardTitle className="text-portfolio-gold">Submit Review</CardTitle>
-                <CardDescription className="text-white/70">
+                <CardDescription className="text-portfolio-white/70">
                   Provide your feedback and recommendation
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div>
-                  <label className="text-white text-sm font-medium">Feedback</label>
+                  <label className="text-portfolio-white text-sm font-medium">Feedback</label>
                   <Textarea
                     value={feedback}
                     onChange={(e) => setFeedback(e.target.value)}
                     placeholder="Provide detailed feedback on the script..."
-                    className="bg-portfolio-black border-portfolio-gold/30 text-white min-h-[120px]"
+                    className="bg-portfolio-black border-portfolio-gold/30 text-portfolio-white min-h-[120px]"
                   />
                 </div>
                 <div>
-                  <label className="text-white text-sm font-medium">Recommendation</label>
+                  <label className="text-portfolio-white text-sm font-medium">Recommendation</label>
                   <Select value={recommendation} onValueChange={setRecommendation}>
-                    <SelectTrigger className="bg-portfolio-black border-portfolio-gold/30 text-white">
+                    <SelectTrigger className="bg-portfolio-black border-portfolio-gold/30 text-portfolio-white">
                       <SelectValue placeholder="Select recommendation" />
                     </SelectTrigger>
                     <SelectContent>

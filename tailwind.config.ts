@@ -64,13 +64,15 @@ export default {
 					ring: 'hsl(var(--sidebar-ring))'
 				},
 				// Custom photography portfolio colors
-				'portfolio-gold': '#BFA16F',
+				'portfolio-gold': '#FFD62F',
 				'portfolio-black': '#000000',
-				'portfolio-dark': '#090909'
+				'portfolio-dark': '#090909',
+				'portfolio-white': '#F5F3E5'
 			},
 			fontFamily: {
 				'playfair': ['Playfair Display', 'serif'],
 				'open-sans': ['Open Sans', 'sans-serif'],
+				'special-elite': ['Special Elite', 'cursive'],
 			},
 			borderRadius: {
 				lg: 'var(--radius)',

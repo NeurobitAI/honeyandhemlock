@@ -14,7 +14,7 @@ serve(async (req) => {
   }
 
   try {
-    const { title, authorName, authorEmail, authorPhone } = await req.json();
+    const { title, authorName, authorEmail, authorPhone, amount, tierName, tierId, tierDescription } = await req.json();
 
     const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", {
       apiVersion: "2023-10-16",
@@ -27,10 +27,10 @@ serve(async (req) => {
           price_data: {
             currency: "usd",
             product_data: {
-              name: "Script Review Service",
-              description: `Review for script: ${title}`,
+              name: `${tierName} - Script Review Service`,
+              description: `${tierDescription} | Script: ${title}`,
             },
-            unit_amount: 5000, // $50.00
+            unit_amount: amount, // Amount in cents from frontend
           },
           quantity: 1,
         },
@@ -43,6 +43,9 @@ serve(async (req) => {
         authorName,
         authorEmail,
         authorPhone: authorPhone || "",
+        tierName,
+        tierId,
+        tierDescription,
       },
     });
 

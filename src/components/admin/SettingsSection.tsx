@@ -22,23 +22,49 @@ const SettingsSection = () => {
 
   const fetchSettings = async () => {
     try {
+      console.log('Fetching settings data...');
       const { data, error } = await supabase
         .from('site_settings')
         .select('*');
       
-      if (error) throw error;
+      if (error) {
+        console.error('Settings fetch error:', error);
+        // Set default settings instead of failing
+        setSettings({
+          tier_1_price: '500',
+          tier_2_price: '750',
+          tier_3_price: '1000',
+          site_title: 'Honey & Hemlock Productions',
+          support_email: 'support@honeyandhemlock.productions'
+        });
+        toast({
+          title: "Database Warning",
+          description: `Settings could not be loaded: ${error.message}. Using defaults.`,
+          variant: "destructive"
+        });
+        return;
+      }
+      
+      console.log('Settings fetched:', data?.length || 0);
       
       const settingsMap = {};
-      data.forEach(setting => {
+      (data || []).forEach(setting => {
         settingsMap[setting.setting_key] = setting.setting_value;
       });
       
       setSettings(settingsMap);
     } catch (error) {
       console.error('Error fetching settings:', error);
+      setSettings({
+        tier_1_price: '500',
+        tier_2_price: '750',
+        tier_3_price: '1000',
+        site_title: 'Honey & Hemlock Productions',
+        support_email: 'support@honeyandhemlock.productions'
+      });
       toast({
         title: "Error",
-        description: "Failed to fetch settings",
+        description: "Failed to fetch settings. Using defaults. Check console for details.",
         variant: "destructive"
       });
     } finally {
@@ -48,6 +74,7 @@ const SettingsSection = () => {
 
   const updateSetting = async (key: string, value: any) => {
     try {
+      console.log('Updating setting:', key, '=', value);
       const { error } = await supabase
         .from('site_settings')
         .upsert({
@@ -56,7 +83,15 @@ const SettingsSection = () => {
           updated_at: new Date().toISOString()
         });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Setting update error:', error);
+        toast({
+          title: "Error",
+          description: `Failed to update setting: ${error.message}`,
+          variant: "destructive"
+        });
+        return;
+      }
 
       setSettings(prev => ({
         ...prev,
@@ -71,21 +106,28 @@ const SettingsSection = () => {
       console.error('Error updating setting:', error);
       toast({
         title: "Error",
-        description: "Failed to update setting",
+        description: "Failed to update setting. Check console for details.",
         variant: "destructive"
       });
     }
   };
 
   if (loading) {
-    return <div className="text-white">Loading settings...</div>;
+    return (
+      <div className="flex items-center justify-center py-12">
+        <div className="text-portfolio-white text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-portfolio-gold mx-auto mb-4"></div>
+          <p>Loading settings...</p>
+        </div>
+      </div>
+    );
   }
 
   return (
     <div className="space-y-6">
       <Card className="bg-[#282828] border-none">
         <CardHeader>
-          <CardTitle className="text-white flex items-center">
+          <CardTitle className="text-portfolio-white flex items-center">
             <Settings className="w-5 h-5 mr-2" />
             System Settings
           </CardTitle>
@@ -104,7 +146,7 @@ const SettingsSection = () => {
             <TabsContent value="pricing" className="space-y-4">
               <Card className="bg-[#232323] border-gray-600">
                 <CardHeader>
-                  <CardTitle className="text-white flex items-center">
+                  <CardTitle className="text-portfolio-white flex items-center">
                     <DollarSign className="w-4 h-4 mr-2" />
                     Tier Pricing Management
                   </CardTitle>
@@ -112,66 +154,66 @@ const SettingsSection = () => {
                 <CardContent className="space-y-4">
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
-                      <Label className="text-white">Tier 1 Price ($)</Label>
+                      <Label className="text-portfolio-white">Tier 1 Price ($)</Label>
                       <Input
                         type="number"
                         value={settings.tier_1_price || ''}
                         onChange={(e) => updateSetting('tier_1_price', e.target.value)}
-                        className="bg-[#282828] text-white border-gray-600"
+                        className="bg-[#282828] text-portfolio-white border-gray-600"
                       />
                     </div>
                     <div>
-                      <Label className="text-white">Tier 2 Price ($)</Label>
+                      <Label className="text-portfolio-white">Tier 2 Price ($)</Label>
                       <Input
                         type="number"
                         value={settings.tier_2_price || ''}
                         onChange={(e) => updateSetting('tier_2_price', e.target.value)}
-                        className="bg-[#282828] text-white border-gray-600"
+                        className="bg-[#282828] text-portfolio-white border-gray-600"
                       />
                     </div>
                     <div>
-                      <Label className="text-white">Tier 3 Price ($)</Label>
+                      <Label className="text-portfolio-white">Tier 3 Price ($)</Label>
                       <Input
                         type="number"
                         value={settings.tier_3_price || ''}
                         onChange={(e) => updateSetting('tier_3_price', e.target.value)}
-                        className="bg-[#282828] text-white border-gray-600"
+                        className="bg-[#282828] text-portfolio-white border-gray-600"
                       />
                     </div>
                   </div>
                   <div>
-                    <Label className="text-white">Additional Page Fee ($)</Label>
+                    <Label className="text-portfolio-white">Additional Page Fee ($)</Label>
                     <Input
                       type="number"
                       value={settings.additional_page_fee || ''}
                       onChange={(e) => updateSetting('additional_page_fee', e.target.value)}
-                      className="bg-[#282828] text-white border-gray-600"
+                      className="bg-[#282828] text-portfolio-white border-gray-600"
                     />
                   </div>
                   <div>
-                    <Label className="text-white">Tier 1 Description</Label>
+                    <Label className="text-portfolio-white">Tier 1 Description</Label>
                     <Textarea
                       value={settings.tier_1_description || ''}
                       onChange={(e) => updateSetting('tier_1_description', e.target.value)}
-                      className="bg-[#282828] text-white border-gray-600"
+                      className="bg-[#282828] text-portfolio-white border-gray-600"
                       rows={3}
                     />
                   </div>
                   <div>
-                    <Label className="text-white">Tier 2 Description</Label>
+                    <Label className="text-portfolio-white">Tier 2 Description</Label>
                     <Textarea
                       value={settings.tier_2_description || ''}
                       onChange={(e) => updateSetting('tier_2_description', e.target.value)}
-                      className="bg-[#282828] text-white border-gray-600"
+                      className="bg-[#282828] text-portfolio-white border-gray-600"
                       rows={3}
                     />
                   </div>
                   <div>
-                    <Label className="text-white">Tier 3 Description</Label>
+                    <Label className="text-portfolio-white">Tier 3 Description</Label>
                     <Textarea
                       value={settings.tier_3_description || ''}
                       onChange={(e) => updateSetting('tier_3_description', e.target.value)}
-                      className="bg-[#282828] text-white border-gray-600"
+                      className="bg-[#282828] text-portfolio-white border-gray-600"
                       rows={3}
                     />
                   </div>
@@ -182,35 +224,35 @@ const SettingsSection = () => {
             <TabsContent value="payments" className="space-y-4">
               <Card className="bg-[#232323] border-gray-600">
                 <CardHeader>
-                  <CardTitle className="text-white">Payment Settings</CardTitle>
+                  <CardTitle className="text-portfolio-white">Payment Settings</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div>
-                    <Label className="text-white">Processing Fee (%)</Label>
+                    <Label className="text-portfolio-white">Processing Fee (%)</Label>
                     <Input
                       type="number"
                       step="0.1"
                       value={settings.processing_fee || ''}
                       onChange={(e) => updateSetting('processing_fee', e.target.value)}
-                      className="bg-[#282828] text-white border-gray-600"
+                      className="bg-[#282828] text-portfolio-white border-gray-600"
                     />
                   </div>
                   <div>
-                    <Label className="text-white">Tax Rate (%)</Label>
+                    <Label className="text-portfolio-white">Tax Rate (%)</Label>
                     <Input
                       type="number"
                       step="0.1"
                       value={settings.tax_rate || ''}
                       onChange={(e) => updateSetting('tax_rate', e.target.value)}
-                      className="bg-[#282828] text-white border-gray-600"
+                      className="bg-[#282828] text-portfolio-white border-gray-600"
                     />
                   </div>
                   <div>
-                    <Label className="text-white">Default Currency</Label>
+                    <Label className="text-portfolio-white">Default Currency</Label>
                     <Input
                       value={settings.default_currency || 'USD'}
                       onChange={(e) => updateSetting('default_currency', e.target.value)}
-                      className="bg-[#282828] text-white border-gray-600"
+                      className="bg-[#282828] text-portfolio-white border-gray-600"
                     />
                   </div>
                 </CardContent>
@@ -220,19 +262,19 @@ const SettingsSection = () => {
             <TabsContent value="email" className="space-y-4">
               <Card className="bg-[#232323] border-gray-600">
                 <CardHeader>
-                  <CardTitle className="text-white flex items-center">
+                  <CardTitle className="text-portfolio-white flex items-center">
                     <Mail className="w-4 h-4 mr-2" />
                     Email Notifications
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div>
-                    <Label className="text-white">Support Email</Label>
+                    <Label className="text-portfolio-white">Support Email</Label>
                     <Input
                       type="email"
                       value={settings.support_email || ''}
                       onChange={(e) => updateSetting('support_email', e.target.value)}
-                      className="bg-[#282828] text-white border-gray-600"
+                      className="bg-[#282828] text-portfolio-white border-gray-600"
                     />
                   </div>
                   <div className="flex items-center space-x-2">
@@ -240,21 +282,21 @@ const SettingsSection = () => {
                       checked={settings.email_notifications_enabled}
                       onCheckedChange={(checked) => updateSetting('email_notifications_enabled', checked)}
                     />
-                    <Label className="text-white">Enable Email Notifications</Label>
+                    <Label className="text-portfolio-white">Enable Email Notifications</Label>
                   </div>
                   <div className="flex items-center space-x-2">
                     <Switch
                       checked={settings.judge_assignment_emails}
                       onCheckedChange={(checked) => updateSetting('judge_assignment_emails', checked)}
                     />
-                    <Label className="text-white">Judge Assignment Emails</Label>
+                    <Label className="text-portfolio-white">Judge Assignment Emails</Label>
                   </div>
                   <div className="flex items-center space-x-2">
                     <Switch
                       checked={settings.review_completion_emails}
                       onCheckedChange={(checked) => updateSetting('review_completion_emails', checked)}
                     />
-                    <Label className="text-white">Review Completion Emails</Label>
+                    <Label className="text-portfolio-white">Review Completion Emails</Label>
                   </div>
                 </CardContent>
               </Card>
@@ -263,18 +305,18 @@ const SettingsSection = () => {
             <TabsContent value="site" className="space-y-4">
               <Card className="bg-[#232323] border-gray-600">
                 <CardHeader>
-                  <CardTitle className="text-white flex items-center">
+                  <CardTitle className="text-portfolio-white flex items-center">
                     <Globe className="w-4 h-4 mr-2" />
                     Site Configuration
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div>
-                    <Label className="text-white">Site Title</Label>
+                    <Label className="text-portfolio-white">Site Title</Label>
                     <Input
                       value={settings.site_title || ''}
                       onChange={(e) => updateSetting('site_title', e.target.value)}
-                      className="bg-[#282828] text-white border-gray-600"
+                      className="bg-[#282828] text-portfolio-white border-gray-600"
                     />
                   </div>
                   <div className="flex items-center space-x-2">
@@ -282,15 +324,15 @@ const SettingsSection = () => {
                       checked={settings.maintenance_mode}
                       onCheckedChange={(checked) => updateSetting('maintenance_mode', checked)}
                     />
-                    <Label className="text-white">Maintenance Mode</Label>
+                    <Label className="text-portfolio-white">Maintenance Mode</Label>
                   </div>
                   <div>
-                    <Label className="text-white">Max File Size (MB)</Label>
+                    <Label className="text-portfolio-white">Max File Size (MB)</Label>
                     <Input
                       type="number"
                       value={settings.max_file_size || '10'}
                       onChange={(e) => updateSetting('max_file_size', e.target.value)}
-                      className="bg-[#282828] text-white border-gray-600"
+                      className="bg-[#282828] text-portfolio-white border-gray-600"
                     />
                   </div>
                 </CardContent>
@@ -300,7 +342,7 @@ const SettingsSection = () => {
             <TabsContent value="permissions" className="space-y-4">
               <Card className="bg-[#232323] border-gray-600">
                 <CardHeader>
-                  <CardTitle className="text-white flex items-center">
+                  <CardTitle className="text-portfolio-white flex items-center">
                     <Shield className="w-4 h-4 mr-2" />
                     User Permissions
                   </CardTitle>
@@ -311,14 +353,14 @@ const SettingsSection = () => {
                       checked={settings.public_judge_signup}
                       onCheckedChange={(checked) => updateSetting('public_judge_signup', checked)}
                     />
-                    <Label className="text-white">Allow Public Judge Signup</Label>
+                    <Label className="text-portfolio-white">Allow Public Judge Signup</Label>
                   </div>
                   <div className="flex items-center space-x-2">
                     <Switch
                       checked={settings.auto_judge_approval}
                       onCheckedChange={(checked) => updateSetting('auto_judge_approval', checked)}
                     />
-                    <Label className="text-white">Auto-approve Judge Applications</Label>
+                    <Label className="text-portfolio-white">Auto-approve Judge Applications</Label>
                   </div>
                 </CardContent>
               </Card>
@@ -327,34 +369,34 @@ const SettingsSection = () => {
             <TabsContent value="general" className="space-y-4">
               <Card className="bg-[#232323] border-gray-600">
                 <CardHeader>
-                  <CardTitle className="text-white flex items-center">
+                  <CardTitle className="text-portfolio-white flex items-center">
                     <FileText className="w-4 h-4 mr-2" />
                     General Settings
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div>
-                    <Label className="text-white">Terms of Service URL</Label>
+                    <Label className="text-portfolio-white">Terms of Service URL</Label>
                     <Input
                       value={settings.terms_url || ''}
                       onChange={(e) => updateSetting('terms_url', e.target.value)}
-                      className="bg-[#282828] text-white border-gray-600"
+                      className="bg-[#282828] text-portfolio-white border-gray-600"
                     />
                   </div>
                   <div>
-                    <Label className="text-white">Privacy Policy URL</Label>
+                    <Label className="text-portfolio-white">Privacy Policy URL</Label>
                     <Input
                       value={settings.privacy_url || ''}
                       onChange={(e) => updateSetting('privacy_url', e.target.value)}
-                      className="bg-[#282828] text-white border-gray-600"
+                      className="bg-[#282828] text-portfolio-white border-gray-600"
                     />
                   </div>
                   <div>
-                    <Label className="text-white">Contact Phone</Label>
+                    <Label className="text-portfolio-white">Contact Phone</Label>
                     <Input
                       value={settings.contact_phone || ''}
                       onChange={(e) => updateSetting('contact_phone', e.target.value)}
-                      className="bg-[#282828] text-white border-gray-600"
+                      className="bg-[#282828] text-portfolio-white border-gray-600"
                     />
                   </div>
                 </CardContent>

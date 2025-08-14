@@ -61,7 +61,7 @@ const SponsorshipSection = () => {
   };
 
   return (
-    <div className="bg-portfolio-black text-white py-16">
+    <div className="bg-portfolio-black text-portfolio-white py-16">
       <div className="container mx-auto px-6">
         {/* The Field Logo at the top */}
         <div className="text-center mb-12">
@@ -73,8 +73,8 @@ const SponsorshipSection = () => {
         </div>
 
         <div className="text-center mb-16">
-          <h2 className="font-playfair text-4xl font-bold mb-4">Support Our Vision</h2>
-          <p className="font-open-sans text-lg text-portfolio-gold mb-8">
+          <h2 className="font-special-elite text-4xl font-semibold mb-4">Support Our Vision</h2>
+          <p className="font-special-elite text-lg text-portfolio-gold mb-8">
             Honey & Hemlock Productions is proud to be associated with The Field, a non profit organization dedicated to helping artists thrive.
           </p>
         </div>
@@ -84,13 +84,13 @@ const SponsorshipSection = () => {
           <Card className="bg-portfolio-dark border-portfolio-gold/20">
             <CardHeader>
               <CardTitle className="text-portfolio-gold text-center text-2xl">Sponsor Our Production</CardTitle>
-              <CardDescription className="text-white/70 text-center">
+              <CardDescription className="text-portfolio-white/70 text-center">
                 Enter your desired sponsorship amount and help support female-driven filmmaking
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div>
-                <label htmlFor="sponsorName" className="block text-white font-medium mb-2">
+                <label htmlFor="sponsorName" className="block text-portfolio-white font-medium mb-2">
                   Your Name
                 </label>
                 <Input
@@ -99,12 +99,12 @@ const SponsorshipSection = () => {
                   value={sponsorName}
                   onChange={(e) => setSponsorName(e.target.value)}
                   placeholder="Enter your name"
-                  className="bg-portfolio-black border-portfolio-gold/30 text-white placeholder:text-gray-400"
+                  className="bg-portfolio-black border-portfolio-gold/30 text-portfolio-white placeholder:text-gray-400"
                 />
               </div>
 
               <div>
-                <label htmlFor="sponsorEmail" className="block text-white font-medium mb-2">
+                <label htmlFor="sponsorEmail" className="block text-portfolio-white font-medium mb-2">
                   Your Email
                 </label>
                 <Input
@@ -113,12 +113,12 @@ const SponsorshipSection = () => {
                   value={sponsorEmail}
                   onChange={(e) => setSponsorEmail(e.target.value)}
                   placeholder="Enter your email"
-                  className="bg-portfolio-black border-portfolio-gold/30 text-white placeholder:text-gray-400"
+                  className="bg-portfolio-black border-portfolio-gold/30 text-portfolio-white placeholder:text-gray-400"
                 />
               </div>
 
               <div>
-                <label htmlFor="amount" className="block text-white font-medium mb-2">
+                <label htmlFor="amount" className="block text-portfolio-white font-medium mb-2">
                   Sponsorship Amount ($)
                 </label>
                 <Input
@@ -129,7 +129,7 @@ const SponsorshipSection = () => {
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
                   placeholder="Enter amount (minimum $1)"
-                  className="bg-portfolio-black border-portfolio-gold/30 text-white placeholder:text-gray-400"
+                  className="bg-portfolio-black border-portfolio-gold/30 text-portfolio-white placeholder:text-gray-400"
                 />
               </div>
 
@@ -141,7 +141,7 @@ const SponsorshipSection = () => {
                 {isLoading ? 'Processing...' : 'Sponsor Now'}
               </Button>
 
-              <p className="text-white/60 text-sm text-center">
+              <p className="text-portfolio-white/60 text-sm text-center">
                 Your contribution will be processed securely through Stripe and is tax-deductible through The Field.
               </p>
             </CardContent>

@@ -76,12 +76,12 @@ const PricingPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-portfolio-black text-white">
+    <div className="min-h-screen bg-portfolio-black text-portfolio-white">
       <Header />
       
       {/* Background Image */}
       <div 
-        className="fixed inset-0 z-0 opacity-5"
+        className="fixed inset-0 z-0 opacity-5 pointer-events-none"
         style={{
           backgroundImage: `url('/lovable-uploads/db11a8de-7cf8-49e0-b7c9-33d92bc0fd88.png')`,
           backgroundSize: 'cover',
@@ -92,13 +92,13 @@ const PricingPage = () => {
       
       <div className="container mx-auto px-4 sm:px-6 py-12 md:py-20 relative z-10">
         <div className="text-center mb-12 md:mb-16">
-          <h1 className="font-playfair text-3xl sm:text-4xl md:text-5xl font-bold mb-4 text-portfolio-gold px-4">
+          <h1 className="font-special-elite text-3xl sm:text-4xl md:text-5xl font-semibold mb-4 text-portfolio-gold px-4">
             Honey Writes
           </h1>
-          <p className="font-open-sans text-xl sm:text-2xl mb-6 md:mb-8 text-white px-4">
+          <p className="font-special-elite text-xl sm:text-2xl mb-6 md:mb-8 text-portfolio-white px-4">
             By producers for production
           </p>
-          <p className="font-open-sans text-base sm:text-lg text-white/80 max-w-3xl mx-auto px-4 leading-relaxed">
+          <p className="font-special-elite text-base sm:text-lg text-portfolio-white/80 max-w-3xl mx-auto px-4 leading-relaxed">
             Professional script review services designed by industry professionals to help you refine your screenplay and bring it closer to production-ready quality.
           </p>
         </div>
@@ -107,7 +107,7 @@ const PricingPage = () => {
           {pricingTiers.map((tier) => (
             <Card 
               key={tier.id} 
-              className={`bg-portfolio-dark border-2 transition-all hover:scale-105 cursor-pointer ${
+              className={`h-full bg-portfolio-dark border-2 transition-all hover:scale-105 cursor-pointer flex flex-col ${
                 selectedTier === tier.id 
                   ? 'border-portfolio-gold shadow-lg shadow-portfolio-gold/20' 
                   : 'border-portfolio-gold/20 hover:border-portfolio-gold/40'
@@ -115,22 +115,22 @@ const PricingPage = () => {
               onClick={() => handleTierSelection(tier)}
             >
               <CardHeader className="text-center p-4 sm:p-6">
-                <CardTitle className="text-portfolio-gold text-xl sm:text-2xl font-playfair mb-2">
+                <CardTitle className="text-portfolio-gold text-xl sm:text-2xl font-special-elite mb-2">
                   {tier.name}
                 </CardTitle>
-                <div className="text-3xl sm:text-4xl font-bold text-white mb-4">
+                <div className="text-3xl sm:text-4xl font-bold text-portfolio-white mb-4">
                   ${tier.price}
                 </div>
-                <p className="text-white/80 text-sm leading-relaxed">
+                <p className="text-portfolio-white/80 text-sm leading-relaxed">
                   {tier.description}
                 </p>
               </CardHeader>
-              <CardContent className="p-4 sm:p-6 pt-0">
-                <ul className="space-y-3 mb-6">
+              <CardContent className="p-4 sm:p-6 pt-0 flex flex-col flex-grow">
+                <ul className="space-y-3 mb-6 flex-grow">
                   {tier.features.map((feature, index) => (
                     <li key={index} className="flex items-start space-x-3">
                       <Check className="w-4 h-4 sm:w-5 sm:h-5 text-portfolio-gold mt-0.5 flex-shrink-0" />
-                      <span className="text-white/90 text-sm leading-relaxed">{feature}</span>
+                      <span className="text-portfolio-white/90 text-sm leading-relaxed">{feature}</span>
                     </li>
                   ))}
                 </ul>
@@ -150,7 +150,7 @@ const PricingPage = () => {
 
         {/* Additional Pricing Info */}
         <div className="text-center px-4">
-          <p className="text-white/80 text-lg font-open-sans">
+          <p className="text-portfolio-white/80 text-lg font-special-elite">
             90-120 pages: Additional $5 per page
           </p>
         </div>
