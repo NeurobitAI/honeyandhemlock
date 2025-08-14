@@ -10,6 +10,7 @@ interface FilmData {
   title: string;
   images: string[];
   description?: string;
+  trailerUrl?: string;
 }
 
 const filmData: Record<string, FilmData> = {
@@ -20,7 +21,8 @@ const filmData: Record<string, FilmData> = {
       '/lovable-uploads/spaceman-2.png',
       '/lovable-uploads/spaceman-3.png'
     ],
-    description: 'A journey through space and human connection.'
+    description: 'Spaceman is an exploration of human emotion that broaches subject matter that is unfortunately too often still considered taboo. It follows Bobby on his first jaunt back into the dating world after escaping an abusive marriage in which he fell victim to domestic violence.',
+    trailerUrl: '/lovable-uploads/Copy of spaceman_trailer (1080p).mp4'
   },
   speechless: {
     title: 'SPEECHLESS',
@@ -29,7 +31,8 @@ const filmData: Record<string, FilmData> = {
       '/lovable-uploads/speechless-2.png',
       '/lovable-uploads/speechless-3.png'
     ],
-    description: 'A powerful story told without words.'
+    description: 'When faced with the unimaginable of losing his first love in a tragic accident, Jake struggles to find the words in the pivotal moment of giving her eulogy. When literal letters start to pour from Jake, lifelong friend Allison dives deep to help her friend navigate this shared grief.',
+    trailerUrl: '/lovable-uploads/Copy of Copy of Speechless Social Clip.mp4'
   },
   solitarity: {
     title: 'SOLITARITY',
@@ -38,7 +41,8 @@ const filmData: Record<string, FilmData> = {
       '/lovable-uploads/solitarity-2.png',
       '/lovable-uploads/solitarity-3.png'
     ],
-    description: 'Exploring solitude and human connection.'
+    description: 'Solitarity is the surrealist exploration of depression through the experience of Jeremy, a man at the end of his rope. Succumbing to his numbness, Jeremy is ready to throw in the towel when depression manifests itself into a human like entity.',
+    trailerUrl: '/lovable-uploads/Copy of Solitarity_Trailer.mp4'
   }
 };
 
@@ -98,8 +102,32 @@ const FilmGallery = () => {
           )}
         </div>
 
+        {/* Trailer Section */}
+        {film.trailerUrl && (
+          <div className="max-w-4xl mx-auto mb-12 md:mb-16">
+            <h2 className="font-special-elite text-2xl sm:text-3xl font-semibold mb-6 text-center text-portfolio-gold">
+              Watch Trailer
+            </h2>
+            <div className="relative w-full rounded-lg overflow-hidden shadow-2xl bg-black">
+              <video
+                src={film.trailerUrl}
+                title={`${film.title} Trailer`}
+                className="w-full h-full"
+                controls
+                preload="metadata"
+                poster={`/lovable-uploads/${film.title.toLowerCase()}-poster.png`}
+              >
+                Your browser does not support the video tag.
+              </video>
+            </div>
+          </div>
+        )}
+
         {/* Image Gallery */}
         <div className="max-w-6xl mx-auto">
+          <h2 className="font-special-elite text-2xl sm:text-3xl font-semibold mb-6 text-center text-portfolio-gold">
+            Behind the Scenes
+          </h2>
           <ImageGallery images={film.images} title={film.title} />
         </div>
 

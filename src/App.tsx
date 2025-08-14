@@ -17,6 +17,9 @@ import JudgeLogin from "./pages/JudgeLogin";
 import JudgeSignup from "./pages/JudgeSignup";
 import AdminDashboard from "./pages/AdminDashboard";
 import JudgeDashboard from "./pages/JudgeDashboard";
+import JudgesPanel from "./pages/JudgesPanel";
+import TermsAndConditions from "./pages/TermsAndConditions";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -46,6 +49,9 @@ const App = () => (
             <Route path="/judge-signup" element={<JudgeSignup />} />
             <Route path="/admin-dashboard" element={<AdminDashboard />} />
             <Route path="/judge-dashboard" element={<JudgeDashboard />} />
+            <Route path="/judges" element={<JudgesPanel />} />
+            <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

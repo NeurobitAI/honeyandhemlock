@@ -150,6 +150,13 @@ const Header = () => {
                 Sponsorship
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-portfolio-gold transition-all group-hover:w-full"></span>
               </Link>
+              <Link 
+                to="/admin"
+                className="font-special-elite text-sm uppercase tracking-wider hover:text-portfolio-gold transition-colors relative group"
+              >
+                Admin Login
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-portfolio-gold transition-all group-hover:w-full"></span>
+              </Link>
               <button 
                 onClick={() => setIsContactOpen(true)}
                 className="font-special-elite text-sm uppercase tracking-wider hover:text-portfolio-gold transition-colors relative group"
@@ -248,6 +255,13 @@ const Header = () => {
                 onClick={closeMobileMenu}
               >
                 Sponsorship
+              </Link>
+              <Link 
+                to="/admin"
+                className="font-special-elite text-xl uppercase tracking-wider hover:text-portfolio-gold transition-colors text-center py-3"
+                onClick={closeMobileMenu}
+              >
+                Admin Login
               </Link>
               <button 
                 onClick={() => {

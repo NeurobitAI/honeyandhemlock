@@ -56,6 +56,16 @@ const Footer = () => {
           </Link>
         </div>
 
+        {/* Legal Links */}
+        <div className="flex flex-wrap justify-center space-x-6 mb-8">
+          <Link to="/privacy-policy" className="font-special-elite text-xs text-portfolio-white/60 hover:text-portfolio-white/80 transition-colors">
+            Privacy Policy
+          </Link>
+          <Link to="/terms-and-conditions" className="font-special-elite text-xs text-portfolio-white/60 hover:text-portfolio-white/80 transition-colors">
+            Terms & Conditions
+          </Link>
+        </div>
+
         {/* Social Icons */}
         <div className="flex justify-center space-x-6">
           <a 
@@ -95,6 +105,13 @@ const Footer = () => {
               <IMDBIcon />
             </div>
           </a>
+        </div>
+
+        {/* Copyright */}
+        <div className="text-center mt-8 pt-8 border-t border-portfolio-white/20">
+          <p className="font-special-elite text-xs text-portfolio-white/60">
+            © {new Date().getFullYear()} Honey & Hemlock Productions. All rights reserved.
+          </p>
         </div>
       </div>
     </footer>

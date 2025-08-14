@@ -16,13 +16,15 @@ import {
   Search, 
   Bell,
   FileText,
-  DollarSign
+  DollarSign,
+  Mail
 } from 'lucide-react';
 
 // Import the new sections
-import JudgesSection from '@/components/admin/JudgesSection';
+import ContractorsSection from '@/components/admin/ContractorsSection';
 import ScriptsSection from '@/components/admin/ScriptsSection';
 import SettingsSection from '@/components/admin/SettingsSection';
+import ContactsSection from '@/components/admin/ContactsSection';
 
 const AdminDashboard = () => {
   const { user, logout } = useAuth();
@@ -68,7 +70,7 @@ const AdminDashboard = () => {
         .select('*');
       
       if (judgesError) {
-        console.error('Judges fetch error:', judgesError);
+        console.error('Contractors fetch error:', judgesError);
         // Don't throw, just log and continue with empty data
       }
 
@@ -86,7 +88,7 @@ const AdminDashboard = () => {
 
       // Calculate metrics with null safety
       const safeScripts = scripts || [];
-      const safeJudges = judges || [];
+      const safeContractors = judges || [];
       const safeActivity = activity || [];
 
       const totalPayments = safeScripts.filter(s => s.payment_status === 'paid')
@@ -97,7 +99,7 @@ const AdminDashboard = () => {
 
       console.log('Dashboard data calculated:', {
         scripts: safeScripts.length,
-        judges: safeJudges.length,
+        contractors: safeContractors.length,
         activity: safeActivity.length
       });
 
@@ -106,7 +108,7 @@ const AdminDashboard = () => {
         scriptUploads: safeScripts.length,
         assignedScripts,
         pendingScripts,
-        totalJudges: safeJudges.length,
+        totalJudges: safeContractors.length,
         recentActivity: safeActivity
       });
     } catch (error) {
@@ -198,7 +200,7 @@ const AdminDashboard = () => {
           <CardContent>
             <div className="space-y-4">
               <div className="flex justify-between items-center">
-                <span className="text-gray-400">Assigned to Judges</span>
+                <span className="text-gray-400">Assigned to Contractors</span>
                 <span className="text-2xl font-bold text-portfolio-white">{dashboardData.assignedScripts}</span>
               </div>
               <div className="flex justify-between items-center">
@@ -217,12 +219,12 @@ const AdminDashboard = () => {
           </CardContent>
         </Card>
 
-        {/* Judges Registered Card */}
+        {/* Contractors Registered Card */}
         <Card className="bg-[#282828] border-none">
           <CardContent className="p-6">
             <div className="flex justify-between items-start">
               <div>
-                <p className="text-gray-400 text-sm">Judges Registered</p>
+                <p className="text-gray-400 text-sm">Contractors Registered</p>
                 <p className="text-3xl font-bold text-portfolio-white mt-2">{dashboardData.totalJudges}</p>
                 <p className="text-sm mt-2">
                   <span className="text-green-400">+3</span>
@@ -322,8 +324,9 @@ const AdminDashboard = () => {
           <ul className="space-y-2">
             {[
               { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
-              { id: 'judges', label: 'Judges', icon: User },
+              { id: 'contractors', label: 'Contractors', icon: User },
               { id: 'scripts', label: 'Scripts', icon: FileText },
+              { id: 'contacts', label: 'Contacts', icon: Mail },
               { id: 'settings', label: 'Settings', icon: Settings }
             ].map((item) => (
               <li key={item.id}>
@@ -375,8 +378,9 @@ const AdminDashboard = () => {
         {/* Main Content Area */}
         <main className="flex-1 p-6 overflow-auto">
           {activeTab === 'dashboard' && renderDashboard()}
-          {activeTab === 'judges' && <JudgesSection />}
+          {activeTab === 'contractors' && <ContractorsSection />}
           {activeTab === 'scripts' && <ScriptsSection />}
+          {activeTab === 'contacts' && <ContactsSection />}
           {activeTab === 'settings' && <SettingsSection />}
         </main>
       </div>
