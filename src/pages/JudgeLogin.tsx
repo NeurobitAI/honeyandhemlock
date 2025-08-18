@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
@@ -6,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
+import { Gavel } from 'lucide-react';
 
 const JudgeLogin = () => {
   const [email, setEmail] = useState('');
@@ -24,9 +24,9 @@ const JudgeLogin = () => {
       if (result.success) {
         toast({
           title: "Login successful",
-          description: "Welcome to your dashboard",
+          description: "Welcome to your contractor dashboard",
         });
-        navigate('/judge-dashboard');
+        navigate('/contractor-dashboard');
       } else {
         toast({
           title: "Login failed",
@@ -69,17 +69,25 @@ const JudgeLogin = () => {
       <div className="w-full max-w-md space-y-6 relative z-10">
         <Card className="bg-portfolio-dark border-portfolio-gold">
           <CardHeader className="text-center">
-            <CardTitle className="text-2xl font-special-elite text-portfolio-gold">Judge Login</CardTitle>
+            <div className="flex justify-center mb-4">
+              <Gavel className="w-12 h-12 text-portfolio-gold" />
+            </div>
+            <CardTitle className="text-2xl font-special-elite text-portfolio-gold">Contractor Login</CardTitle>
             <CardDescription className="text-portfolio-white/80">
-              Access your judge dashboard
+              Access your script review dashboard
             </CardDescription>
+            <div className="mt-4 p-3 bg-portfolio-gold/10 rounded-lg border border-portfolio-gold/30">
+              <p className="text-xs text-portfolio-white/70">Test Credentials:</p>
+              <p className="text-sm text-portfolio-gold font-mono">Email: test</p>
+              <p className="text-sm text-portfolio-gold font-mono">Password: test</p>
+            </div>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <Input
-                  type="email"
-                  placeholder="Email"
+                  type="text"
+                  placeholder="Email or Username"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
@@ -101,7 +109,7 @@ const JudgeLogin = () => {
                 className="w-full bg-portfolio-gold text-black hover:bg-portfolio-gold/90"
                 disabled={isLoading}
               >
-                {isLoading ? 'Logging in...' : 'Login'}
+                {isLoading ? 'Logging in...' : 'Login as Contractor'}
               </Button>
             </form>
           </CardContent>
@@ -109,7 +117,7 @@ const JudgeLogin = () => {
 
         <div className="text-center">
           <p className="text-portfolio-white/60 text-sm mb-4">
-            Don't have an account? <Link to="/judge-signup" className="text-portfolio-gold hover:underline">Sign Up</Link>
+            Need an account? <Link to="/contractor-signup" className="text-portfolio-gold hover:underline">Apply as Contractor</Link>
           </p>
           <Link to="/" className="text-portfolio-gold hover:text-portfolio-white transition-colors">
             ← Back to Home

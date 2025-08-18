@@ -13,11 +13,12 @@ import PricingPage from "./pages/PricingPage";
 import ScriptPortal from "./pages/ScriptPortal";
 import Sponsorship from "./pages/Sponsorship";
 import AdminLogin from "./pages/AdminLogin";
-import JudgeLogin from "./pages/JudgeLogin";
-import JudgeSignup from "./pages/JudgeSignup";
+import ContractorLogin from "./pages/ContractorLogin";
+import ContractorSignup from "./pages/ContractorSignup";
 import AdminDashboard from "./pages/AdminDashboard";
-import JudgeDashboard from "./pages/JudgeDashboard";
-import JudgesPanel from "./pages/JudgesPanel";
+import ContractorDashboard from "./pages/ContractorDashboard";
+import JudgeLogin from "./pages/JudgeLogin";
+import ContractorsPanel from "./pages/ContractorsPanel";
 import TermsAndConditions from "./pages/TermsAndConditions";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import NotFound from "./pages/NotFound";
@@ -45,11 +46,14 @@ const App = () => (
             <Route path="/script-upload" element={<ScriptPortal />} />
             <Route path="/sponsorship" element={<Sponsorship />} />
             <Route path="/admin" element={<AdminLogin />} />
+            <Route path="/contractor" element={<ContractorLogin />} />
+            <Route path="/contractor-signup" element={<ContractorSignup />} />
+            <Route path="/judge-signup" element={<ContractorSignup />} />
             <Route path="/judge" element={<JudgeLogin />} />
-            <Route path="/judge-signup" element={<JudgeSignup />} />
+            <Route path="/judge-login" element={<JudgeLogin />} />
             <Route path="/admin-dashboard" element={<AdminDashboard />} />
-            <Route path="/judge-dashboard" element={<JudgeDashboard />} />
-            <Route path="/judges" element={<JudgesPanel />} />
+            <Route path="/contractor-dashboard" element={<ContractorDashboard />} />
+            <Route path="/contractors" element={<ContractorsPanel />} />
             <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="*" element={<NotFound />} />

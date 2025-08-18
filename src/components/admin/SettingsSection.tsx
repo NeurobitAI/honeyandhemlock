@@ -9,7 +9,7 @@ import { Switch } from '@/components/ui/switch';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
-import { Settings, DollarSign, Mail, Globe, Shield, FileText } from 'lucide-react';
+import { Settings, DollarSign, Mail, Globe, Shield, FileText, Send, Lock } from 'lucide-react';
 
 const SettingsSection = () => {
   const [settings, setSettings] = useState<any>({});
@@ -134,13 +134,9 @@ const SettingsSection = () => {
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="pricing" className="w-full">
-            <TabsList className="grid w-full grid-cols-6">
+            <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger value="pricing">Pricing</TabsTrigger>
-              <TabsTrigger value="payments">Payments</TabsTrigger>
               <TabsTrigger value="email">Email</TabsTrigger>
-              <TabsTrigger value="site">Site</TabsTrigger>
-              <TabsTrigger value="permissions">Permissions</TabsTrigger>
-              <TabsTrigger value="general">General</TabsTrigger>
             </TabsList>
 
             <TabsContent value="pricing" className="space-y-4">
@@ -221,183 +217,161 @@ const SettingsSection = () => {
               </Card>
             </TabsContent>
 
-            <TabsContent value="payments" className="space-y-4">
-              <Card className="bg-[#232323] border-gray-600">
-                <CardHeader>
-                  <CardTitle className="text-portfolio-white">Payment Settings</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div>
-                    <Label className="text-portfolio-white">Processing Fee (%)</Label>
-                    <Input
-                      type="number"
-                      step="0.1"
-                      value={settings.processing_fee || ''}
-                      onChange={(e) => updateSetting('processing_fee', e.target.value)}
-                      className="bg-[#282828] text-portfolio-white border-gray-600"
-                    />
-                  </div>
-                  <div>
-                    <Label className="text-portfolio-white">Tax Rate (%)</Label>
-                    <Input
-                      type="number"
-                      step="0.1"
-                      value={settings.tax_rate || ''}
-                      onChange={(e) => updateSetting('tax_rate', e.target.value)}
-                      className="bg-[#282828] text-portfolio-white border-gray-600"
-                    />
-                  </div>
-                  <div>
-                    <Label className="text-portfolio-white">Default Currency</Label>
-                    <Input
-                      value={settings.default_currency || 'USD'}
-                      onChange={(e) => updateSetting('default_currency', e.target.value)}
-                      className="bg-[#282828] text-portfolio-white border-gray-600"
-                    />
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
 
             <TabsContent value="email" className="space-y-4">
+              {/* SMTP Configuration */}
               <Card className="bg-[#232323] border-gray-600">
                 <CardHeader>
                   <CardTitle className="text-portfolio-white flex items-center">
                     <Mail className="w-4 h-4 mr-2" />
-                    Email Notifications
+                    SMTP Configuration
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <Label className="text-portfolio-white">SMTP Host</Label>
+                      <Input
+                        placeholder="smtp.gmail.com"
+                        value={settings.smtp_host || ''}
+                        onChange={(e) => updateSetting('smtp_host', e.target.value)}
+                        className="bg-[#282828] text-portfolio-white border-gray-600"
+                      />
+                    </div>
+                    <div>
+                      <Label className="text-portfolio-white">SMTP Port</Label>
+                      <Input
+                        placeholder="587"
+                        value={settings.smtp_port || ''}
+                        onChange={(e) => updateSetting('smtp_port', e.target.value)}
+                        className="bg-[#282828] text-portfolio-white border-gray-600"
+                      />
+                    </div>
+                  </div>
                   <div>
-                    <Label className="text-portfolio-white">Support Email</Label>
+                    <Label className="text-portfolio-white">SMTP Username</Label>
+                    <Input
+                      placeholder="your-email@gmail.com"
+                      value={settings.smtp_username || ''}
+                      onChange={(e) => updateSetting('smtp_username', e.target.value)}
+                      className="bg-[#282828] text-portfolio-white border-gray-600"
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-portfolio-white flex items-center">
+                      <Lock className="w-3 h-3 mr-1" />
+                      SMTP Password / API Key
+                    </Label>
+                    <Input
+                      type="password"
+                      placeholder="••••••••••••"
+                      value={settings.smtp_password || ''}
+                      onChange={(e) => updateSetting('smtp_password', e.target.value)}
+                      className="bg-[#282828] text-portfolio-white border-gray-600"
+                    />
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <Label className="text-portfolio-white">From Email</Label>
+                      <Input
+                        type="email"
+                        placeholder="noreply@honeyandhemlock.com"
+                        value={settings.smtp_from_email || ''}
+                        onChange={(e) => updateSetting('smtp_from_email', e.target.value)}
+                        className="bg-[#282828] text-portfolio-white border-gray-600"
+                      />
+                    </div>
+                    <div>
+                      <Label className="text-portfolio-white">From Name</Label>
+                      <Input
+                        placeholder="Honey & Hemlock Productions"
+                        value={settings.smtp_from_name || ''}
+                        onChange={(e) => updateSetting('smtp_from_name', e.target.value)}
+                        className="bg-[#282828] text-portfolio-white border-gray-600"
+                      />
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Switch
+                      checked={settings.smtp_secure === 'true'}
+                      onCheckedChange={(checked) => updateSetting('smtp_secure', checked ? 'true' : 'false')}
+                    />
+                    <Label className="text-portfolio-white">Use TLS/SSL Encryption</Label>
+                  </div>
+                  <Button 
+                    className="bg-portfolio-gold text-black hover:bg-portfolio-gold/90"
+                    onClick={async () => {
+                      toast({
+                        title: "Testing Connection",
+                        description: "Sending test email...",
+                      });
+                      // Test SMTP connection would go here
+                      setTimeout(() => {
+                        toast({
+                          title: "Test Complete",
+                          description: "SMTP settings saved. Test email functionality will be implemented with backend.",
+                        });
+                      }, 1000);
+                    }}
+                  >
+                    <Send className="w-4 h-4 mr-2" />
+                    Test SMTP Connection
+                  </Button>
+                </CardContent>
+              </Card>
+
+              {/* Email Notification Settings */}
+              <Card className="bg-[#232323] border-gray-600">
+                <CardHeader>
+                  <CardTitle className="text-portfolio-white">Notification Settings</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div>
+                    <Label className="text-portfolio-white">Admin Notification Email</Label>
                     <Input
                       type="email"
+                      placeholder="admin@honeyandhemlock.com"
                       value={settings.support_email || ''}
                       onChange={(e) => updateSetting('support_email', e.target.value)}
                       className="bg-[#282828] text-portfolio-white border-gray-600"
                     />
                   </div>
-                  <div className="flex items-center space-x-2">
-                    <Switch
-                      checked={settings.email_notifications_enabled}
-                      onCheckedChange={(checked) => updateSetting('email_notifications_enabled', checked)}
-                    />
-                    <Label className="text-portfolio-white">Enable Email Notifications</Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Switch
-                      checked={settings.judge_assignment_emails}
-                      onCheckedChange={(checked) => updateSetting('judge_assignment_emails', checked)}
-                    />
-                    <Label className="text-portfolio-white">Judge Assignment Emails</Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Switch
-                      checked={settings.review_completion_emails}
-                      onCheckedChange={(checked) => updateSetting('review_completion_emails', checked)}
-                    />
-                    <Label className="text-portfolio-white">Review Completion Emails</Label>
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            <TabsContent value="site" className="space-y-4">
-              <Card className="bg-[#232323] border-gray-600">
-                <CardHeader>
-                  <CardTitle className="text-portfolio-white flex items-center">
-                    <Globe className="w-4 h-4 mr-2" />
-                    Site Configuration
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div>
-                    <Label className="text-portfolio-white">Site Title</Label>
-                    <Input
-                      value={settings.site_title || ''}
-                      onChange={(e) => updateSetting('site_title', e.target.value)}
-                      className="bg-[#282828] text-portfolio-white border-gray-600"
-                    />
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Switch
-                      checked={settings.maintenance_mode}
-                      onCheckedChange={(checked) => updateSetting('maintenance_mode', checked)}
-                    />
-                    <Label className="text-portfolio-white">Maintenance Mode</Label>
-                  </div>
-                  <div>
-                    <Label className="text-portfolio-white">Max File Size (MB)</Label>
-                    <Input
-                      type="number"
-                      value={settings.max_file_size || '10'}
-                      onChange={(e) => updateSetting('max_file_size', e.target.value)}
-                      className="bg-[#282828] text-portfolio-white border-gray-600"
-                    />
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            <TabsContent value="permissions" className="space-y-4">
-              <Card className="bg-[#232323] border-gray-600">
-                <CardHeader>
-                  <CardTitle className="text-portfolio-white flex items-center">
-                    <Shield className="w-4 h-4 mr-2" />
-                    User Permissions
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="flex items-center space-x-2">
-                    <Switch
-                      checked={settings.public_judge_signup}
-                      onCheckedChange={(checked) => updateSetting('public_judge_signup', checked)}
-                    />
-                    <Label className="text-portfolio-white">Allow Public Judge Signup</Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Switch
-                      checked={settings.auto_judge_approval}
-                      onCheckedChange={(checked) => updateSetting('auto_judge_approval', checked)}
-                    />
-                    <Label className="text-portfolio-white">Auto-approve Judge Applications</Label>
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            <TabsContent value="general" className="space-y-4">
-              <Card className="bg-[#232323] border-gray-600">
-                <CardHeader>
-                  <CardTitle className="text-portfolio-white flex items-center">
-                    <FileText className="w-4 h-4 mr-2" />
-                    General Settings
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div>
-                    <Label className="text-portfolio-white">Terms of Service URL</Label>
-                    <Input
-                      value={settings.terms_url || ''}
-                      onChange={(e) => updateSetting('terms_url', e.target.value)}
-                      className="bg-[#282828] text-portfolio-white border-gray-600"
-                    />
-                  </div>
-                  <div>
-                    <Label className="text-portfolio-white">Privacy Policy URL</Label>
-                    <Input
-                      value={settings.privacy_url || ''}
-                      onChange={(e) => updateSetting('privacy_url', e.target.value)}
-                      className="bg-[#282828] text-portfolio-white border-gray-600"
-                    />
-                  </div>
-                  <div>
-                    <Label className="text-portfolio-white">Contact Phone</Label>
-                    <Input
-                      value={settings.contact_phone || ''}
-                      onChange={(e) => updateSetting('contact_phone', e.target.value)}
-                      className="bg-[#282828] text-portfolio-white border-gray-600"
-                    />
+                  <div className="space-y-3">
+                    <div className="flex items-center space-x-2">
+                      <Switch
+                        checked={settings.email_notifications_enabled}
+                        onCheckedChange={(checked) => updateSetting('email_notifications_enabled', checked)}
+                      />
+                      <Label className="text-portfolio-white">Enable Email Notifications</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Switch
+                        checked={settings.contractor_assignment_emails}
+                        onCheckedChange={(checked) => updateSetting('contractor_assignment_emails', checked)}
+                      />
+                      <Label className="text-portfolio-white">Contractor Assignment Emails</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Switch
+                        checked={settings.review_completion_emails}
+                        onCheckedChange={(checked) => updateSetting('review_completion_emails', checked)}
+                      />
+                      <Label className="text-portfolio-white">Review Completion Emails</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Switch
+                        checked={settings.new_script_upload_emails}
+                        onCheckedChange={(checked) => updateSetting('new_script_upload_emails', checked)}
+                      />
+                      <Label className="text-portfolio-white">New Script Upload Notifications</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Switch
+                        checked={settings.contact_form_emails}
+                        onCheckedChange={(checked) => updateSetting('contact_form_emails', checked)}
+                      />
+                      <Label className="text-portfolio-white">Contact Form Submission Alerts</Label>
+                    </div>
                   </div>
                 </CardContent>
               </Card>

@@ -102,27 +102,6 @@ const FilmGallery = () => {
           )}
         </div>
 
-        {/* Trailer Section */}
-        {film.trailerUrl && (
-          <div className="max-w-4xl mx-auto mb-12 md:mb-16">
-            <h2 className="font-special-elite text-2xl sm:text-3xl font-semibold mb-6 text-center text-portfolio-gold">
-              Watch Trailer
-            </h2>
-            <div className="relative w-full rounded-lg overflow-hidden shadow-2xl bg-black">
-              <video
-                src={film.trailerUrl}
-                title={`${film.title} Trailer`}
-                className="w-full h-full"
-                controls
-                preload="metadata"
-                poster={`/lovable-uploads/${film.title.toLowerCase()}-poster.png`}
-              >
-                Your browser does not support the video tag.
-              </video>
-            </div>
-          </div>
-        )}
-
         {/* Image Gallery */}
         <div className="max-w-6xl mx-auto">
           <h2 className="font-special-elite text-2xl sm:text-3xl font-semibold mb-6 text-center text-portfolio-gold">

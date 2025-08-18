@@ -25,22 +25,37 @@ const ScriptPortal = () => {
   useEffect(() => {
     // Get the selected tier from localStorage
     const tierData = localStorage.getItem('selectedTier');
+    console.log('=== SCRIPT PORTAL DEBUG ===');
+    console.log('Raw localStorage data:', tierData);
+    
     if (tierData) {
-      const parsedTier = JSON.parse(tierData);
-      
-      // Debug: Log the tier data to check pricing
-      console.log('Retrieved tier from localStorage:', parsedTier);
-      
-      // Validate that the tier has proper pricing (should be 500, 750, or 1000)
-      if (parsedTier.price && (parsedTier.price === 500 || parsedTier.price === 750 || parsedTier.price === 1000)) {
-        setSelectedTier(parsedTier);
-      } else {
-        console.warn('Invalid tier pricing detected, clearing localStorage and redirecting');
+      try {
+        const parsedTier = JSON.parse(tierData);
+        
+        // Enhanced debug logging
+        console.log('Parsed tier object:', parsedTier);
+        console.log('Tier price:', parsedTier.price);
+        console.log('Tier name:', parsedTier.name);
+        console.log('Tier ID:', parsedTier.id);
+        
+        // Validate that the tier has proper pricing (should be 0, 500, 750, or 1000)
+        if (parsedTier.price !== undefined && (parsedTier.price === 0 || parsedTier.price === 500 || parsedTier.price === 750 || parsedTier.price === 1000)) {
+          console.log('Valid tier detected, setting selectedTier');
+          setSelectedTier(parsedTier);
+        } else {
+          console.warn('Invalid tier pricing detected:', parsedTier.price);
+          console.warn('Expected: 0, 500, 750, or 1000');
+          console.warn('Clearing localStorage and redirecting to pricing page');
+          localStorage.removeItem('selectedTier');
+          navigate('/script-portal');
+        }
+      } catch (error) {
+        console.error('Error parsing tier data:', error);
         localStorage.removeItem('selectedTier');
         navigate('/script-portal');
       }
     } else {
-      // If no tier selected, redirect to pricing page
+      console.log('No tier data in localStorage, redirecting to pricing page');
       navigate('/script-portal');
     }
   }, [navigate]);
@@ -108,7 +123,9 @@ const ScriptPortal = () => {
             <h2 className="text-portfolio-gold text-lg sm:text-xl font-semibold mb-2">
               Selected Package: {selectedTier.name}
             </h2>
-            <p className="text-2xl sm:text-3xl font-bold text-portfolio-white">${selectedTier.price}</p>
+            <p className="text-2xl sm:text-3xl font-bold text-portfolio-white">
+              {selectedTier.price === 0 ? 'Free' : `$${selectedTier.price}`}
+            </p>
             <p className="text-portfolio-white/80 text-xs sm:text-sm mt-2 leading-relaxed">{selectedTier.description}</p>
           </div>
         </div>

@@ -10,12 +10,12 @@ import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { User, Mail, BookOpen } from 'lucide-react';
 
-interface JudgeSignupFormProps {
+interface ContractorSignupFormProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-const JudgeSignupForm: React.FC<JudgeSignupFormProps> = ({ isOpen, onClose }) => {
+const ContractorSignupForm: React.FC<ContractorSignupFormProps> = ({ isOpen, onClose }) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -33,7 +33,7 @@ const JudgeSignupForm: React.FC<JudgeSignupFormProps> = ({ isOpen, onClose }) =>
 
     try {
       const { error } = await supabase
-        .from('judge_applications')
+        .from('contractor_applications')
         .insert({
           name: formData.name,
           email: formData.email,
@@ -80,7 +80,7 @@ const JudgeSignupForm: React.FC<JudgeSignupFormProps> = ({ isOpen, onClose }) =>
         <CardHeader>
           <CardTitle className="text-portfolio-gold flex items-center">
             <BookOpen className="w-5 h-5 mr-2" />
-            Apply to Become a Judge
+            Apply to Become a Contractor
           </CardTitle>
           <CardDescription className="text-portfolio-white/70">
             Join our team of script reviewers and help shape the future of screenwriting
@@ -156,7 +156,7 @@ const JudgeSignupForm: React.FC<JudgeSignupFormProps> = ({ isOpen, onClose }) =>
                 id="bio"
                 value={formData.bio}
                 onChange={(e) => setFormData(prev => ({ ...prev, bio: e.target.value }))}
-                placeholder="Share your background, experience with scripts, and why you'd like to be a judge..."
+                placeholder="Share your background, experience with scripts, and why you'd like to be a contractor..."
                 className="bg-portfolio-black border-portfolio-gold/30 text-portfolio-white min-h-[100px]"
               />
             </div>
@@ -185,4 +185,4 @@ const JudgeSignupForm: React.FC<JudgeSignupFormProps> = ({ isOpen, onClose }) =>
   );
 };
 
-export default JudgeSignupForm;
+export default ContractorSignupForm;

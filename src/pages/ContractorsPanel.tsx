@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { User, Award, BookOpen, Calendar } from "lucide-react";
 
-interface Judge {
+interface Contractor {
   id: number;
   name: string;
   title: string;
@@ -17,37 +17,37 @@ interface Judge {
   yearsExperience?: number;
 }
 
-const JudgesPanel = () => {
-  // TO ADD JUDGES: Uncomment and fill in the template below for each judge
-  // Upload judge photos to the public/judges/ directory
-  // The page automatically switches from placeholder to live content when judges are added
-  const judges: Judge[] = [
-    // TEMPLATE - Copy this structure for each judge:
+const ContractorsPanel = () => {
+  // TO ADD JUDGES: Uncomment and fill in the template below for each contractor
+  // Upload contractor photos to the public/contractors/ directory
+  // The page automatically switches from placeholder to live content when contractors are added
+  const contractors: Contractor[] = [
+    // TEMPLATE - Copy this structure for each contractor:
     // {
     //   id: 1,
-    //   name: "Judge Name",
+    //   name: "Contractor Name",
     //   title: "Professional Title",
     //   bio: "Detailed biography highlighting experience and expertise...",
     //   specialties: ["Genre1", "Genre2", "Specialty Area"],
     //   experience: "X+ years in film industry",
-    //   image: "/judges/judge-photo.jpg", // Optional - shows placeholder if not provided
+    //   image: "/contractors/contractor-photo.jpg", // Optional - shows placeholder if not provided
     //   awards: ["Award 1", "Award 2"], // Optional
     //   education: "Educational background", // Optional
     //   yearsExperience: 15 // Used for stats calculation
     // },
-    // Add more judges here when available
+    // Add more contractors here when available
   ];
 
-  const JudgeCard = ({ judge }: { judge: Judge }) => (
+  const ContractorCard = ({ contractor }: { contractor: Contractor }) => (
     <Card className="bg-portfolio-dark border-portfolio-gold/30 hover:border-portfolio-gold/60 transition-all duration-300 hover:scale-105">
       <CardContent className="p-6">
-        {/* Judge Image */}
+        {/* Contractor Image */}
         <div className="flex justify-center mb-6">
           <div className="w-32 h-32 rounded-full bg-portfolio-gold/20 flex items-center justify-center border-2 border-portfolio-gold/30 overflow-hidden">
-            {judge.image ? (
+            {contractor.image ? (
               <img 
-                src={judge.image} 
-                alt={judge.name}
+                src={contractor.image} 
+                alt={contractor.name}
                 className="w-full h-full object-cover"
               />
             ) : (
@@ -56,18 +56,18 @@ const JudgesPanel = () => {
           </div>
         </div>
 
-        {/* Judge Info */}
+        {/* Contractor Info */}
         <div className="text-center mb-4">
           <h3 className="font-special-elite text-xl font-semibold text-portfolio-gold mb-2">
-            {judge.name}
+            {contractor.name}
           </h3>
           <p className="font-special-elite text-sm text-portfolio-white/80 mb-3">
-            {judge.title}
+            {contractor.title}
           </p>
-          {judge.yearsExperience && (
+          {contractor.yearsExperience && (
             <div className="flex items-center justify-center text-portfolio-white/70 mb-3">
               <Calendar className="w-4 h-4 mr-2" />
-              <span className="font-special-elite text-sm">{judge.yearsExperience}+ Years Experience</span>
+              <span className="font-special-elite text-sm">{contractor.yearsExperience}+ Years Experience</span>
             </div>
           )}
         </div>
@@ -75,7 +75,7 @@ const JudgesPanel = () => {
         {/* Specialties */}
         <div className="mb-4">
           <div className="flex flex-wrap justify-center gap-2">
-            {judge.specialties.map((specialty, index) => (
+            {contractor.specialties.map((specialty, index) => (
               <Badge 
                 key={index}
                 className="bg-portfolio-gold/20 text-portfolio-gold border-portfolio-gold/30 font-special-elite text-xs"
@@ -88,28 +88,28 @@ const JudgesPanel = () => {
 
         {/* Bio */}
         <p className="font-special-elite text-sm text-portfolio-white/80 leading-relaxed mb-4 text-center">
-          {judge.bio}
+          {contractor.bio}
         </p>
 
         {/* Education */}
-        {judge.education && (
+        {contractor.education && (
           <div className="mb-4">
             <div className="flex items-center justify-center text-portfolio-white/70">
               <BookOpen className="w-4 h-4 mr-2" />
-              <span className="font-special-elite text-xs">{judge.education}</span>
+              <span className="font-special-elite text-xs">{contractor.education}</span>
             </div>
           </div>
         )}
 
         {/* Awards */}
-        {judge.awards && judge.awards.length > 0 && (
+        {contractor.awards && contractor.awards.length > 0 && (
           <div className="border-t border-portfolio-gold/30 pt-4">
             <div className="flex items-center justify-center mb-2">
               <Award className="w-4 h-4 mr-2 text-portfolio-gold" />
               <span className="font-special-elite text-sm text-portfolio-gold">Recognition</span>
             </div>
             <div className="space-y-1">
-              {judge.awards.map((award, index) => (
+              {contractor.awards.map((award, index) => (
                 <p key={index} className="font-special-elite text-xs text-portfolio-white/70 text-center">
                   {award}
                 </p>
@@ -130,7 +130,7 @@ const JudgesPanel = () => {
           </div>
         </div>
         <h3 className="font-special-elite text-lg font-semibold text-portfolio-gold/70 mb-2">
-          Judge Position Available
+          Contractor Position Available
         </h3>
         <p className="font-special-elite text-sm text-portfolio-white/60 leading-relaxed">
           We're building our prestigious panel of industry experts. This space is reserved for accomplished professionals who will evaluate and provide valuable feedback on submitted scripts.
@@ -168,28 +168,28 @@ const JudgesPanel = () => {
           {/* Header Section */}
           <div className="text-center mb-16">
             <h1 className="font-special-elite text-4xl md:text-5xl font-semibold mb-4 text-portfolio-gold">
-              Our Judges Panel
+              Our Contractors Panel
             </h1>
             <p className="font-special-elite text-lg text-portfolio-white/80 max-w-3xl mx-auto leading-relaxed">
               Meet the industry professionals who bring years of experience and expertise to evaluate your scripts with precision and insight.
             </p>
           </div>
 
-          {/* Judges Grid */}
-          {judges.length > 0 ? (
+          {/* Contractors Grid */}
+          {contractors.length > 0 ? (
             <>
               {/* Stats Section */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
                 <Card className="bg-portfolio-dark border-portfolio-gold/30 text-center">
                   <CardContent className="p-6">
-                    <div className="text-3xl font-bold text-portfolio-gold mb-2">{judges.length}</div>
-                    <div className="font-special-elite text-sm text-portfolio-white/80">Expert Judges</div>
+                    <div className="text-3xl font-bold text-portfolio-gold mb-2">{contractors.length}</div>
+                    <div className="font-special-elite text-sm text-portfolio-white/80">Expert Contractors</div>
                   </CardContent>
                 </Card>
                 <Card className="bg-portfolio-dark border-portfolio-gold/30 text-center">
                   <CardContent className="p-6">
                     <div className="text-3xl font-bold text-portfolio-gold mb-2">
-                      {judges.reduce((acc, judge) => acc + (judge.yearsExperience || 0), 0)}+
+                      {contractors.reduce((acc, contractor) => acc + (contractor.yearsExperience || 0), 0)}+
                     </div>
                     <div className="font-special-elite text-sm text-portfolio-white/80">Combined Years Experience</div>
                   </CardContent>
@@ -197,17 +197,17 @@ const JudgesPanel = () => {
                 <Card className="bg-portfolio-dark border-portfolio-gold/30 text-center">
                   <CardContent className="p-6">
                     <div className="text-3xl font-bold text-portfolio-gold mb-2">
-                      {judges.reduce((acc, judge) => acc + (judge.specialties?.length || 0), 0)}
+                      {contractors.reduce((acc, contractor) => acc + (contractor.specialties?.length || 0), 0)}
                     </div>
                     <div className="font-special-elite text-sm text-portfolio-white/80">Areas of Expertise</div>
                   </CardContent>
                 </Card>
               </div>
 
-              {/* Judges Cards */}
+              {/* Contractors Cards */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {judges.map((judge) => (
-                  <JudgeCard key={judge.id} judge={judge} />
+                {contractors.map((contractor) => (
+                  <ContractorCard key={contractor.id} contractor={contractor} />
                 ))}
               </div>
             </>
@@ -238,7 +238,7 @@ const JudgesPanel = () => {
               <Card className="bg-portfolio-dark border-portfolio-gold/30 max-w-4xl mx-auto">
                 <CardContent className="p-8">
                   <h3 className="font-special-elite text-xl font-semibold text-portfolio-gold mb-6 text-center">
-                    What to Expect from Our Judges
+                    What to Expect from Our Contractors
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-4">
@@ -307,4 +307,4 @@ const JudgesPanel = () => {
   );
 };
 
-export default JudgesPanel;
+export default ContractorsPanel;

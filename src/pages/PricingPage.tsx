@@ -17,6 +17,18 @@ interface PricingTier {
 
 const pricingTiers: PricingTier[] = [
   {
+    id: 'free',
+    name: 'Free Upload',
+    price: 0,
+    description: 'Upload your script for basic processing and storage in our system',
+    features: [
+      'Script upload and storage',
+      'Basic file processing',
+      'Access to your uploaded script',
+      'Entry into review queue'
+    ]
+  },
+  {
     id: 'tier1',
     name: 'Essential Review',
     price: 500,
@@ -119,7 +131,7 @@ const PricingPage = () => {
                   {tier.name}
                 </CardTitle>
                 <div className="text-3xl sm:text-4xl font-bold text-portfolio-white mb-4">
-                  ${tier.price}
+                  {tier.price === 0 ? 'Free' : `$${tier.price}`}
                 </div>
                 <p className="text-portfolio-white/80 text-sm leading-relaxed">
                   {tier.description}

@@ -78,23 +78,106 @@ const ScriptSubmissionForm: React.FC<ScriptSubmissionFormProps> = ({
     onSubmissionStart();
 
     try {
-      // Debug: Log the selected tier data
+      // Enhanced debug logging
+      console.log('=== SCRIPT SUBMISSION DEBUG ===');
       console.log('Selected Tier:', selectedTier);
-      console.log('Tier Price:', selectedTier.price);
-      console.log('Amount in cents:', selectedTier.price * 100);
+      console.log('Tier Price (dollars):', selectedTier.price);
+      console.log('Is Free Tier:', selectedTier.price === 0);
+      
+      // Check if this is a free tier
+      if (selectedTier.price === 0) {
+        // For free tier, upload the file to Supabase storage first
+        const fileExt = file.name.split('.').pop();
+        const fileName = `${Date.now()}_${file.name}`;
+        const filePath = `scripts/${fileName}`;
+        
+        console.log('Uploading file to Supabase storage:', filePath);
+        
+        // Upload file to Supabase storage
+        const { data: uploadData, error: uploadError } = await supabase.storage
+          .from('scripts')
+          .upload(filePath, file);
+        
+        if (uploadError) {
+          console.error('File upload error:', uploadError);
+          throw new Error('Failed to upload file');
+        }
+        
+        // Get public URL for the uploaded file
+        const { data: { publicUrl } } = supabase.storage
+          .from('scripts')
+          .getPublicUrl(filePath);
+        
+        console.log('File uploaded successfully, creating script record');
+        
+        // Create script record directly in database
+        const { data: scriptData, error: scriptError } = await supabase
+          .from('scripts')
+          .insert({
+            title,
+            author_name: authorName,
+            author_email: authorEmail,
+            author_phone: authorPhone,
+            file_url: publicUrl,
+            file_name: file.name,
+            amount: 0,
+            payment_status: 'paid', // Mark as paid since it's free
+            status: 'pending',
+            tier_id: selectedTier.id,
+            tier_name: selectedTier.name
+          })
+          .select()
+          .single();
+        
+        if (scriptError) {
+          console.error('Script creation error:', scriptError);
+          throw scriptError;
+        }
+        
+        console.log('Free script created successfully:', scriptData);
+        
+        // Show success message
+        toast({
+          title: "Script Uploaded Successfully!",
+          description: "Your script has been submitted for review.",
+        });
+        
+        // Clear form
+        setTitle('');
+        setAuthorName('');
+        setAuthorEmail('');
+        setAuthorPhone('');
+        setFile(null);
+        
+        // Clear selected tier from localStorage
+        localStorage.removeItem('selectedTier');
+        
+        // Optionally navigate to a success page or reset the form
+        setTimeout(() => {
+          window.location.href = '/';
+        }, 2000);
+        
+        return;
+      }
+      
+      // For paid tiers, proceed with Stripe payment
+      const requestBody = {
+        title,
+        authorName,
+        authorEmail,
+        authorPhone,
+        amount: selectedTier.price * 100, // Convert to cents
+        tierName: selectedTier.name,
+        tierId: selectedTier.id,
+        tierDescription: selectedTier.description,
+      };
+      
+      console.log('Full request body being sent to Supabase:', requestBody);
+      console.log('Specifically, amount being sent:', requestBody.amount);
       
       // Create Stripe payment session with the selected tier price
       const { data, error } = await supabase.functions.invoke('create-script-payment', {
-        body: {
-          title,
-          authorName,
-          authorEmail,
-          authorPhone,
-          amount: selectedTier.price * 100, // Convert to cents
-          tierName: selectedTier.name,
-          tierId: selectedTier.id,
-          tierDescription: selectedTier.description,
-        },
+        body: requestBody,
       });
 
       if (error) throw error;
@@ -114,9 +197,9 @@ const ScriptSubmissionForm: React.FC<ScriptSubmissionFormProps> = ({
         window.location.href = data.url;
       }
     } catch (error: any) {
-      console.error('Error creating payment:', error);
+      console.error('Error processing submission:', error);
       
-      let errorMessage = "Failed to process payment. Please try again.";
+      let errorMessage = "Failed to process submission. Please try again.";
       
       if (error.message) {
         errorMessage = error.message;
@@ -125,7 +208,7 @@ const ScriptSubmissionForm: React.FC<ScriptSubmissionFormProps> = ({
       }
       
       toast({
-        title: "Payment Error",
+        title: "Submission Error",
         description: errorMessage,
         variant: "destructive"
       });
@@ -210,7 +293,7 @@ const ScriptSubmissionForm: React.FC<ScriptSubmissionFormProps> = ({
         className="w-full bg-portfolio-gold text-black hover:bg-portfolio-gold/90 text-lg py-3"
       >
         <Upload className="w-5 h-5 mr-2" />
-        Submit Script
+        {selectedTier.price === 0 ? 'Upload Script (Free)' : 'Proceed to Payment'}
       </Button>
     </form>
   );

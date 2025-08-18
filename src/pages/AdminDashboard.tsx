@@ -21,22 +21,26 @@ import {
 } from 'lucide-react';
 
 // Import the new sections
-import ContractorsSection from '@/components/admin/ContractorsSection';
+import ContractorsSection from '@/components/admin/ContractorsSectionSimple'; // Using simple version for now
 import ScriptsSection from '@/components/admin/ScriptsSection';
 import SettingsSection from '@/components/admin/SettingsSection';
 import ContactsSection from '@/components/admin/ContactsSection';
+import NotificationsDropdown from '@/components/admin/NotificationsDropdown';
+import ProfileDropdown from '@/components/admin/ProfileDropdown';
+import SearchModal from '@/components/admin/SearchModal';
 
 const AdminDashboard = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState('dashboard');
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [dashboardData, setDashboardData] = useState({
     totalPayments: 0,
     scriptUploads: 0,
     assignedScripts: 0,
     pendingScripts: 0,
-    totalJudges: 0,
+    totalContractors: 0,
     recentActivity: []
   });
 
@@ -64,13 +68,13 @@ const AdminDashboard = () => {
         // Don't throw, just log and continue with empty data
       }
 
-      // Fetch judges data with better error handling
-      const { data: judges, error: judgesError } = await supabase
+      // Fetch contractors data from judges table
+      const { data: contractors, error: contractorsError } = await supabase
         .from('judges')
         .select('*');
       
-      if (judgesError) {
-        console.error('Contractors fetch error:', judgesError);
+      if (contractorsError) {
+        console.error('Contractors fetch error:', contractorsError);
         // Don't throw, just log and continue with empty data
       }
 
@@ -88,7 +92,7 @@ const AdminDashboard = () => {
 
       // Calculate metrics with null safety
       const safeScripts = scripts || [];
-      const safeContractors = judges || [];
+      const safeContractors = contractors || [];
       const safeActivity = activity || [];
 
       const totalPayments = safeScripts.filter(s => s.payment_status === 'paid')
@@ -108,7 +112,7 @@ const AdminDashboard = () => {
         scriptUploads: safeScripts.length,
         assignedScripts,
         pendingScripts,
-        totalJudges: safeContractors.length,
+        totalContractors: safeContractors.length,
         recentActivity: safeActivity
       });
     } catch (error) {
@@ -119,7 +123,7 @@ const AdminDashboard = () => {
         scriptUploads: 0,
         assignedScripts: 0,
         pendingScripts: 0,
-        totalJudges: 0,
+        totalContractors: 0,
         recentActivity: []
       });
       
@@ -225,7 +229,7 @@ const AdminDashboard = () => {
             <div className="flex justify-between items-start">
               <div>
                 <p className="text-gray-400 text-sm">Contractors Registered</p>
-                <p className="text-3xl font-bold text-portfolio-white mt-2">{dashboardData.totalJudges}</p>
+                <p className="text-3xl font-bold text-portfolio-white mt-2">{dashboardData.totalContractors}</p>
                 <p className="text-sm mt-2">
                   <span className="text-green-400">+3</span>
                   <span className="text-gray-400 ml-1">New This Month</span>
@@ -362,16 +366,16 @@ const AdminDashboard = () => {
         <header className="bg-[#FFD62F] h-16 px-6 flex items-center justify-between">
           <h1 className="text-xl font-bold text-black">Admin Dashboard</h1>
           <div className="flex items-center space-x-4">
-            <div className="relative">
-              <Search className="w-5 h-5 text-black" />
-            </div>
-            <div className="relative">
-              <Bell className="w-5 h-5 text-black" />
-              <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full text-xs"></span>
-            </div>
-            <div className="w-8 h-8 bg-black rounded-full flex items-center justify-center">
-              <User className="w-5 h-5 text-[#FFD62F]" />
-            </div>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="text-black hover:bg-black/10"
+              onClick={() => setIsSearchOpen(true)}
+            >
+              <Search className="w-5 h-5" />
+            </Button>
+            <NotificationsDropdown />
+            <ProfileDropdown onNavigateToSettings={() => setActiveTab('settings')} />
           </div>
         </header>
 
@@ -384,6 +388,16 @@ const AdminDashboard = () => {
           {activeTab === 'settings' && <SettingsSection />}
         </main>
       </div>
+      
+      {/* Search Modal */}
+      <SearchModal 
+        isOpen={isSearchOpen} 
+        onClose={() => setIsSearchOpen(false)}
+        onNavigate={(tab) => {
+          setActiveTab(tab);
+          setIsSearchOpen(false);
+        }}
+      />
     </div>
   );
 };

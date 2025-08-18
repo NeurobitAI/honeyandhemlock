@@ -3,6 +3,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { X, Send } from "lucide-react";
+import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
 
 interface ContactFormProps {
   isOpen: boolean;
@@ -22,6 +24,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ isOpen, onClose }) => {
   const [isSuccess, setIsSuccess] = useState(false);
   const [focusedField, setFocusedField] = useState<string | null>(null);
   const [showForm, setShowForm] = useState(false);
+  const { toast } = useToast();
 
   // Animate form entrance
   useEffect(() => {
@@ -37,30 +40,58 @@ const ContactForm: React.FC<ContactFormProps> = ({ isOpen, onClose }) => {
     e.preventDefault();
     setIsSubmitting(true);
     
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    // Save to localStorage for admin to see
-    const contacts = JSON.parse(localStorage.getItem('contacts') || '[]');
-    const newContact = {
-      ...formData,
-      id: Date.now(),
-      date: new Date().toISOString(),
-      status: 'new'
-    };
-    contacts.push(newContact);
-    localStorage.setItem('contacts', JSON.stringify(contacts));
-    
-    setIsSubmitting(false);
-    setIsSuccess(true);
-    
-    // Reset form after success animation
-    setTimeout(() => {
-      setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
+    try {
+      // Save to Supabase
+      const { data, error } = await supabase
+        .from('contacts')
+        .insert({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone || null,
+          subject: formData.subject || null,
+          message: formData.message,
+          status: 'new'
+        })
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      // Also save to localStorage as backup
+      const contacts = JSON.parse(localStorage.getItem('contacts') || '[]');
+      const newContact = {
+        ...formData,
+        id: data.id,
+        created_at: data.created_at,
+        status: 'new'
+      };
+      contacts.push(newContact);
+      localStorage.setItem('contacts', JSON.stringify(contacts));
+
+      setIsSuccess(true);
+      
+      toast({
+        title: "Message Sent!",
+        description: "We'll get back to you soon.",
+      });
+
+      // Reset form after success animation
       setTimeout(() => {
-        onClose();
-      }, 1000);
-    }, 2500);
+        setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
+        setTimeout(() => {
+          onClose();
+        }, 1000);
+      }, 2500);
+    } catch (error: any) {
+      console.error('Error submitting contact form:', error);
+      toast({
+        title: "Error",
+        description: error.message || "Failed to send message. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {

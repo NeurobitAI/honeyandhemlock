@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 
-const AdminLogin = () => {
+const ContractorLogin = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -24,9 +24,9 @@ const AdminLogin = () => {
       if (result.success) {
         toast({
           title: "Login successful",
-          description: "Welcome to the dashboard",
+          description: "Welcome to your dashboard",
         });
-        navigate('/admin-dashboard');
+        navigate('/contractor-dashboard');
       } else {
         toast({
           title: "Login failed",
@@ -49,18 +49,18 @@ const AdminLogin = () => {
     <div className="min-h-screen bg-portfolio-black flex items-center justify-center p-4 relative overflow-hidden">
       {/* Background Lens Images */}
       <div 
-        className="absolute top-1/4 left-1/4 w-1/4 h-1/3 opacity-17 z-0 pointer-events-none"
+        className="absolute top-0 right-1/3 w-1/3 h-1/2 opacity-18 z-0 pointer-events-none"
         style={{
-          backgroundImage: `url('/lovable-uploads/9cf1eb65-bc24-4062-9ec2-2bafdbaa9642.png')`,
+          backgroundImage: `url('/lovable-uploads/74c9a851-6d57-412e-9a5e-b83bc5a76b7c.png')`,
           backgroundPosition: 'center',
           backgroundSize: 'contain',
           backgroundRepeat: 'no-repeat'
         }}
       />
       <div 
-        className="absolute bottom-1/3 right-1/4 w-1/5 h-1/4 opacity-15 z-0 pointer-events-none"
+        className="absolute bottom-1/4 left-1/4 w-1/4 h-1/3 opacity-16 z-0 pointer-events-none"
         style={{
-          backgroundImage: `url('/lovable-uploads/74c9a851-6d57-412e-9a5e-b83bc5a76b7c.png')`,
+          backgroundImage: `url('/lovable-uploads/9cf1eb65-bc24-4062-9ec2-2bafdbaa9642.png')`,
           backgroundPosition: 'center',
           backgroundSize: 'contain',
           backgroundRepeat: 'no-repeat'
@@ -69,9 +69,9 @@ const AdminLogin = () => {
       <div className="w-full max-w-md space-y-6 relative z-10">
         <Card className="bg-portfolio-dark border-portfolio-gold">
           <CardHeader className="text-center">
-            <CardTitle className="text-2xl font-special-elite text-portfolio-gold">Sign In</CardTitle>
+            <CardTitle className="text-2xl font-special-elite text-portfolio-gold">Contractor Login</CardTitle>
             <CardDescription className="text-portfolio-white/80">
-              Access your dashboard
+              Access your contractor dashboard
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -101,29 +101,16 @@ const AdminLogin = () => {
                 className="w-full bg-portfolio-gold text-black hover:bg-portfolio-gold/90"
                 disabled={isLoading}
               >
-                {isLoading ? 'Signing in...' : 'Sign In'}
+                {isLoading ? 'Logging in...' : 'Login'}
               </Button>
             </form>
           </CardContent>
         </Card>
 
-        <Card className="bg-portfolio-dark border-portfolio-gold">
-          <CardContent className="pt-6">
-            <div className="text-center space-y-4">
-              <p className="text-portfolio-white/80">Contractor?</p>
-              <Link to="/judge">
-                <Button variant="outline" className="w-full border-portfolio-gold text-portfolio-gold hover:bg-portfolio-gold hover:text-black">
-                  Contractor Login
-                </Button>
-              </Link>
-              <p className="text-portfolio-white/60 text-sm">
-                Don't have an account? <Link to="/contractor-signup" className="text-portfolio-gold hover:underline">Sign Up</Link>
-              </p>
-            </div>
-          </CardContent>
-        </Card>
-
         <div className="text-center">
+          <p className="text-portfolio-white/60 text-sm mb-4">
+            Don't have an account? <Link to="/contractor-signup" className="text-portfolio-gold hover:underline">Sign Up</Link>
+          </p>
           <Link to="/" className="text-portfolio-gold hover:text-portfolio-white transition-colors">
             ← Back to Home
           </Link>
@@ -133,4 +120,4 @@ const AdminLogin = () => {
   );
 };
 
-export default AdminLogin;
+export default ContractorLogin;

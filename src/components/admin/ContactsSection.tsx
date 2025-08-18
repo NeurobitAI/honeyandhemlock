@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 import { Mail, Phone, User, Calendar, MessageSquare, Trash2 } from 'lucide-react';
 
 interface ContactSubmission {
@@ -22,18 +23,50 @@ const ContactsSection = () => {
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
 
-  const fetchContacts = useCallback(() => {
+  const fetchContacts = useCallback(async () => {
     try {
+      // Fetch from Supabase
+      const { data, error } = await supabase
+        .from('contacts')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+
+      // Map the data to match our interface
+      const mappedContacts = (data || []).map(contact => ({
+        id: contact.id,
+        name: contact.name,
+        email: contact.email,
+        phone: contact.phone || '',
+        subject: contact.subject || '',
+        message: contact.message,
+        date: contact.created_at,
+        status: contact.status as 'new' | 'read' | 'responded'
+      }));
+
+      setContacts(mappedContacts);
+
+      // Also check localStorage for any legacy data
+      const localData = localStorage.getItem('contacts');
+      if (localData) {
+        const localContacts = JSON.parse(localData);
+        // You might want to migrate these to Supabase
+        console.log('Found legacy contacts in localStorage:', localContacts.length);
+      }
+    } catch (error) {
+      console.error('Error fetching contacts:', error);
+      
+      // Fallback to localStorage if Supabase fails
       const contactsData = localStorage.getItem('contacts');
       const parsedContacts = contactsData ? JSON.parse(contactsData) : [];
       setContacts(parsedContacts.sort((a: ContactSubmission, b: ContactSubmission) => 
         new Date(b.date).getTime() - new Date(a.date).getTime()
       ));
-    } catch (error) {
-      console.error('Error fetching contacts:', error);
+      
       toast({
-        title: "Error",
-        description: "Failed to fetch contact submissions",
+        title: "Warning",
+        description: "Failed to fetch from database, showing cached data",
         variant: "destructive"
       });
     } finally {
@@ -45,13 +78,21 @@ const ContactsSection = () => {
     fetchContacts();
   }, [fetchContacts]);
 
-  const updateContactStatus = (contactId: number, newStatus: 'new' | 'read' | 'responded') => {
+  const updateContactStatus = async (contactId: number | string, newStatus: 'new' | 'read' | 'responded') => {
     try {
+      // Update in Supabase
+      const { error } = await supabase
+        .from('contacts')
+        .update({ status: newStatus })
+        .eq('id', contactId);
+
+      if (error) throw error;
+
+      // Update local state
       const updatedContacts = contacts.map(contact => 
         contact.id === contactId ? { ...contact, status: newStatus } : contact
       );
       setContacts(updatedContacts);
-      localStorage.setItem('contacts', JSON.stringify(updatedContacts));
       
       toast({
         title: "Success",
@@ -67,11 +108,19 @@ const ContactsSection = () => {
     }
   };
 
-  const deleteContact = (contactId: number) => {
+  const deleteContact = async (contactId: number | string) => {
     try {
+      // Delete from Supabase
+      const { error } = await supabase
+        .from('contacts')
+        .delete()
+        .eq('id', contactId);
+
+      if (error) throw error;
+
+      // Update local state
       const updatedContacts = contacts.filter(contact => contact.id !== contactId);
       setContacts(updatedContacts);
-      localStorage.setItem('contacts', JSON.stringify(updatedContacts));
       
       toast({
         title: "Success",

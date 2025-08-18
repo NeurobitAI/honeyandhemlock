@@ -8,7 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 
-const JudgeSignup = () => {
+const ContractorSignup = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
@@ -28,7 +28,7 @@ const JudgeSignup = () => {
         options: {
           data: {
             name,
-            role: 'judge'
+            role: 'contractor'
           }
         }
       });
@@ -36,28 +36,32 @@ const JudgeSignup = () => {
       if (error) throw error;
 
       if (data.user) {
-        // Insert judge record into the judges table
+        // Insert judge record into the judges table with bcrypt password hash
+        const bcrypt = await import('bcryptjs');
+        const passwordHash = await bcrypt.hash(password, 10);
+        
         const { error: judgeError } = await supabase
           .from('judges')
           .insert({
             id: data.user.id,
             name,
             email,
-            password_hash: 'managed_by_auth', // Placeholder since auth handles passwords
+            password_hash: passwordHash,
             status: 'pending'
           });
 
         if (judgeError) {
           console.error('Error creating judge record:', judgeError);
+          // Still show success since auth account was created
         }
       }
 
       toast({
-        title: "Signup Successful",
-        description: "Your account has been submitted for admin approval. You will be notified once approved.",
+        title: "Request Sent",
+        description: "Awaiting admin's approval. You will be notified once your account is approved.",
       });
       
-      navigate('/judge');
+      navigate('/contractor');
     } catch (error: any) {
       toast({
         title: "Signup Failed",
@@ -74,7 +78,7 @@ const JudgeSignup = () => {
       <div className="w-full max-w-md">
         <Card className="bg-portfolio-dark border-portfolio-gold">
           <CardHeader className="text-center">
-            <CardTitle className="text-2xl font-special-elite text-portfolio-gold">Judge Sign Up</CardTitle>
+            <CardTitle className="text-2xl font-special-elite text-portfolio-gold">Contractor Sign Up</CardTitle>
             <CardDescription className="text-portfolio-white/80">
               Apply to become a script reviewer
             </CardDescription>
@@ -128,7 +132,7 @@ const JudgeSignup = () => {
             
             <div className="mt-6 text-center">
               <p className="text-portfolio-white/60 text-sm">
-                Already have an account? <Link to="/judge" className="text-portfolio-gold hover:underline">Login</Link>
+                Already have an account? <Link to="/contractor" className="text-portfolio-gold hover:underline">Login</Link>
               </p>
             </div>
           </CardContent>
@@ -144,4 +148,4 @@ const JudgeSignup = () => {
   );
 };
 
-export default JudgeSignup;
+export default ContractorSignup;

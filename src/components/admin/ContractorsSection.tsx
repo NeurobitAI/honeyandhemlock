@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
-import { User, Mail, Clock, Award, CheckCircle, FileText, Star, Plus, Minus, Target, Zap, TrendingUp, BookOpen } from 'lucide-react';
+import { User, Mail, Clock, Award, CheckCircle, FileText, Star, Plus, Minus, Target, Zap, TrendingUp, BookOpen, Trash2 } from 'lucide-react';
 
 interface Script {
   id: string;
@@ -38,6 +38,7 @@ const ContractorsSection = () => {
   const [contractors, setContractors] = useState<any[]>([]);
   const [scripts, setScripts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const { toast } = useToast();
   
   // Review functionality states
@@ -97,9 +98,9 @@ const ContractorsSection = () => {
 
   const fetchContractors = async () => {
     try {
-      console.log('Fetching contractors data...');
+      console.log('Fetching judges/contractors data...');
       const { data, error } = await supabase
-        .from('judges')
+        .from('judges')  // Using judges table as it hasn't been renamed yet
         .select('*')
         .order('name');
       
@@ -112,19 +113,24 @@ const ContractorsSection = () => {
           description: `Failed to fetch contractors: ${error.message}`,
           variant: "destructive"
         });
+        setLoading(false);
         return;
       }
       
       console.log('Contractors fetched:', data?.length || 0);
+      console.log('Contractors data:', data);
       setContractors(data || []);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error fetching contractors:', error);
       setContractors([]);
+      setError(error.message || 'Failed to fetch contractors');
       toast({
         title: "Error",
         description: "Failed to fetch contractors. Check console for details.",
         variant: "destructive"
       });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -157,20 +163,25 @@ const ContractorsSection = () => {
       const { error } = await supabase
         .from('scripts')
         .update({ 
-          assigned_judge_id: contractorId,
+          assigned_judge_id: contractorId,  // Using judge_id as table hasn't been renamed
           status: 'assigned'
         })
         .eq('id', scriptId);
 
       if (error) throw error;
 
-      // Log the activity
-      await supabase.rpc('log_activity', {
-        p_activity_type: 'assignment',
-        p_description: `Script assigned to contractor`,
-        p_script_id: scriptId,
-        p_judge_id: contractorId
-      });
+      // Log the activity (if function exists)
+      try {
+        await supabase.rpc('log_activity', {
+          p_activity_type: 'assignment',
+          p_description: `Script assigned to judge/contractor`,
+          p_script_id: scriptId,
+          p_judge_id: contractorId  // Using judge_id parameter
+        });
+      } catch (logError) {
+        console.log('Activity logging not available:', logError);
+        // Continue without logging - not critical
+      }
 
       toast({
         title: "Success",
@@ -184,6 +195,70 @@ const ContractorsSection = () => {
       toast({
         title: "Error",
         description: "Failed to assign script",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const handleDeleteContractor = async (contractorId: string) => {
+    try {
+      // Check if admin session exists
+      const adminSession = localStorage.getItem('admin_session');
+      if (!adminSession) {
+        toast({
+          title: "Authentication Required",
+          description: "Please log in as admin to perform this action",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      const { error } = await supabase
+        .from('judges')
+        .delete()
+        .eq('id', contractorId);
+
+      if (error) {
+        console.error('Delete error details:', error);
+        throw error;
+      }
+
+      toast({
+        title: "Success",
+        description: "Contractor deleted successfully",
+      });
+
+      fetchContractors();
+    } catch (error: any) {
+      console.error('Error deleting contractor:', error);
+      toast({
+        title: "Error",
+        description: "Failed to delete contractor. Please ensure the database migration has been run.",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const handleApproveContractor = async (contractorId: string) => {
+    try {
+      const { error } = await supabase
+        .from('judges')
+        .update({ status: 'approved' })
+        .eq('id', contractorId);
+
+      if (error) throw error;
+
+      toast({
+        title: "Success",
+        description: "Contractor approved successfully",
+      });
+
+      fetchContractors();
+    } catch (error: any) {
+      console.error('Error approving contractor:', error);
+      toast({
+        title: "Error",
+        description: "Failed to approve contractor",
         variant: "destructive"
       });
     }
@@ -262,6 +337,29 @@ const ContractorsSection = () => {
         <div className="text-portfolio-white text-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-portfolio-gold mx-auto mb-4"></div>
           <p>Loading contractors data...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <div className="text-portfolio-white text-center">
+          <p className="text-red-500 mb-4">Error loading contractors section</p>
+          <p className="text-sm text-gray-400">{error}</p>
+          <Button 
+            onClick={() => {
+              setError(null);
+              setLoading(true);
+              fetchContractors();
+              fetchScripts();
+            }}
+            className="mt-4 bg-portfolio-gold text-black"
+          >
+            Retry
+          </Button>
         </div>
       </div>
     );
@@ -452,7 +550,7 @@ const ContractorsSection = () => {
                 </div>
                 <div className="text-center">
                   <div className="text-3xl font-bold text-[#FFD62F]">
-                    {contractors.filter(c => c.availability === 'available').length}
+                    {contractors.filter(c => c.status === 'approved' || c.availability === 'available').length}
                   </div>
                   <div className="text-gray-400">Available</div>
                 </div>
@@ -505,13 +603,24 @@ const ContractorsSection = () => {
                         <TableCell className="text-portfolio-white">{contractor.total_scripts_reviewed || 0}</TableCell>
                         <TableCell>{getStatusBadge(contractor.status || 'pending')}</TableCell>
                         <TableCell>
-                          <Button
-                            size="sm"
-                            className="bg-[#FFD62F] text-black hover:bg-[#FFD62F]/90"
-                            onClick={() => {/* View details */}}
-                          >
-                            View
-                          </Button>
+                          <div className="flex gap-2">
+                            {contractor.status === 'pending' && (
+                              <Button
+                                size="sm"
+                                className="bg-green-600 text-white hover:bg-green-700"
+                                onClick={() => handleApproveContractor(contractor.id)}
+                              >
+                                Approve
+                              </Button>
+                            )}
+                            <Button
+                              size="sm"
+                              variant="destructive"
+                              onClick={() => handleDeleteContractor(contractor.id)}
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </Button>
+                          </div>
                         </TableCell>
                       </TableRow>
                     ))
